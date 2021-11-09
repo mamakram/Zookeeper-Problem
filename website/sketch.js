@@ -10,7 +10,11 @@ var Trdr = "";
 var res = false;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let screen;
+  screen = createCanvas(windowWidth*45/100, 500);
+  screen.parent("scriptContainer");
+  screen.mousePressed(pushPointOnlyIfItIsOnScreen);
+
 
   // Put setup code here
   fill("black");
@@ -29,7 +33,7 @@ function draw() {
   }
 }
 
-function mousePressed() {
+function pushPointOnlyIfItIsOnScreen() {
   points.push(new Point(mouseX, mouseY));
   if (points.length === 3) {
     var turn_direction = indicateTurnDirection(points[0], points[1], points[2]);
