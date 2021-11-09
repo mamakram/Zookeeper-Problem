@@ -1,0 +1,63 @@
+
+<!--j'ai juste copié de codesandbox donc si t'as des améliorations a faire hésite pas-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link href="style.css" rel="stylesheet" />
+        <title>Zookeeper</title>
+    </head>
+    <body>
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'Explanation')">Explanation</button>
+            <button class="tablinks" onclick="openTab(event, 'Demo')">Demo</button>
+            <button class="tablinks" onclick="openTab(event, 'References')">References</button>
+        </div>
+        
+        <!-- Tab content -->
+        <div id="Explanation" class="tabcontent">
+        <h3>Zookeeper's Problem</h3>
+        <p>Explain stuff here</p>
+        </div>
+        
+        <div id="Demo" class="tabcontent">
+        <h3>Demo</h3>
+        <p>Explain rules here</p>
+        <!--
+        <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.5/math.js"
+        integrity="sha512-R+I48DmxDONCcV2MyhKKVv9QYPzcmoSdNYBDNmHoJh2R4g6mqakFTBiIMYU9r/T0kK8y5Q/JvlQ8iRb5DdHV/A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+        <script src=""></script> 
+        -->
+        </div>
+        
+        <div id="References" class="tabcontent">
+        <h3>References</h3>
+        <p>Reference some people here</p>
+        </div>
+
+        <!-- script to open tabs-->
+        <script>
+            function openTab(evt, tabName) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.className += " active";
+            }
+            document.getElementById("Explanation").style.display = "block";
+        </script>
+    </body>
+</html>
