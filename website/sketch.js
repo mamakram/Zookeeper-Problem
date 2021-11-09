@@ -60,5 +60,5 @@ function indicateTurnDirection(a, b, c) {
 
 // This Redraws the Canvas when resized
 windowResized = function () {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowWidth*45/100, 500);
 };
