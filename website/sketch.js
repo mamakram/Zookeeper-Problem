@@ -200,7 +200,7 @@ class Cage {
 // -------------------------------------------------------------------------
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let canvas = createCanvas(windowWidth, windowHeight);
   textSize(15);
   frameRate(3);
 
