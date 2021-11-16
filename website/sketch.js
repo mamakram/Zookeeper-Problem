@@ -200,17 +200,26 @@ class Cage {
 // -------------------------------------------------------------------------
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let screen;
+  screen = createCanvas(windowWidth*45/50, windowHeight*45/50);
+  screen.parent("scriptContainer")
   textSize(15);
-  frameRate(3);
+  //frameRate(3);
 
+  /*
   clearBtn = createButton("Clear");
+  clearBtn.parent("screen")
   clearBtn.position(30, 30);
   clearBtn.mousePressed(reset);
 
   makeCageBtn = createButton("Create a cage using my points");
+  makeCageBtn.parent("scriptContainer")
   makeCageBtn.position(30, 60);
   makeCageBtn.mousePressed(createCage);
+  */
+  //document.getElementById("Info").innerHTML = 'hi';
+  //document.getElementById("crCage");
+  //document.getElementById("rst").disabled = true;
 
   createPolyDaiza();
 }
@@ -278,9 +287,11 @@ function drawCages() {
 
 function displayMessage() {
   if (startPtNr < 2) {
-    text("Please select two points on the borders of the polygon", 400, 100);
+    //text("Please select two points on the borders of the polygon", 400, 100);
+    document.getElementById("Info").innerHTML = 'Please select two points on the borders of the polygon';
   } else if (startPtNr >= 2) {
-    text("You can add points and create the cage when finished", 400, 100);
+    //text("You can add points and create the cage when finished", 400, 100);
+    document.getElementById("Info").innerHTML = 'You can add points and create the cage when finished';
   }
 }
 
@@ -400,7 +411,7 @@ function isOnSegment(A, B, point) {
 }
 
 function createPolyDaiza() {
-  let positions = readTextFile("polyDaizaPoints.txt");
+  let positions = "33 245\n39 305\n106 306\n108 243\n162 379\n71 382\n142 465\n550 464\n547 385\n453 382\n416 421\n363 341\n316 404\n318 266\n444 238\n436 326\n576 319\n576 190\n280 176\n265 283\n186 280\n172 175\n85 187\n";
   positions = positions.trim().split("\n");
 
   for (let i = 0; i < positions.length; i++) {
@@ -462,8 +473,12 @@ function reset() {
   background(200);
   cageBorderMemory = [];
   polyDaiza.reset();
+  //document.getElementById("rst").disabled = false;
+  //document.getElementById("crCage").disabled = true;
+  drawPolygon();
 }
 
+/*
 function readTextFile(file) {
   var rawFile = new XMLHttpRequest();
   var allText;
@@ -478,6 +493,7 @@ function readTextFile(file) {
   rawFile.send(null);
   return allText;
 }
+*/
 
 function createCage() {
   if (polyDaiza.getLastCage().inConstruction) {
@@ -489,5 +505,5 @@ function createCage() {
 
 // This Redraws the Canvas when resized
 windowResized = function () {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowWidth*45/50, windowHeight*45/50);
 };
