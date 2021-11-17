@@ -1,7 +1,21 @@
 /* eslint-disable no-undef, no-unused-vars */
-import { squareDistance,mod,sortPointsRadially,isRT,drawSegment } from "./Utils.js";
+import {
+  squareDistance,
+  mod,
+  sortPointsRadially,
+  isRT,
+  drawSegment,
+  checkSegmentIntersection,
+} from "./Utils.js";
 
+/**
+ * Class to represent Cage on canvas
+ */
 class Cage {
+  /**
+   * Constructor
+   * @param {Zoolygon} Zoolygon Zoolygon that contains the cage
+   */
   constructor(Zoolygon) {
     this.Zoolygon = Zoolygon;
     this.polyChainPoints = [];
@@ -9,6 +23,10 @@ class Cage {
     this.points = [];
   }
 
+  /**
+   * Create the chain of vertices of the Zoolygon connecting points A and B
+   * @returns true if the chain is convex and AB doesnt intersect any segment of the Zoolygon
+   */
   createPolyChain() {
     let A = this.polyChainPoints[0];
     let B = this.polyChainPoints[1];
@@ -19,7 +37,7 @@ class Cage {
         squareDistance(B, this.Zoolygon.points[A.segmentOnPolygon])
       )
         this.polyChainPoints = [B, A];
-      return;
+      return true;
     }
     if (A.segmentOnPolygon > B.segmentOnPolygon) {
       this.polyChainPoints = [B, A];
@@ -32,8 +50,38 @@ class Cage {
     } else {
       this.polyChainPoints = cand2.reverse();
     }
+    let startIndex = this.Zoolygon.points.indexOf(this.polyChainPoints[1]);
+    for (let i = 0; i < this.polyChainPoints.length - 2; i++) {
+      if (
+        this.Zoolygon.isConcaveVertex(
+          (Number(startIndex) + i) % this.Zoolygon.points.length
+        )
+      ) {
+        this.polyChainPoints = [A];
+        return false;
+      }
+    }
+    for (let i = 0; i < this.Zoolygon.points.length; i++) {
+      if (
+        i != A.segmentOnPolygon &&
+        i != B.segmentOnPolygon &&
+        checkSegmentIntersection(
+          A,
+          B,
+          this.Zoolygon.points[i],
+          this.Zoolygon.points[(i + 1) % this.Zoolygon.points.length]
+        )
+      ) {
+        this.polyChainPoints = [A];
+        return false;
+      }
+    }
+    return true;
   }
 
+  /**
+   * Compute the chain of vertices of the Zoolygon connecting points A and B
+   */
   computePolyChain(counterClockwise) {
     let A = this.polyChainPoints[0];
     let B = this.polyChainPoints[1];
@@ -66,11 +114,12 @@ class Cage {
     return this.points;
   }
 
+  /**
+   * Construct the cage with the polygonal chain and the points drawn on the canvas to form a convex Hull
+   * Based on Graham scan : conceptually, we will do a graham scan on all the points given by the user
+   * and then connect it to the polygonal chain we've found
+   */
   constructCage() {
-    /*
-    Based on Graham scan : conceptually, we will do a graham scan on all the points given by the user
-    and then connect it to the polygonal chain we've found 
-    */
     if (this.points.length > 0) {
       this.points = sortPointsRadially(
         this.points,
@@ -79,7 +128,7 @@ class Cage {
 
       let stack = [
         this.polyChainPoints[this.polyChainPoints.length - 1],
-        this.points[0]
+        this.points[0],
       ];
       this.points.push(this.polyChainPoints[0]);
       for (let i = 1; i < this.points.length; i++) {
@@ -95,13 +144,9 @@ class Cage {
     //console.log(edgeIntersection(this.Zoolygon, this));
   }
 
-  getInitialPoint() {
-    let minIndex = 0;
-    for (let i = 1; i < this.points.length; i++)
-      if (this.points[i].x < this.points[minIndex].x) minIndex = i;
-    return minIndex;
-  }
-
+  /**
+   * Draw the cage on the canvas
+   */
   draw() {
     if (!this.inConstruction)
       for (let i = 0; i < this.points.length; i++) {

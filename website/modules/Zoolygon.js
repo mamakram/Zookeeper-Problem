@@ -1,6 +1,9 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Polygon } from "./Polygon.js";
 
+/**
+ * class to represent Zoolygon on canvas (i.e Polygon with cages)
+ */
 class Zoolygon extends Polygon {
   constructor(points) {
     super(points);

@@ -1,18 +1,39 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Point } from "./Point.js";
-import {drawSegment,checkRayIntersection,isSegmentBefore} from "./Utils.js"
+import {
+  drawSegment,
+  checkRayIntersection,
+  isSegmentBefore,
+  isRT,
+  mod,
+  reflectionOnLine,
+  squareDistance,
+} from "./Utils.js";
 
+/**
+ * class to represent Polygon on canvas
+ */
 class Polygon {
   constructor(points) {
     this.points = points;
     this.triangulations = [];
   }
 
+  /**
+   * Check if given point is one of the vertices of the Polygon
+   * @param {Point} p given point
+   * @returns boolean to indicate if the point is included
+   */
   includes(p) {
     for (let i in this.points) if (this.points[i] === p) return true;
     return false;
   }
 
+  /**
+   * Check if a given point is inside the Polygon
+   * @param {Point} p given point
+   * @returns boolean to indicate if point is inside
+   */
   isInside(p) {
     //check if point in Polygon, if true stores first intersection in point.intersection
     let isInside = false;
@@ -21,7 +42,10 @@ class Polygon {
     return isInside;
   }
 
-  triangulate(depth = 0) {
+  /**
+   * Recursive algorithm to triangulate the polygon
+   */
+  triangulate() {
     //recursively compute triangulations of a polygon p
     if (this.points.length === 3)
       return new Triangle(this.points[0], this.points[1], this.points[2]);
@@ -43,6 +67,11 @@ class Polygon {
     }
   }
 
+  /**
+   * Check if the point of the polygon at index i is a concave vertex
+   * @param {int} i index
+   * @returns boolean true if concave
+   */
   isConcaveVertex(i) {
     //check if vertex i of polygon p is concave
     return isRT(
@@ -52,6 +81,10 @@ class Polygon {
     );
   }
 
+  /**
+   * Find the first ear of the polygon by starting at index 0
+   * @returns the point corresponding to the ear
+   */
   findEar() {
     //find index of ear in polygon
     let i = 0;
@@ -83,8 +116,13 @@ class Polygon {
     return i;
   }
 
+  /**
+   * Compute array containing all intersections of ray ab with polygon p, first intersection is first in array
+   * @param {*} a
+   * @param {*} b
+   * @returns the computed array
+   */
   rayPolygon(a, b) {
-    //return array containing all intersections of ray ab with polygon p, first intersection is first in array
     var intersections = [];
     for (let i = 0; i < this.points.length; i++) {
       if (
@@ -97,7 +135,7 @@ class Polygon {
       ) {
         let segment = [
           this.points[i],
-          this.points[(i + 1) % this.points.length]
+          this.points[(i + 1) % this.points.length],
         ];
         if (
           intersections.length === 0 ||
@@ -116,10 +154,36 @@ class Polygon {
     return intersections;
   }
 
+  /**
+   * Find reflection to the Polygon segment with the minimum distance to a given point
+   * @param {*} p given point
+   * @returns the minimum reflected point
+   */
+  findMinReflection(p) {
+    let minPoint = null;
+    let minDistance = 300; //minimum distance from point to avoid disasters
+    for (let i = 0; i < this.points.length; i++) {
+      let p1 = this.points[i];
+      let p2 = this.points[(i + 1) % this.points.length];
+      let current = reflectionOnLine(p1, p2, p);
+      current.segmentOnPolygon = i;
+      if (checkRayIntersection(p, current, p1, p2)) {
+        if (squareDistance(p, current) < minDistance) {
+          minDistance = squareDistance(p, current);
+          minPoint = current;
+        }
+      }
+    }
+    return minPoint;
+  }
+  /**
+   * Draw polygon on canvas
+   */
   draw() {
     for (let i in this.triangulations) this.triangulations[i].draw();
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
+      text(i, this.points[i].x, this.points[i].y);
     }
   }
 }
@@ -128,6 +192,11 @@ class Triangle extends Polygon {
   constructor(a, b, c) {
     super([a, b, c]);
   }
+  /**
+   * Check if a given point is inside the Triangle
+   * @param {Point} p given point
+   * @returns boolean to indicate if point is inside
+   */
   isInside(p) {
     let p1 = this.points[0];
     let p2 = this.points[1];
