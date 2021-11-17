@@ -23,6 +23,32 @@ class Cage {
     this.points = [];
   }
 
+  isValid(p) {
+    let currentPoints = this.polyChainPoints.concat(this.points);
+    for (let j = 0; j < currentPoints.length; j++)
+      for (let i = 0; i < this.Zoolygon.points.length; i++) {
+        let containsSegment = i === currentPoints[j].segmentOnPolygon;
+        if (this.Zoolygon.includes(currentPoints[j])) {
+          //vertex of Zoolygon
+          let index = this.Zoolygon.points.indexOf(currentPoints[j]);
+          containsSegment =
+            i === index || i === mod(index - 1, this.Zoolygon.points.length);
+        }
+        if (
+          !containsSegment &&
+          checkSegmentIntersection(
+            currentPoints[j],
+            p,
+            this.Zoolygon.points[i],
+            this.Zoolygon.points[(i + 1) % this.Zoolygon.points.length]
+          )
+        ) {
+          return false;
+        }
+      }
+    return true;
+  }
+
   /**
    * Create the chain of vertices of the Zoolygon connecting points A and B
    * @returns true if the chain is convex and AB doesnt intersect any segment of the Zoolygon
@@ -45,12 +71,15 @@ class Cage {
 
     let cand1 = this.computePolyChain(true);
     let cand2 = this.computePolyChain(false);
+
+    //choose the shortest chain between cw and anti-cw
     if (cand1.length <= cand2.length) {
       this.polyChainPoints = cand1;
     } else {
       this.polyChainPoints = cand2.reverse();
     }
     let startIndex = this.Zoolygon.points.indexOf(this.polyChainPoints[1]);
+    //check if all the vertices contained in the chain are convex
     for (let i = 0; i < this.polyChainPoints.length - 2; i++) {
       if (
         this.Zoolygon.isConcaveVertex(
@@ -61,6 +90,7 @@ class Cage {
         return false;
       }
     }
+    //check if the segment connecting A to B doesn't intersect the Zoolygon
     for (let i = 0; i < this.Zoolygon.points.length; i++) {
       if (
         i != A.segmentOnPolygon &&

@@ -167,6 +167,7 @@ class Polygon {
       let p2 = this.points[(i + 1) % this.points.length];
       let current = reflectionOnLine(p1, p2, p);
       current.segmentOnPolygon = i;
+      //check that the ray formed by the point and its reflection intersects the line
       if (checkRayIntersection(p, current, p1, p2)) {
         if (squareDistance(p, current) < minDistance) {
           minDistance = squareDistance(p, current);

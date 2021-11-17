@@ -3,7 +3,6 @@ import { Polygon } from "./modules/Polygon.js";
 import { Zoolygon } from "./modules/Zoolygon.js";
 import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
-import { checkRayIntersection, squareDistance } from "./modules/Utils.js";
 
 const polyDaizaPoints = [
   [33, 245],
@@ -76,8 +75,14 @@ window.mousePressed = function () {
     }
   } else {
     if (polyDaiza.isInside(mousePoint))
-      if (!currentCage.isInside(mousePoint))
+      if (
+        !currentCage.isInside(mousePoint) &&
+        polyDaiza.getLastCage().isValid(mousePoint)
+      ) {
         polyDaiza.getLastCage().points.push(mousePoint);
+      } else {
+        error = true;
+      }
   }
 };
 
