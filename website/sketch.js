@@ -18,7 +18,7 @@ const polyDaizaPoints = [
   [444, 238],
   [436, 326],
   [576, 319],
-  [576, 190],
+  [570, 190],
   [280, 176],
   [265, 283],
   [186, 280],
@@ -27,7 +27,7 @@ const polyDaizaPoints = [
 ];
 var polyDaiza;
 var borderCount = 0; //number of selected border points for cage creation
-var tempPolygon;
+var currentCage;
 
 //TODO: When placing A and B on polygon, compute reflection of point on polygon instead of current method
 
@@ -52,12 +52,10 @@ class Polygon {
   }
 
   isInside(p) {
-    console.log("hello");
     //check if point in Polygon, if true stores first intersection in point.intersection
     let isInside = false;
     let intersections = this.rayPolygon(p, new Point(p.x + 50, p.y));
     isInside = Number(intersections.length) % 2 === 1;
-    console.log(isInside);
     return isInside;
   }
 
@@ -159,14 +157,7 @@ class Polygon {
   draw() {
     for (let i in this.triangulations) this.triangulations[i].draw();
     for (let i = 0; i < this.points.length; i++) {
-      if (this.points.length > 3)
-        drawSegment(
-          this.points[i],
-          this.points[(i + 1) % this.points.length],
-          "red"
-        );
-      else
-        drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
+      drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
     }
   }
 }
@@ -253,7 +244,6 @@ class Cage {
       i = (A.segmentOnPolygon + 1) % polyDaiza.points.length;
     let stop = (B.segmentOnPolygon + 1) % polyDaiza.points.length;
     while (i !== stop) {
-      console.log("is " + i);
       chain.push(polyDaiza.points[i]);
       if (counterClockwise) {
         i = (i + 1) % polyDaiza.points.length;
@@ -300,6 +290,7 @@ class Cage {
       this.points = this.polyChainPoints.concat(stack);
     } else this.points = this.polyChainPoints;
     this.inConstruction = false;
+    console.log(edgeIntersection(polyDaiza, this));
   }
 
   getInitialPoint() {
@@ -361,6 +352,42 @@ function isSegmentBefore(a, c, d, e, f) {
   else return false;
 }
 
+function indicateTurnDirection(a, b, c) {
+  let norme = computeOrientation(a, b, c);
+  if (norme < 0) {
+    return 1;
+  } else if (norme === 0) {
+    return 0;
+  } else {
+    return -1;
+  }
+}
+
+function linesIntersect(a, b, c, d) {
+  return (
+    indicateTurnDirection(a, b, c) * indicateTurnDirection(a, b, d) +
+      indicateTurnDirection(c, d, a) * indicateTurnDirection(c, d, b) ===
+    -2
+  );
+}
+
+function edgeIntersection(a_zoolygon, a_cage) {
+  let zolyPoints = a_zoolygon.points;
+  let cagePoints = a_cage.points;
+  for (let i = 0; i < zolyPoints.length; i++) {
+    let a = zolyPoints[i];
+    let b = zolyPoints[mod(i + 1, zolyPoints.length)];
+    for (let j = 0; j < cagePoints.length; j++) {
+      let c = cagePoints[j];
+      let d = cagePoints[mod(j + 1, cagePoints.length)];
+      if (linesIntersect(a, b, c, d)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function sortPointsRadially(points, startPoint) {
   //sort radially by comparing to startpoint
   return points.sort(function comparator(A, B) {
@@ -413,7 +440,7 @@ function isLT(A, B, Q) {
 }
 
 function createCage() {
-  if (polyDaiza.getLastCage().inConstruction) {
+  if (polyDaiza.getLastCage().inConstruction && borderCount === 2) {
     polyDaiza.getLastCage().constructCage();
     borderCount = 0;
   }
@@ -431,6 +458,17 @@ function mod(n, m) {
   return ((n % m) + m) % m;
 }
 
+function solve2eq2unk(a, b, c, d, e, f) {
+  let det = a * d - b * c;
+  if (det !== 0) {
+    let x = (e * d - b * f) / det;
+    let y = (a * f - e * c) / det;
+    return [x, y];
+  } else {
+    console.log("ERROR");
+  }
+}
+
 function reflectionOnLine(a, b, c) {
   let m = (b.y - a.y) / (b.x - a.x);
   let h = b.y - m * b.x;
@@ -444,28 +482,43 @@ function squareDistance(p1, p2) {
   return Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2);
 }
 
+function findMinReflection(p) {
+  let minPoint = null;
+  let minDistance = 300; //minimum distance from point to avoid disasters
+  for (let i = 0; i < polyDaiza.points.length; i++) {
+    let p1 = polyDaiza.points[i];
+    let p2 = polyDaiza.points[(i + 1) % polyDaiza.points.length];
+    let current = reflectionOnLine(p1, p2, p);
+    current.segmentOnPolygon = i;
+    if (checkRayIntersection(p, current, p1, p2)) {
+      if (squareDistance(p, current) < minDistance) {
+        minDistance = squareDistance(p, current);
+        minPoint = current;
+      }
+    }
+  }
+  return minPoint;
+}
+
 function mousePressed() {
   let labelLst = ["A", "B"];
   let mousePoint = new Point(mouseX, mouseY);
   if (borderCount < 2) {
     mousePoint.label = labelLst[borderCount];
     if (borderCount === 0) polyDaiza.addCage(new Cage());
-    for (let i = 0; i < polyDaiza.points.length; i++) {
-      let p1 = polyDaiza.points[i];
-      let p2 = polyDaiza.points[(i + 1) % polyDaiza.points.length];
-      if (isOnSegment(p1, p2, mousePoint)) {
-        mousePoint.segmentOnPolygon = i;
-        polyDaiza.getLastCage().polyChainPoints.push(mousePoint);
-        borderCount++;
-      }
+    let newPoint = findMinReflection(mousePoint);
+    if (newPoint !== null) {
+      newPoint.label = labelLst[borderCount];
+      polyDaiza.getLastCage().polyChainPoints.push(newPoint);
+      borderCount++;
     }
     if (borderCount === 2) {
       polyDaiza.getLastCage().createPolyChain();
-      tempPolygon = new Polygon(polyDaiza.getLastCage().polyChainPoints);
+      currentCage = new Polygon(polyDaiza.getLastCage().polyChainPoints);
     }
   } else {
     if (polyDaiza.isInside(mousePoint))
-      if (!tempPolygon.isInside(mousePoint))
+      if (!currentCage.isInside(mousePoint))
         polyDaiza.getLastCage().points.push(mousePoint);
   }
 }
@@ -478,7 +531,6 @@ function setup() {
   screen.parent("scriptContainer");
   textSize(15);
   createPolyDaiza();
-  polyDaiza.triangulate();
 }
 
 function reset() {
@@ -524,4 +576,3 @@ function displayMessage() {
 windowResized = function () {
   resizeCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
 };
-//  resizeCanvas(windowWidth*45/50, windowHeight*45/50);
