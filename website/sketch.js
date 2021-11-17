@@ -374,18 +374,9 @@ function mousePressed() {
 // -------------------------------------------------------------------------
 
 function setup() {
-  let canvas = createCanvas(windowWidth, windowHeight);
-  //canvas.parent("scriptContainer");
+  let screen = createCanvas(windowWidth*45/50, windowHeight*45/50);
+  screen.parent("scriptContainer");
   textSize(15);
-
-  clearBtn = createButton("Clear");
-  clearBtn.position(30, 30);
-  clearBtn.mousePressed(reset);
-
-  makeCageBtn = createButton("Create a cage using my points");
-  makeCageBtn.position(30, 60);
-  makeCageBtn.mousePressed(createCage);
-
   createPolyDaiza();
 }
 
@@ -421,12 +412,13 @@ function displayMessage() {
     !polyDaiza.getLastCage().inConstruction ||
     borderCount < 2
   ) {
-    text("Please select two points on the borders of the polygon", 400, 100);
+    document.getElementById("Info").innerHTML = 'Please select two points on the borders of the polygon';
   } else {
-    text("You can add points and create the cage when finished", 400, 100);
+    document.getElementById("Info").innerHTML = 'You can add points and create the cage when finished';
   }
 }
 // This Redraws the Canvas when resized
 windowResized = function () {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(windowWidth*45/50, windowHeight*45/50);
 };
+//  resizeCanvas(windowWidth*45/50, windowHeight*45/50);
