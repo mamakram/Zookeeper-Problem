@@ -43,6 +43,12 @@ class Point {
 class Polygon {
   constructor(points) {
     this.points = points;
+    this.triangulations = [];
+  }
+
+  includes(p) {
+    for (let i in this.points) if (this.points[i] === p) return true;
+    return false;
   }
 
   isInside(p) {
@@ -53,6 +59,68 @@ class Polygon {
     isInside = Number(intersections.length) % 2 === 1;
     console.log(isInside);
     return isInside;
+  }
+
+  triangulate(depth = 0) {
+    //recursively compute triangulations of a polygon p
+    if (this.points.length === 3)
+      return new Triangle(this.points[0], this.points[1], this.points[2]);
+    else {
+      let ear = this.findEar();
+      let minusindex = mod(Number(ear) - 1, this.points.length);
+      let plusindex = (Number(ear) + 1) % this.points.length;
+      let triangle = new Triangle(
+        this.points[ear],
+        this.points[minusindex],
+        this.points[plusindex]
+      );
+      this.triangulations.push(triangle);
+      let newPoints = this.points.slice();
+      newPoints.splice(ear, 1);
+      let p = new Polygon(newPoints);
+      p.triangulate(depth + 1);
+      this.triangulations = this.triangulations.concat(p.triangulations);
+    }
+  }
+
+  isConcaveVertex(i) {
+    //check if vertex i of polygon p is concave
+    return isRT(
+      this.points[mod(i - 1, this.points.length)],
+      this.points[i],
+      this.points[(i + 1) % this.points.length]
+    );
+  }
+
+  findEar() {
+    //find index of ear in polygon
+    let i = 0;
+    let earNotFound = true;
+    while (earNotFound) {
+      if (!this.isConcaveVertex(Number(i))) {
+        earNotFound = false;
+        let minusindex = mod(Number(i) - 1, this.points.length);
+        let plusindex = (Number(i) + 1) % this.points.length;
+        //check that no concave vertices inside triangle formed by the three points
+        let triangle = new Triangle(
+          this.points[i],
+          this.points[minusindex],
+          this.points[plusindex]
+        );
+        let j = 0;
+        while (j < this.points.length && !earNotFound) {
+          if (
+            !triangle.includes(this.points[j]) &&
+            triangle.isInside(this.points[j], triangle) &&
+            this.isConcaveVertex(Number(j))
+          )
+            earNotFound = true;
+          j++;
+        }
+      }
+      if (earNotFound) i = (Number(i) + 1) % this.points.length;
+    }
+    return i;
   }
 
   rayPolygon(a, b) {
@@ -89,9 +157,32 @@ class Polygon {
   }
 
   draw() {
+    for (let i in this.triangulations) this.triangulations[i].draw();
     for (let i = 0; i < this.points.length; i++) {
-      drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
+      if (this.points.length > 3)
+        drawSegment(
+          this.points[i],
+          this.points[(i + 1) % this.points.length],
+          "red"
+        );
+      else
+        drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
     }
+  }
+}
+
+class Triangle extends Polygon {
+  constructor(a, b, c) {
+    super([a, b, c]);
+  }
+  isInside(p) {
+    let p1 = this.points[0];
+    let p2 = this.points[1];
+    let p3 = this.points[2];
+    return (
+      (isRT(p1, p2, p) && isRT(p2, p3, p) && isRT(p3, p1, p)) ||
+      (isLT(p1, p2, p) && isLT(p2, p3, p) && isLT(p3, p1, p))
+    );
   }
 }
 
@@ -340,6 +431,15 @@ function mod(n, m) {
   return ((n % m) + m) % m;
 }
 
+function reflectionOnLine(a, b, c) {
+  let m = (b.y - a.y) / (b.x - a.x);
+  let h = b.y - m * b.x;
+  let mp = -1 / m;
+  let hp = c.y - mp * c.x;
+  let res = solve2eq2unk(-1 * m, 1, -1 * mp, 1, h, hp);
+  return new Point(res[0], res[1]);
+}
+
 function squareDistance(p1, p2) {
   return Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2);
 }
@@ -374,10 +474,11 @@ function mousePressed() {
 // -------------------------------------------------------------------------
 
 function setup() {
-  let screen = createCanvas(windowWidth*45/50, windowHeight*45/50);
+  let screen = createCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
   screen.parent("scriptContainer");
   textSize(15);
   createPolyDaiza();
+  polyDaiza.triangulate();
 }
 
 function reset() {
@@ -412,13 +513,15 @@ function displayMessage() {
     !polyDaiza.getLastCage().inConstruction ||
     borderCount < 2
   ) {
-    document.getElementById("Info").innerHTML = 'Please select two points on the borders of the polygon';
+    document.getElementById("Info").innerHTML =
+      "Please select two points on the borders of the polygon";
   } else {
-    document.getElementById("Info").innerHTML = 'You can add points and create the cage when finished';
+    document.getElementById("Info").innerHTML =
+      "You can add points and create the cage when finished";
   }
 }
 // This Redraws the Canvas when resized
 windowResized = function () {
-  resizeCanvas(windowWidth*45/50, windowHeight*45/50);
+  resizeCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
 };
 //  resizeCanvas(windowWidth*45/50, windowHeight*45/50);
