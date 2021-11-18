@@ -129,7 +129,25 @@
         a Simple Polygon
       </h3>
       <!--l. 27-->
-      <p class="noindent"></p>
+      <p class="noindent"> 
+        The shortest path in a simple polygon is the first step to be able to contruct
+        the shortest path between all cages. To do so, we compute the dual graph of the 
+        polygon. The dual is a graph of triangles, in form of a tree. There exist an edge between 
+        two triangles in the dual if those two triangles share an edge in the triangulated polygon. <br class="newline"/>  
+        <br class="newline"/>  
+        What interests us in the dual tree is the path between two special triangles of the 
+        triangulations : those who have an endpoint of the shortest path inside them. We find this path
+        using a DFS in the graph. <br class="newline"/>  
+        <br class="newline"/>  
+        Now that we have an approximatively shortest path inside our original polygon, we can proceed the funnel algorithm.
+        To do so, we first compute the list of segments of triangles crossed by our path. Then, following our path, each time we cross
+        one segment of this list with our path, we can update boundaries on the shortest path using the endpoints of the 
+        segment we crossed. (This is where the current implementation stops, the way boundaries are update will
+        be explained when the funnel will be completed)
+
+      
+
+      </p>
       <h3 class="sectionHead">
         <span class="titlemark">4 </span> <a id="x1-80004"></a>Zookeeper
         algorithm
@@ -151,10 +169,31 @@
         Cage when done to form a convex Cage with the set of points and the two
         points on the Polygon
       </p>
+
+      
       <div id="messages ">
         <p id="Info"></p>
         <p style="min-height: 40px; color: red" id="Error"></p>
       </div>
+
+      <p>
+        NOTE: 
+        The Show Funnel button is a temporary button for the funnel algorithm in developpement. 
+        It displays :
+        <ul class="itemize1">
+          <li class="itemize">
+            the triangulation of the polygon,
+          </li>
+          <li class="itemize">
+            the approximate shortest path between the 2 fixed points s and t (in red), 
+          </li>
+          <li class="itemize">
+            the segments crossed by the path (in green)
+          </li>
+        </ul>
+        The actual shortest path is still to be computed using the funnel algorithm.
+
+      </p>
 
       <div id="buttons">
         <button class="button1" onclick="createCage()" id="crCage">

@@ -179,7 +179,7 @@ class Polygon {
         for (let j = i; j < this.triangulations.length; j++) {
           let triangle2 = this.triangulations[j % this.triangulations.length];
 
-          if (triangle1.commonEdge(triangle2)) {
+          if (triangle1.hasCommonEdge(triangle2)) {
             this.dual.connect(triangle1, triangle2);
             this.dual.connect(triangle2, triangle1);
           }
@@ -279,9 +279,23 @@ class Triangle extends Polygon {
   /**
    * Check if the triangle has a common edge with an other triangle
    * @param {Triangle} other : the triangle in comparison
+   * @returns true if the triangle other has a common edge with this
    */
-  commonEdge(other) {
-    let count = 0;
+  hasCommonEdge(other){
+    let edge = this.getCommonEdge(other)
+    if (edge.length === 2) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Compute the common edge with an other triangle
+   * @param {Triangle} other : the triangle in comparison
+   * @returns edge : the coordinates of the edge in common 
+   */
+  getCommonEdge(other) {
+    let edge = []
     for (let i = 0; i < other.points.length; i++) {
       let p = other.points[i];
       if (
@@ -289,13 +303,10 @@ class Triangle extends Polygon {
         p === this.points[1] ||
         p === this.points[2]
       ) {
-        count++;
+        edge.push(p)
       }
     }
-    if (count === 2) {
-      return true;
-    }
-    return false;
+    return edge;
   }
 }
 
