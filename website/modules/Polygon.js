@@ -180,8 +180,8 @@ class Polygon {
           let triangle2 = this.triangulations[j % this.triangulations.length];
 
           if (triangle1.commonEdge(triangle2)) {
-            this.dual.connect(triangle1.center, triangle2.center);
-            this.dual.connect(triangle2.center, triangle1.center);
+            this.dual.connect(triangle1, triangle2);
+            this.dual.connect(triangle2, triangle1);
           }
         }
       }
@@ -246,6 +246,8 @@ class Triangle extends Polygon {
   constructor(a, b, c) {
     super([a, b, c]);
     this.center = this.findCenter();
+    this.specialPoint = undefined; // point from/to which compute a shortest path
+    this.visited = false; // triangles are used as nodes for graph in dual graph of polygon
   }
   /**
    * Check if a given point is inside the Triangle
