@@ -10,7 +10,7 @@ class Graph {
     /**
      * Connect two triangles in the graph if they share a common edge
      * @param {Point} point1 : center of triangle 1
-     * @param {Point} point2 : center of Triangle 2
+     * @param {Point} point2 : center of triangle 2
      */
 
     // TODO:

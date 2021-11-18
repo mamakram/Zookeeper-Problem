@@ -181,6 +181,7 @@ class Polygon {
 
           if (triangle1.commonEdge(triangle2)) {
             this.dual.connect(triangle1.center, triangle2.center);
+            this.dual.connect(triangle2.center, triangle1.center);
           }
         }
       }

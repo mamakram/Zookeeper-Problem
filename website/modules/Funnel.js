@@ -18,7 +18,9 @@ class Funnel {
       // TODO: create a real tree and find the path between this.s and this.t
       let treeSeg = [];
       let dual = this.originalPoly.getDualGraph();
-      console.log(dual);
+      
+      console.log(dual)
+      // For visual purpose only.
       for (let [key, value] of dual.adjList) {
         for (let i = 0; i < value.length; i++) {
           treeSeg.push([key, value[i]]);
