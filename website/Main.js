@@ -62,11 +62,12 @@ window.mousePressed = function () {
     mousePoint.label = labelLst[borderCount];
     if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
     let newPoint = polyDaiza.findMinReflection(mousePoint);
-    if (newPoint !== null && !polyDaiza.isInsideCage(newPoint)) {
-      newPoint.label = labelLst[borderCount];
-      polyDaiza.getLastCage().polyChainPoints.push(newPoint);
-      borderCount++;
-    }
+    if (newPoint !== null)
+      if (!polyDaiza.isInsideCage(newPoint)) {
+        newPoint.label = labelLst[borderCount];
+        polyDaiza.getLastCage().polyChainPoints.push(newPoint);
+        borderCount++;
+      } else error = true;
     if (borderCount === 2) {
       if (!polyDaiza.getLastCage().createPolyChain(polyDaiza)) {
         borderCount = 1; //reset borderCount if the second point is invalid
@@ -104,7 +105,6 @@ window.setup = function () {
 };
 
 window.reset = function () {
-  background(200);
   polyDaiza.reset();
   borderCount = 0;
 };
@@ -117,7 +117,7 @@ window.draw = function () {
   if (polyDaiza !== undefined) {
     polyDaiza.draw();
     polyDaiza.drawCages();
-    if (polyDaiza.funnel !== undefined) polyDaiza.drawFunnel();
+    if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
   }
   displayMessage();
 };
@@ -136,6 +136,6 @@ function displayMessage() {
   }
   if (error) {
     document.getElementById("Error").innerHTML =
-      "Invalid point, check that both points on the polygon form a convex chain and that the created cage would not intersect a line of the Polygon";
-  } else document.getElementById("Error").innerHTML = "";
+      "Invalid point, check that both points on the polygon form a convex chain and that the created cage would not intersect a segment or a Cage of the Polygon";
+  } else document.getElementById("Error").innerHTML = " ";
 }

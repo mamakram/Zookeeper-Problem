@@ -9,7 +9,7 @@ class Zoolygon extends Polygon {
   constructor(points) {
     super(points);
     this.cages = [];
-    this.funnel = undefined;
+    this.funnel = null;
   }
 
   isInsideCage(p) {
@@ -37,6 +37,9 @@ class Zoolygon extends Polygon {
   }
 
   reset() {
+    this.triangulations = [];
+    this.funnel = null;
+    this.dual = null;
     this.cages = [];
   }
 }
