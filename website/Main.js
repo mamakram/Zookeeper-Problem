@@ -3,12 +3,13 @@ import { Polygon } from "./modules/Polygon.js";
 import { Zoolygon } from "./modules/Zoolygon.js";
 import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
+import { Funnel } from "./modules/Funnel.js"
 
 const polyDaizaPoints = [
   [33, 245],
   [39, 305],
   [106, 306],
-  [108, 243],
+  [108, 251],
   [162, 379],
   [71, 382],
   [142, 465],
@@ -17,17 +18,18 @@ const polyDaizaPoints = [
   [453, 382],
   [416, 421],
   [363, 341],
-  [316, 404],
-  [318, 266],
+  [316, 414],
+  [318, 286],
   [444, 238],
   [436, 326],
   [576, 319],
-  [570, 190],
+  [580, 190],
+  [332, 152],
   [280, 176],
   [265, 283],
   [186, 280],
   [172, 175],
-  [85, 187],
+  [85, 187]
 ];
 var polyDaiza;
 var borderCount = 0; //number of selected border points for cage creation
@@ -86,6 +88,10 @@ window.mousePressed = function () {
   }
 };
 
+window.showFunnel = function() {
+  polyDaiza.funnel = new Funnel(polyDaiza);
+}
+
 //                            SETUP
 // -------------------------------------------------------------------------
 
@@ -110,6 +116,8 @@ window.draw = function () {
   if (polyDaiza !== undefined) {
     polyDaiza.draw();
     polyDaiza.drawCages();
+    if (polyDaiza.funnel !== undefined)
+      polyDaiza.drawFunnel();
   }
   displayMessage();
 };

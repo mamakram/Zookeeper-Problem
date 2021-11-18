@@ -1,10 +1,12 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Point } from "./Point.js";
+import { Graph } from "./Graph.js";
 import {
   drawSegment,
   checkRayIntersection,
   isSegmentBefore,
   isRT,
+  isLT,
   mod,
   reflectionOnLine,
   squareDistance,
@@ -17,6 +19,7 @@ class Polygon {
   constructor(points) {
     this.points = points;
     this.triangulations = [];
+    this.dual = null;
   }
 
   /**
@@ -45,10 +48,12 @@ class Polygon {
   /**
    * Recursive algorithm to triangulate the polygon
    */
-  triangulate() {
+  triangulate(depth = 0) {
     //recursively compute triangulations of a polygon p
     if (this.points.length === 3)
-      return new Triangle(this.points[0], this.points[1], this.points[2]);
+      this.triangulations.push(
+        new Triangle(this.points[0], this.points[1], this.points[2])
+      );
     else {
       let ear = this.findEar();
       let minusindex = mod(Number(ear) - 1, this.points.length);
@@ -87,7 +92,7 @@ class Polygon {
    */
   findEar() {
     //find index of ear in polygon
-    let i = 0;
+    let i = 2;
     let earNotFound = true;
     while (earNotFound) {
       if (!this.isConcaveVertex(Number(i))) {
@@ -155,6 +160,36 @@ class Polygon {
   }
 
   /**
+   * Compute the dual graph of the polygon if it is needed, 
+   * this action proceeds to a polygon triangulation.
+   * 
+   * @returns the dual graph of the polygon
+   */
+  getDualGraph() {
+    if (this.dual !== null) {
+      return this.dual;
+    } else {
+      this.triangulate();
+      this.dual = new Graph();
+
+      // TODO: it's in O(n**2), but preproccessing so idk if it matters
+      for (let i = 0; i < this.triangulations.length; i++) {
+        let triangle1 = this.triangulations[i];
+
+        for (let j = i; j < this.triangulations.length; j++) {
+          let triangle2 = this.triangulations[j % this.triangulations.length];
+
+          if (triangle1.commonEdge(triangle2)) {
+            this.dual.connect(triangle1.center, triangle2.center);
+          }
+        }
+      }
+      console.log(this.dual.adjList);
+      return this.dual;
+    }
+  }
+
+  /**
    * Find reflection to the Polygon segment with the minimum distance to a given point
    * @param {*} p given point
    * @returns the minimum reflected point
@@ -184,7 +219,24 @@ class Polygon {
     for (let i in this.triangulations) this.triangulations[i].draw();
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
-      text(i, this.points[i].x, this.points[i].y);
+    }
+
+    // drawing of the triangulation : used for visual purpose while developping the 
+    // funnel
+    for (let i = 0; i < this.triangulations.length; i++) {
+      this.triangulations[i].draw();
+      fill(0);
+      ellipse(
+        this.triangulations[i].center.x,
+        this.triangulations[i].center.y,
+        4,
+        4
+      );
+      text(
+        "C",
+        this.triangulations[i].center.x,
+        this.triangulations[i].center.y
+      );
     }
   }
 }
@@ -192,6 +244,7 @@ class Polygon {
 class Triangle extends Polygon {
   constructor(a, b, c) {
     super([a, b, c]);
+    this.center = this.findCenter();
   }
   /**
    * Check if a given point is inside the Triangle
@@ -206,6 +259,40 @@ class Triangle extends Polygon {
       (isRT(p1, p2, p) && isRT(p2, p3, p) && isRT(p3, p1, p)) ||
       (isLT(p1, p2, p) && isLT(p2, p3, p) && isLT(p3, p1, p))
     );
+  }
+
+  /**
+   * Compute the ceter point of a triangle.
+   * Mainly used for building the dual tree of the polygon.
+   * 
+   * @returns the point in the center of the triangle
+   */
+  findCenter() {
+    let centerX = (this.points[0].x + this.points[1].x + this.points[2].x) / 3;
+    let centerY = (this.points[0].y + this.points[1].y + this.points[2].y) / 3;
+    return new Point(centerX, centerY);
+  }
+
+  /**
+   * Check if the triangle has a common edge with an other triangle
+   * @param {Triangle} other : the triangle in comparison
+   */
+  commonEdge(other) {
+    let count = 0;
+    for (let i = 0; i < other.points.length; i++) {
+      let p = other.points[i];
+      if (
+        p === this.points[0] ||
+        p === this.points[1] ||
+        p === this.points[2]
+      ) {
+        count++;
+      }
+    }
+    if (count === 2) {
+      return true;
+    }
+    return false;
   }
 }
 

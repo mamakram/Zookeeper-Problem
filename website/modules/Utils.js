@@ -61,13 +61,7 @@ function isOnSegment(A, B, point) {
 }
 
 function isAligned(A, B, Q) {
-  let tmp = computeOrientation(A, B, Q);
-
-  if (tmp < 200 && tmp > -200) {
-    // approximation //TODO : trouver une meilleure solution
-    return true;
-  }
-  //return computeOrientation(A, B, Q) === 0;
+  return computeOrientation(A, B, Q) === 0;
 }
 
 function computeOrientation(A, B, Q) {
