@@ -6,7 +6,11 @@ import {
   isRT,
   drawSegment,
   checkSegmentIntersection,
+  isAligned,
+  computeOrientation,
 } from "./Utils.js";
+
+import { Polygon } from "./Polygon.js";
 
 /**
  * Class to represent Cage on canvas
@@ -21,6 +25,19 @@ class Cage {
     this.polyChainPoints = [];
     this.inConstruction = true;
     this.points = [];
+  }
+
+  isInside(p) {
+    if (!this.inConstruction) {
+      for (let i = 0; i < this.points.length; i++) {
+        if (
+          isRT(this.points[i], this.points[(i + 1) % this.points.length], p, 10)
+        )
+          return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   isValid(p) {

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Polygon } from "./Polygon.js";
-import { Funnel } from "./Funnel.js"
+import { Funnel } from "./Funnel.js";
 
 /**
  * class to represent Zoolygon on canvas (i.e Polygon with cages)
@@ -9,7 +9,13 @@ class Zoolygon extends Polygon {
   constructor(points) {
     super(points);
     this.cages = [];
-    this.funnel = undefined
+    this.funnel = null;
+  }
+
+  isInsideCage(p) {
+    for (let i = 0; i < this.cages.length; i++) {
+      if (this.cages[i].isInside(p)) return true;
+    }
   }
 
   addCage(cage) {
@@ -31,6 +37,9 @@ class Zoolygon extends Polygon {
   }
 
   reset() {
+    this.triangulations = [];
+    this.funnel = null;
+    this.dual = null;
     this.cages = [];
   }
 }
