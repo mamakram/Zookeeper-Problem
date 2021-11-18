@@ -3,7 +3,7 @@ import { Polygon } from "./modules/Polygon.js";
 import { Zoolygon } from "./modules/Zoolygon.js";
 import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
-import { Funnel } from "./modules/Funnel.js"
+import { Funnel } from "./modules/Funnel.js";
 
 const polyDaizaPoints = [
   [33, 245],
@@ -29,7 +29,7 @@ const polyDaizaPoints = [
   [265, 283],
   [186, 280],
   [172, 175],
-  [85, 187]
+  [85, 187],
 ];
 var polyDaiza;
 var borderCount = 0; //number of selected border points for cage creation
@@ -62,7 +62,7 @@ window.mousePressed = function () {
     mousePoint.label = labelLst[borderCount];
     if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
     let newPoint = polyDaiza.findMinReflection(mousePoint);
-    if (newPoint !== null) {
+    if (newPoint !== null && !polyDaiza.isInsideCage(newPoint)) {
       newPoint.label = labelLst[borderCount];
       polyDaiza.getLastCage().polyChainPoints.push(newPoint);
       borderCount++;
@@ -78,6 +78,7 @@ window.mousePressed = function () {
   } else {
     if (polyDaiza.isInside(mousePoint))
       if (
+        !polyDaiza.isInsideCage(mousePoint) &&
         !currentCage.isInside(mousePoint) &&
         polyDaiza.getLastCage().isValid(mousePoint)
       ) {
@@ -88,9 +89,9 @@ window.mousePressed = function () {
   }
 };
 
-window.showFunnel = function() {
+window.showFunnel = function () {
   polyDaiza.funnel = new Funnel(polyDaiza);
-}
+};
 
 //                            SETUP
 // -------------------------------------------------------------------------
@@ -116,8 +117,7 @@ window.draw = function () {
   if (polyDaiza !== undefined) {
     polyDaiza.draw();
     polyDaiza.drawCages();
-    if (polyDaiza.funnel !== undefined)
-      polyDaiza.drawFunnel();
+    if (polyDaiza.funnel !== undefined) polyDaiza.drawFunnel();
   }
   displayMessage();
 };

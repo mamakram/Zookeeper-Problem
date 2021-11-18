@@ -20,8 +20,69 @@
 
     <!-- Tab content -->
     <div id="Explanation" class="tabcontent">
-      <h3>Zookeeper's Problem</h3>
-      <p>Explain stuff here</p>
+      <h2 style = "text-align: center;" class="titleHead">Zookeeper problem: Solving the zookeeper
+        algorithm in approximatively O(nlogn)</h2>
+        <div style = "text-align: center;"class="author" ><span 
+        class="cmr-12">Amir M. Fallahi, Anthony Kerckhof, Markus Makram Ghatas </span></div><br />
+        <div style = "text-align: center;"  class="date" ><span 
+        class="cmr-12">19 November 2021</span></div>
+           <h3 class="sectionHead"><span class="titlemark">1   </span> <a 
+            id="x1-10001"></a>Preamble</h3>
+            <!--l. 7--><p class="noindent" >
+               <h4 class="subsectionHead"><span class="titlemark">1.1   </span> <a 
+             id="x1-20001.1"></a>What is the Zookeeper&#8217;s Problem</h4>
+            <!--l. 8--><p class="noindent" >Let P be a simple polygon representing a zoo. From now on, we will call this
+            polygon the Zoolygon.<br 
+            class="newline" /> Let C<sub><span 
+            class="cmr-7">1</span></sub>,...,C<sub><span 
+            class="cmmi-7">k</span></sub> be a set of k disjoint convex hulls in P
+            such that each convex hull shares an edge with our Zoolygon. These are
+            the cages of our zoo.<br 
+            class="newline" /> Let p be a vertex of P representing a zoo-keeper&#8217;s
+            chair.<br 
+            class="newline" />The zoo-keeper&#8217;s problem is to find the shortest closed path starting at p and
+            touching at least one point of each cage without entering them. This path is a
+            shortest path that the zoo-keeper can take to feed all the animals.
+            <!--l. 11--><p class="noindent" >
+               <h4 class="subsectionHead"><span class="titlemark">1.2   </span> <a 
+             id="x1-30001.2"></a>Objective</h4>
+            <!--l. 12--><p class="noindent" >The aim of this website is to provide an algorithm that solves the Zookeeper&#8217;s
+            algorithm on a predefined Simple Polygon.<br 
+            class="newline" />For this, the user will be provided an environment to place cages in a Zoo and then
+            find the shortest path from a chosen vertex.
+            <!--l. 15--><p class="noindent" >
+               <h3 class="sectionHead"><span class="titlemark">2   </span> <a 
+             id="x1-40002"></a>Environment</h3>
+            <!--l. 16--><p class="noindent" >
+               <h4 class="subsectionHead"><span class="titlemark">2.1   </span> <a 
+             id="x1-50002.1"></a>Description</h4>
+            <!--l. 17--><p class="noindent" >The environment given to the user consists of a canvas containing our Zoolygon (Zoo
+            polygon). Here, the user is able to place as many cages as they wish by selecting
+            points first on the polygon edges then inside to form a convex hull across an edge.
+            The createCage button then creates said convex hull.<br 
+            class="newline" />
+               <h4 class="subsectionHead"><span class="titlemark">2.2   </span> <a 
+             id="x1-60002.2"></a>Implementation</h4>
+            <!--l. 19--><p class="noindent" >To implement these features, a few things are necessary:<br 
+            class="newline" />
+            
+                 <ul class="itemize1">
+                 <li class="itemize">A way to reflect a point on a line, for selection of points across polygon
+                 edges
+                 </li>
+                 <li class="itemize">A way to compute the polygonal chain between two points on the Polygon
+                 (i.e all the vertices of the Polygon between these to points) as well as ways
+                 to ensure the convexity of this chain
+                 </li>
+                 <li class="itemize">A way to then compute the rest of the Convex hull of a cage with this
+                 polygonal Chain</li></ul>
+            <!--l. 25--><p class="noindent" >This implementation therefore has a lot of edge cases that have to be handled to restrict
+            point placement in order to create only convex Cages on the Polygon.
+               <h3 class="sectionHead"><span class="titlemark">3   </span> <a 
+             id="x1-70003"></a>Shortest Path in a Simple Polygon</h3>
+            <!--l. 27--><p class="noindent" >
+               <h3 class="sectionHead"><span class="titlemark">4   </span> <a 
+             id="x1-80004"></a>Zookeeper algorithm</h3>
     </div>
 
     <div id="Demo" class="tabcontent">
@@ -65,7 +126,12 @@
 
     <div id="References" class="tabcontent">
       <h3>References</h3>
-      <p>Reference some people here</p>
+      <h4>Zookeeper Algorithm</h4>
+      <a href="https://www.sciencedirect.com/science/article/pii/S0925772102000925">An O(nlogn) algorithm for the zoo-keeper's problem,Sergei Bespamyatnikh</a>
+      <h4>Shortest path</h4>
+      <a href="https://www.cc.gatech.edu/~rpeng/18434_S15/sspPolygon.pdf">Georgia Tech - Seminar in Theoretical Computer Science : Shortest Path in a Polygon, Alex Grinman </a>
+      <br>
+      <a href="https://www.sciencedirect.com/science/article/pii/0925772194900108?via%3Dihub">Computing minimum length paths of a given homotopy class,John Hershberger & Jack Snoeyink</a>
     </div>
 
     <!-- script to open tabs-->

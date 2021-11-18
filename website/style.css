@@ -15,6 +15,9 @@
     padding: 14px 16px;
     transition: 0.3s;
   }
+  br {
+    line-height: 150%;
+ }
   
   /* Change background color of buttons on hover */
   .tab button:hover {
@@ -33,3 +36,23 @@
     border: 1px solid #ccc;
     border-top: none;
   } 
+
+  a{
+    margin-left: 50px;
+  }
+
+  p {
+    margin-left: 50px;
+    margin-right: 150px;
+  }
+  ul{
+    margin-left: 50px;
+    margin-right: 150px;
+  }
+
+  h3{
+    margin-left: 25px;
+  }
+  h4{
+    margin-left: 50px;
+  }
