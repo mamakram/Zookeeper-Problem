@@ -60,14 +60,14 @@ window.mousePressed = function () {
   let mousePoint = new Point(mouseX, mouseY);
   if (borderCount < 2) {
     mousePoint.label = labelLst[borderCount];
-    if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
     let newPoint = polyDaiza.findMinReflection(mousePoint);
-    if (newPoint !== null)
+    if (newPoint !== null) {
+      if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
       if (!polyDaiza.isInsideCage(newPoint)) {
         newPoint.label = labelLst[borderCount];
         polyDaiza.getLastCage().polyChainPoints.push(newPoint);
         borderCount++;
-      } else error = true;
+      }} else error = true;
     if (borderCount === 2) {
       if (!polyDaiza.getLastCage().createPolyChain(polyDaiza)) {
         borderCount = 1; //reset borderCount if the second point is invalid
@@ -94,6 +94,10 @@ window.showFunnel = function () {
   polyDaiza.funnel = new Funnel(polyDaiza);
 };
 
+window.TriWithCages = function () {
+  polyDaiza.triangulateWithCagesAsObstacles();
+};
+
 //                            SETUP
 // -------------------------------------------------------------------------
 
@@ -109,6 +113,10 @@ window.reset = function () {
   borderCount = 0;
 };
 
+window.windowResized = function () {
+  resizeCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
+};
+
 //                             DRAW
 // -------------------------------------------------------------------------
 window.draw = function () {
@@ -118,6 +126,7 @@ window.draw = function () {
     polyDaiza.draw();
     polyDaiza.drawCages();
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
+    if (polyDaiza.ShapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };

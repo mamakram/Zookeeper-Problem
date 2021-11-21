@@ -221,6 +221,14 @@ class Cage {
       }
     }
   }
+
+  getStartPoint() {
+    return this.polyChainPoints[0];
+  }
+
+  getEndPoint() {
+    return this.polyChainPoints[this.polyChainPoints.length-1];
+  }
 }
 
 export { Cage };

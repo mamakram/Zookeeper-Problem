@@ -37,6 +37,7 @@ function edgeIntersection(a_zoolygon, a_cage) {
   return false;
 }
 
+
 function sortPointsRadially(points, startPoint) {
   //sort radially by comparing to startpoint
   return points.sort(function comparator(A, B) {
