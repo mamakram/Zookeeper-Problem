@@ -5,6 +5,12 @@ import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
 import { Funnel } from "./modules/Funnel.js";
 
+const states = {
+  CAGES: "CAGES",
+  FUNNEL: "FUNNEL",
+};
+var state = states.CAGES;
+
 const polyDaizaPoints = [
   [33, 245],
   [39, 305],
@@ -58,40 +64,56 @@ window.mousePressed = function () {
   error = false;
   let labelLst = ["A", "B"];
   let mousePoint = new Point(mouseX, mouseY);
-  if (borderCount < 2) {
-    mousePoint.label = labelLst[borderCount];
-    if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
-    let newPoint = polyDaiza.findMinReflection(mousePoint);
-    if (newPoint !== null)
-      if (!polyDaiza.isInsideCage(newPoint)) {
-        newPoint.label = labelLst[borderCount];
-        polyDaiza.getLastCage().polyChainPoints.push(newPoint);
-        borderCount++;
-      } else error = true;
-    if (borderCount === 2) {
-      if (!polyDaiza.getLastCage().createPolyChain(polyDaiza)) {
-        borderCount = 1; //reset borderCount if the second point is invalid
-        error = true;
-      } else {
-        currentCage = new Polygon(polyDaiza.getLastCage().polyChainPoints);
+  if (state === states.CAGES) {
+    if (borderCount < 2) {
+      mousePoint.label = labelLst[borderCount];
+      if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
+      let newPoint = polyDaiza.findMinReflection(mousePoint);
+      if (newPoint !== null)
+        if (!polyDaiza.isInsideCage(newPoint)) {
+          newPoint.label = labelLst[borderCount];
+          polyDaiza.getLastCage().polyChainPoints.push(newPoint);
+          borderCount++;
+        } else error = true;
+      if (borderCount === 2) {
+        if (!polyDaiza.getLastCage().createPolyChain(polyDaiza)) {
+          borderCount = 1; //reset borderCount if the second point is invalid
+          error = true;
+        } else {
+          currentCage = new Polygon(polyDaiza.getLastCage().polyChainPoints);
+        }
       }
+    } else {
+      if (polyDaiza.isInside(mousePoint))
+        if (
+          !polyDaiza.isInsideCage(mousePoint) &&
+          !currentCage.isInside(mousePoint) &&
+          polyDaiza.getLastCage().isValid(mousePoint)
+        ) {
+          polyDaiza.getLastCage().points.push(mousePoint);
+        } else {
+          error = true;
+        }
     }
   } else {
-    if (polyDaiza.isInside(mousePoint))
-      if (
-        !polyDaiza.isInsideCage(mousePoint) &&
-        !currentCage.isInside(mousePoint) &&
-        polyDaiza.getLastCage().isValid(mousePoint)
-      ) {
-        polyDaiza.getLastCage().points.push(mousePoint);
-      } else {
-        error = true;
+    if (polyDaiza.isInside(mousePoint)) {
+      if (borderCount === 0) {
+        polyDaiza.funnel.reset();
       }
+      polyDaiza.funnel.addPoint(mousePoint);
+      borderCount++;
+      if (borderCount === 2) {
+        polyDaiza.funnel.funnel();
+        borderCount = 0;
+        state = states.CAGES;
+      }
+    }
   }
 };
 
 window.showFunnel = function () {
   polyDaiza.funnel = new Funnel(polyDaiza);
+  state = states.FUNNEL;
 };
 
 //                            SETUP
