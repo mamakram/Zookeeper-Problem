@@ -1,5 +1,5 @@
 import { Point } from "./Point.js";
-import {drawSegment, isRT, isLT} from "./Utils.js"
+import {drawSegment, isRT, isLT, mod} from "./Utils.js"
 
 /**
  * Represent the shortest path between 2 points in a polygon 
@@ -19,7 +19,11 @@ class Funnel {
       // variable for which we can remove the "this." when we don't need to draw them anymore
       this.pathTriangle = this.getRopePath();
       this.segmentCrossedByApproxPath = this.getSegmentCrossed(this.pathTriangle);
-      //this.shortestPath(this.pathTriangle, this.segmentCrossedByApproxPath)
+      let tmp = this.shortestPath(this.pathTriangle, this.segmentCrossedByApproxPath)
+      this.right = tmp[0] // debug
+      this.left = tmp[1] // debug
+      console.log("Right : ", this.right)
+      console.log("Left : ", this.left)
     }
 
     /**
@@ -72,15 +76,19 @@ class Funnel {
       let tail = []
       let left = []
       let right = []
+      
       tail.push(this.special_triangle1.center)
 
-      let pathTriangleCp = pathTriangle.slice()
-      let segCrossedCp = segCrossed.slice()
+      let pathTriangleCp = pathTriangle.slice() // obliged to do copy
+      let segCrossedCp = segCrossed.slice()     // obliged to do copy
 
       let rightElem = null
       let leftElem = null
 
-      while(segCrossedCp.length !== 0){
+      let depth = 0
+      //while(segCrossedCp.length !== 0){
+      while (depth < 4){
+        depth++
         let consideredSeg = segCrossedCp.shift()
         let consideredTriangle = pathTriangleCp.shift()[0]
         
@@ -88,27 +96,79 @@ class Funnel {
         if (isLT(consideredTriangle.center, consideredSeg[0], consideredSeg[1])){
           rightElem = consideredSeg[0]
           leftElem = consideredSeg[1]
-        }else{
+        }else{ // swap
           rightElem = consideredSeg[1]
           leftElem = consideredSeg[0]
         }
-        if (left.length === 0 ||right.length === 0){
+
+        // - - - - - end of setup - - - - - -
+
+        if (left.length === 0 || right.length === 0){
           if (left.length === 0) left.push(leftElem)
           if (right.length === 0) right.push(rightElem)
         }
         else{
+          // Considering right bounds
+          console.log("consider right : ", right)
+          let Jacopo = right.length > 1 ? right[right.length-2] : tail[tail.length-1]
           if (rightElem === right[right.length-1]) {}
-          else if (isLT(consideredTriangle.center, right[right.length-1], rightElem)){
+          else if (isLT(Jacopo, right[right.length-1], rightElem)){
             right[right.length-1] = rightElem;
           }
+          else { // case where we cross a border of the polygon : right doesn't change 
+            console.log("Crossing past left border")
+            let newNextBorderPoint = this.getNext(left[left.length-1], true)  
+            left.push(newNextBorderPoint)    
+            if (left[0] === right[0]){
+              console.log("COMMMMMMON")
+              let common = shift(left)
+              shift(right)
+              tail.push(common)
+            }    
+          }
           
+          // Considering left bounds
+          console.log("consider left : ", left)
           
+          Jacopo = left.length > 1 ? left[left.length-2] : tail[tail.length-1] 
+          console.log(Jacopo, left[left.length-1], leftElem)
+
           if (leftElem === left[left.length-1]) {}
-          else if (isRT(consideredTriangle.center, left[left.length-1], leftElem)){
+          else if (isRT(Jacopo, right[right.length-1], leftElem)) { // case where we cross a border of the polygon : left doesn't change 
+            console.log("Crossing past left border")
+            let newNextBorderPoint = this.getNext(right[right.length-1], false)  
+            right.push(newNextBorderPoint)     
+            if (left[0] === right[0]){
+              console.log("COMMMMMMON")
+              let common = shift(left)
+              shift(right)
+              tail.push(common)
+            }   
+          }
+          else if (isRT(Jacopo, left[left.length-1], leftElem)){
             left[left.length-1] = leftElem;
           }
+          
+          
         }
+        
       }
+      return [tail.concat(right), tail.concat(left)] // temporarily for debug
+    }
+
+    //TODO: should be a function of zoolygon ? 
+    /** 
+     * Get the point that follows the input point, considering either clockwise or counterclockwise order
+     * @param {*} point : the point we are looking for the next 
+     * @param {*} reverseOrder : boolean value
+     */
+    getNext(point, reverseOrder){
+    
+      let poly = this.originalPoly.points
+      let index = poly.indexOf(point)
+      console.log(index)
+      if (reverseOrder) return poly[mod(index-1, poly.length)]
+      else return poly[mod(index+1, poly.length)]
     }
   
     draw() {
@@ -117,14 +177,25 @@ class Funnel {
       text("s", this.s.x, this.s.y);
       ellipse(this.t.x, this.t.y, 4, 4);
       text("t", this.t.x, this.t.y);
+
+      // approximate path
       for (let i = 0; i < this.pathTriangle.length; i++){
         drawSegment(this.pathTriangle[i][0].center, this.pathTriangle[i][1].center, "red");
       
       }
+
+      // segment crossed
       let seg = this.segmentCrossedByApproxPath
       for (let i = 0; i < seg.length; i++){
         drawSegment(seg[i][0], seg[i][1], "green");
-  
+      }
+
+      // left and right bounds 
+      for (let i = 0; i < this.left.length -1 ; i++){
+        drawSegment(this.left[i], this.left[i+1], "blue")
+      }
+      for (let i = 0; i < this.right.length -1 ; i++){
+        drawSegment(this.right[i], this.right[i+1], "orange")
       }
         
     }
