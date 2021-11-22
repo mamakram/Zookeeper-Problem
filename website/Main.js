@@ -43,7 +43,11 @@ var currentCage;
 var error = false;
 
 window.createCage = function () {
-  if (polyDaiza.getLastCage().inConstruction && borderCount === 2) {
+  if (
+    polyDaiza.cages.length > 0 &&
+    polyDaiza.getLastCage().inConstruction &&
+    borderCount === 2
+  ) {
     polyDaiza.getLastCage().constructCage();
     borderCount = 0;
   }

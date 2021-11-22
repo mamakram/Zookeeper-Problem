@@ -183,7 +183,6 @@ class Polygon {
           }
         }
       }
-      console.log(this.dual.adjList);
       return this.dual;
     }
   }
@@ -218,24 +217,6 @@ class Polygon {
     for (let i in this.triangulations) this.triangulations[i].draw();
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
-    }
-
-    // drawing of the triangulation : used for visual purpose while developping the
-    // funnel
-    for (let i = 0; i < this.triangulations.length; i++) {
-      this.triangulations[i].draw();
-      fill(0);
-      ellipse(
-        this.triangulations[i].center.x,
-        this.triangulations[i].center.y,
-        4,
-        4
-      );
-      text(
-        "C",
-        this.triangulations[i].center.x,
-        this.triangulations[i].center.y
-      );
     }
   }
 }
