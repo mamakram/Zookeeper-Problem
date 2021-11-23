@@ -4,6 +4,7 @@ import { Graph } from "./Graph.js";
 import {
   drawSegment,
   checkRayIntersection,
+  checkSegmentIntersection,
   isSegmentBefore,
   isRT,
   isLT,
@@ -161,10 +162,25 @@ class Polygon {
     return intersections;
   }
 
+  intersects(a, b) {
+    for (let i = 0; i < this.points.length; i++) {
+      let segment = [this.points[i], this.points[(i + 1) % this.points.length]];
+      if (
+        !segment.includes(a) &&
+        !segment.includes(b) &&
+        checkSegmentIntersection(a, b, segment[0], segment[1])
+      ) {
+        console.log("inter", segment[0], segment[1], a, b);
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
-   * Compute the dual graph of the polygon if it is needed, 
+   * Compute the dual graph of the polygon if it is needed,
    * this action proceeds to a polygon triangulation.
-   * 
+   *
    * @returns the dual graph of the polygon
    */
   getDualGraph() {
@@ -177,17 +193,14 @@ class Polygon {
       // TODO: it's in O(n**2), but preproccessing so idk if it matters
       for (let i = 0; i < this.triangulations.length; i++) {
         let triangle1 = this.triangulations[i];
-
         for (let j = i; j < this.triangulations.length; j++) {
           let triangle2 = this.triangulations[j % this.triangulations.length];
-
           if (triangle1.hasCommonEdge(triangle2)) {
             this.dual.connect(triangle1, triangle2);
             this.dual.connect(triangle2, triangle1);
           }
         }
       }
-      console.log(this.dual.adjList);
       return this.dual;
     }
   }
@@ -219,27 +232,10 @@ class Polygon {
    * Draw polygon on canvas
    */
   draw() {
-    //for (let i in this.triangulations) this.triangulations[i].draw(); 
+    //for (let i in this.triangulations) this.triangulations[i].draw();
+
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
-    }
-
-    // drawing of the triangulation : used for visual purpose while developping the 
-    // funnel
-    for (let i = 0; i < this.triangulations.length; i++) {
-      this.triangulations[i].draw();
-      fill(0);
-      ellipse(
-        this.triangulations[i].center.x,
-        this.triangulations[i].center.y,
-        4,
-        4
-      );
-      text(
-        "C",
-        this.triangulations[i].center.x,
-        this.triangulations[i].center.y
-      );
     }
   }
 }
@@ -269,7 +265,7 @@ class Triangle extends Polygon {
   /**
    * Compute the ceter point of a triangle.
    * Mainly used for building the dual tree of the polygon.
-   * 
+   *
    * @returns the point in the center of the triangle
    */
   findCenter() {
@@ -283,8 +279,8 @@ class Triangle extends Polygon {
    * @param {Triangle} other : the triangle in comparison
    * @returns true if the triangle other has a common edge with this
    */
-  hasCommonEdge(other){
-    let edge = this.getCommonEdge(other)
+  hasCommonEdge(other) {
+    let edge = this.getCommonEdge(other);
     if (edge.length === 2) {
       return true;
     }
@@ -294,10 +290,10 @@ class Triangle extends Polygon {
   /**
    * Compute the common edge with an other triangle
    * @param {Triangle} other : the triangle in comparison
-   * @returns edge : the coordinates of the edge in common 
+   * @returns edge : the coordinates of the edge in common
    */
   getCommonEdge(other) {
-    let edge = []
+    let edge = [];
     for (let i = 0; i < other.points.length; i++) {
       let p = other.points[i];
       if (
@@ -305,7 +301,7 @@ class Triangle extends Polygon {
         p === this.points[1] ||
         p === this.points[2]
       ) {
-        edge.push(p)
+        edge.push(p);
       }
     }
     return edge;

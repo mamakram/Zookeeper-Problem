@@ -1,7 +1,5 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Polygon } from "./Polygon.js";
-import { Funnel } from "./Funnel.js";
-import {squareDistance, drawSegment, isAligned, isRT, isLT, mod} from "./Utils.js"
 
 /**
  * class to represent Zoolygon on canvas (i.e Polygon with cages)
