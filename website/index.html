@@ -151,7 +151,7 @@
         <br class="newline"/> 
         <center>
         <figure>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/HomotopySmall.gif"/>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/HomotopySmall.gif" width = "20%"/>
           <figcaption>Two homotopic functions</figcaption>
         </figure>
         </center>
@@ -181,7 +181,7 @@
         <br class="newline"/> 
         <center>
         <figure>
-          <img src="./images/Funnel_Base.jpg" width="300" height="270"/>
+          <img src="./images/Funnel_Base.jpg" width = "20%"/>
           <figcaption>Basic Example</figcaption>
         </figure>
         </center>
@@ -194,30 +194,30 @@
       <br class="newline"/> 
       <center>
       <figure>
-        <img src="./images/Funnel_Execution.jpg" width="1200" height="1170"/>
+        <img src="./images/Funnel_Execution_Labeled.jpg" width="75%"/>
         <figcaption>Funnel Algorithm Execution</figcaption>
       </figure>
       </center>
       <br class="newline"/>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 1: </b> At the beginning we connect the apex of our funnel (source point) to the endpoints of the edge which have been crossed by path p.
+        <b>Iteration 1: </b> At the beginning we connect the apex of our funnel (source point) to the endpoints of the edge which have been crossed by path p (AH).
         <br class="newline"/>  
-        <b>Iteration 2: </b> In order to tighten our funnel by considering the next crossed edge, we move the left boundry.
+        <b>Iteration 2: </b> In order to tighten our funnel by considering the first crossed edge (AH), we move the left boundry endpoint from H to G (right boundry is at the most right position compared to the apex [source] so it is not possible to move it).
         <br class="newline"/>
-        <b>Iteration 3: </b> Now in order to tighten our funnel by considering the next crossed edge, we can not move the left boundry (as it is at the left most position compared to the apex). The right boundry also in not movable as the endpoint of next edge is at its right side but it is possible to continue it on the edge in order to reach the next endpoint (this will not tighten the funnel but it its the only way to continue execution).
+        <b>Iteration 3: </b> Now in order to tighten our funnel by considering the next crossed edge (AG), we can not move the left boundry (as it is at the left most position compared to the apex). The right boundry also in not movable as the endpoint of next edge (B) is at its right side (or at least it is aligned with it) but it is possible to continue the right boundry on the edge (AB) in order to reach the next endpoint (this will not tighten the funnel but it is the only way to continue execution; In fact the algorithm perform this action in same case).
         <br class="newline"/>
-        <b>Iteration 4: </b> Now it is possible to move the left boundry.
+        <b>Iteration 4: </b> Now the next crossed edge is BG and it is possible to move the left boundry to tighten the funnel (From G to F).
         <br class="newline"/>
-        <b>Iteration 5: </b> Now it is not possible to move the right boundry (as it is at the right most position compared to the apex). The only way to continue execution is to move the left boundry. As we move this boundry it will be coincide over the other boundry. So the coincide segment will be a part of the solution. This coincide segment is the the tail of our funnel and its endpoint which closer to the destination is the new apex. 
+        <b>Iteration 5: </b> In order to handle the next crossed edge (BF), it is not possible to move the right boundry (as it is at the right most position compared to the apex). The only way to continue execution is to move the left boundry. As we move this boundry it will be coincide over the right boundry. So the coincide segment will be a part of the solution. This coincide segment is the the tail of our funnel and its endpoint which closer to the destination (B) is the new apex. 
         <br class="newline"/>
-        <b>Iteration 6: </b> Now we got new left boundry and new right boundry; As you can see there is a possibility to move the right boundry to tighten the new funnel.
+        <b>Iteration 6: </b> Now we got new left boundry and new right boundry; As you can see there is a possibility to move the right boundry to tighten the new funnel by considering the edge CF.
         <br class="newline"/>
-        <b>Iteration 7: </b> We can again move the right boundry to tighten the funnel.
+        <b>Iteration 7: </b> Next crossed edge is DF and we can again move the right boundry to tighten the funnel .
         <br class="newline"/>
-        <b>Iteration 8: </b> We can again move the right boundry to tighten the funnel.
+        <b>Iteration 8: </b> We can again move the right boundry to tighten the funnel and handle the crossed edge EF.
         <br class="newline"/>
-        <b>Iteration 9: </b> We can again move the right boundry to tighten the funnel. So now we reached the destination; So our solution will be tail with the boundry which have been reached the destination.
+        <b>Iteration 9: </b> We can again move the right boundry to tighten the funnel. So now we reached the destination; So our solution will be tail of the funnel with the boundry which have been reached the destination.
         <br class="newline"/>
       </p>
 
