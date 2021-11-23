@@ -169,7 +169,7 @@ class Polygon {
         !segment.includes(b) &&
         checkSegmentIntersection(a, b, segment[0], segment[1])
       ) {
-        console.log("inter", segment[0], segment[1], a, b);
+        //console.log("inter", segment[0], segment[1], a, b);
         return true;
       }
     }
@@ -186,14 +186,14 @@ class Polygon {
     if (this.dual !== null) {
       return this.dual;
     } else {
-      this.triangulate();
+      //this.triangulate();
       this.dual = new Graph();
 
       // TODO: it's in O(n**2), but preproccessing so idk if it matters
       for (let i = 0; i < this.triangulations.length; i++) {
         let triangle1 = this.triangulations[i];
         for (let j = i; j < this.triangulations.length; j++) {
-          let triangle2 = this.triangulations[j % this.triangulations.length];
+          let triangle2 = this.triangulations[j];
           if (triangle1.hasCommonEdge(triangle2)) {
             this.dual.connect(triangle1, triangle2);
             this.dual.connect(triangle2, triangle1);
@@ -231,7 +231,7 @@ class Polygon {
    * Draw polygon on canvas
    */
   draw() {
-    for (let i in this.triangulations) this.triangulations[i].draw();
+    //for (let i in this.triangulations) this.triangulations[i].draw();
 
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);

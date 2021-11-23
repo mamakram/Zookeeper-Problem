@@ -10,7 +10,7 @@ const states = {
   FUNNEL: "FUNNEL",
 };
 var state = states.CAGES;
-
+var depth = 2;
 const polyDaizaPoints = [
   [33, 245],
   [39, 305],
@@ -116,7 +116,7 @@ window.mousePressed = function () {
 };
 
 window.showFunnel = function () {
-  polyDaiza.funnel = new Funnel(polyDaiza);
+  polyDaiza.funnel = new Funnel(polyDaiza.shapeWithCages, depth++);
   state = states.FUNNEL;
 };
 
@@ -152,7 +152,7 @@ window.draw = function () {
     polyDaiza.draw();
     polyDaiza.drawCages();
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
-    if (polyDaiza.ShapeWithCages !== null) polyDaiza.drawTWCresult();
+    if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };
