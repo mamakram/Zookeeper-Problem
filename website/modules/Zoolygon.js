@@ -1,5 +1,8 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Polygon } from "./Polygon.js";
+import { mod } from "./Utils.js";
+import { Point } from "./Point.js";
+import { Cage } from "./Cage.js";
 
 /**
  * class to represent Zoolygon on canvas (i.e Polygon with cages)
@@ -44,7 +47,9 @@ class Zoolygon extends Polygon {
       tmp = tmp.slice(tmp.indexOf(this.cages[i].getEndPoint()));
       tmp.push(this.cages[i].getStartPoint());
       tmp.reverse();
-      console.log("HERE: " +  tmp[0].label + " /// " + tmp[tmp.length-1].label);
+      console.log(
+        "HERE: " + tmp[0].label + " /// " + tmp[tmp.length - 1].label
+      );
       let A = tmp[0];
       let insertPoint = this.points[A.segmentOnPolygon];
       let cagePoints = this.cages[i].getPoints();
@@ -53,13 +58,16 @@ class Zoolygon extends Polygon {
           rm.push(cagePoints[j]);
         }
       }
-      let cutIndex = mod(mixPoints.indexOf(insertPoint)+1, mixPoints.length);
-      mixPoints = mixPoints.slice(0, cutIndex).concat(tmp).concat(mixPoints.slice(cutIndex));
+      let cutIndex = mod(mixPoints.indexOf(insertPoint) + 1, mixPoints.length);
+      mixPoints = mixPoints
+        .slice(0, cutIndex)
+        .concat(tmp)
+        .concat(mixPoints.slice(cutIndex));
     }
     for (let k = 0; k < rm.length; k++) {
-        let a = mixPoints.indexOf(rm[k]);
-        let temp = mixPoints.slice(0, a).concat(mixPoints.slice(a+1));
-        mixPoints = temp;
+      let a = mixPoints.indexOf(rm[k]);
+      let temp = mixPoints.slice(0, a).concat(mixPoints.slice(a + 1));
+      mixPoints = temp;
     }
     this.ShapeWithCages = new Polygon(mixPoints);
     this.ShapeWithCages.triangulate();
@@ -68,7 +76,6 @@ class Zoolygon extends Polygon {
   drawTWCresult() {
     this.ShapeWithCages.draw();
   }
-
 
   reset() {
     this.triangulations = [];

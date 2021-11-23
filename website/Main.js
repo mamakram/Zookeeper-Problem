@@ -71,10 +71,10 @@ window.mousePressed = function () {
   if (state === states.CAGES) {
     if (borderCount < 2) {
       mousePoint.label = labelLst[borderCount];
-      if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
       let newPoint = polyDaiza.findMinReflection(mousePoint);
       if (newPoint !== null)
         if (!polyDaiza.isInsideCage(newPoint)) {
+          if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
           newPoint.label = labelLst[borderCount];
           polyDaiza.getLastCage().polyChainPoints.push(newPoint);
           borderCount++;

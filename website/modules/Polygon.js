@@ -12,7 +12,6 @@ import {
   reflectionOnLine,
   sortPointsRadially,
   squareDistance,
-
 } from "./Utils.js";
 
 /**
@@ -232,7 +231,7 @@ class Polygon {
    * Draw polygon on canvas
    */
   draw() {
-    //for (let i in this.triangulations) this.triangulations[i].draw();
+    for (let i in this.triangulations) this.triangulations[i].draw();
 
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
