@@ -10,7 +10,9 @@ import {
   isLT,
   mod,
   reflectionOnLine,
+  sortPointsRadially,
   squareDistance,
+
 } from "./Utils.js";
 
 /**
@@ -49,7 +51,7 @@ class Polygon {
   /**
    * Recursive algorithm to triangulate the polygon
    */
-  triangulate(depth = 0) {
+  triangulate() {
     //recursively compute triangulations of a polygon p
     if (this.points.length === 3)
       this.triangulations.push(
@@ -68,7 +70,7 @@ class Polygon {
       let newPoints = this.points.slice();
       newPoints.splice(ear, 1);
       let p = new Polygon(newPoints);
-      p.triangulate(depth + 1);
+      p.triangulate();
       this.triangulations = this.triangulations.concat(p.triangulations);
     }
   }
@@ -231,6 +233,7 @@ class Polygon {
    */
   draw() {
     //for (let i in this.triangulations) this.triangulations[i].draw();
+
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
     }

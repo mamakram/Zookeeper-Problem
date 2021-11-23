@@ -120,6 +120,10 @@ window.showFunnel = function () {
   state = states.FUNNEL;
 };
 
+window.TriWithCages = function () {
+  polyDaiza.triangulateWithCagesAsObstacles();
+};
+
 //                            SETUP
 // -------------------------------------------------------------------------
 
@@ -135,6 +139,10 @@ window.reset = function () {
   borderCount = 0;
 };
 
+window.windowResized = function () {
+  resizeCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
+};
+
 //                             DRAW
 // -------------------------------------------------------------------------
 window.draw = function () {
@@ -144,6 +152,7 @@ window.draw = function () {
     polyDaiza.draw();
     polyDaiza.drawCages();
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
+    if (polyDaiza.ShapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };
