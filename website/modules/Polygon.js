@@ -4,6 +4,7 @@ import { Graph } from "./Graph.js";
 import {
   drawSegment,
   checkRayIntersection,
+  checkSegmentIntersection,
   isSegmentBefore,
   isRT,
   isLT,
@@ -159,6 +160,21 @@ class Polygon {
     return intersections;
   }
 
+  intersects(a, b) {
+    for (let i = 0; i < this.points.length; i++) {
+      let segment = [this.points[i], this.points[(i + 1) % this.points.length]];
+      if (
+        !segment.includes(a) &&
+        !segment.includes(b) &&
+        checkSegmentIntersection(a, b, segment[0], segment[1])
+      ) {
+        console.log("inter", segment[0], segment[1], a, b);
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Compute the dual graph of the polygon if it is needed,
    * this action proceeds to a polygon triangulation.
@@ -214,7 +230,7 @@ class Polygon {
    * Draw polygon on canvas
    */
   draw() {
-    for (let i in this.triangulations) this.triangulations[i].draw();
+    //for (let i in this.triangulations) this.triangulations[i].draw();
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
     }

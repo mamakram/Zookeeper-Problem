@@ -105,7 +105,7 @@ class Funnel {
     let rightElem = null;
     let leftElem = null;
 
-    //while (segCrossedCp.length !== 0) {
+    //while (segCrossedCp.length !== 0) { (depth < 8){
     let depth = 0;
     while (segCrossedCp.length !== 0) {
       depth++;
@@ -128,18 +128,14 @@ class Funnel {
         if (right.length === 0) right.push(rightElem);
       } else {
         // Considering right bounds
-        let Jacopo =
-          right.length > 1 ? right[right.length - 2] : tail[tail.length - 1];
+        let apex = tail[tail.length - 1];
+
         if (rightElem !== right[right.length - 1]) {
           let problem = -1;
-          for (let i in left) {
+          for (let i = 0; i < left.length; i++) {
             //check if there is an intersection between new added point to left and the right funnel
-            if (
-              isLT(Jacopo, left[i], rightElem) //&&
-              //isLT(left[i], rightElem, Jacopo)
-            ) {
+            if (isLT(apex, left[i], rightElem)) {
               problem = i;
-              break;
             }
           }
 
@@ -147,7 +143,10 @@ class Funnel {
             // case where we cross a border of the polygon : right doesn't change
             right = left.slice(0, problem + 1);
             right.push(rightElem);
-          } else if (isLT(Jacopo, right[right.length - 1], rightElem)) {
+          } else if (
+            isLT(apex, right[right.length - 1], rightElem) &&
+            !this.originalPoly.intersects(apex, rightElem)
+          ) {
             right[right.length - 1] = rightElem;
           } else {
             right.push(rightElem);
@@ -156,26 +155,23 @@ class Funnel {
 
         // Considering left bounds
 
-        Jacopo =
-          left.length > 1 ? left[left.length - 2] : tail[tail.length - 1];
-
         if (leftElem !== left[left.length - 1]) {
           let problem = -1;
-          for (let i in right) {
+          //console.log("last point of right " right[right.length - 1],right.length);
+          for (let i = 0; i < right.length; i++) {
             //check if there is an intersection between new added point to left and the right funnel
-            if (
-              isRT(Jacopo, right[i], leftElem) //&&
-              //isRT(right[i], Jacopo, leftElem)
-            ) {
+            if (isRT(apex, right[i], leftElem)) {
               problem = i;
-              break;
             }
           }
           if (problem !== -1) {
             // case where we cross a border of the polygon : left doesn't change
             left = right.slice(0, problem + 1);
             left.push(leftElem);
-          } else if (isRT(Jacopo, left[left.length - 1], leftElem)) {
+          } else if (
+            isRT(apex, left[left.length - 1], leftElem) &&
+            !this.originalPoly.intersects(apex, leftElem)
+          ) {
             left[left.length - 1] = leftElem;
           } else {
             left.push(leftElem);
@@ -189,10 +185,6 @@ class Funnel {
         }
       }
     }
-
-    this.right = []; //[tail[tail.length - 1]].concat(right);
-    this.left = []; //[tail[tail.length - 1]].concat(left);
-
     this.finishPath(left, right, tail);
 
     return tail; // temporarily for debug
