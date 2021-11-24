@@ -16,7 +16,6 @@ class Funnel {
     this.segmentCrossedByApproxPath = [];
     this.pathTriangle = [];
     this.dual = this.originalPoly.getDualGraph();
-    console.log("done");
   }
 
   addPoint(p) {
@@ -60,6 +59,7 @@ class Funnel {
       if (this.originalPoly.triangulations[i].isInside(this.points[1]))
         this.special_triangle2 = this.originalPoly.triangulations[i];
     }
+
     let path = this.dual.dfs_paths(
       this.special_triangle1,
       this.special_triangle2

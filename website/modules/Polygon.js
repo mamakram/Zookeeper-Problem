@@ -30,7 +30,8 @@ class Polygon {
    * @returns boolean to indicate if the point is included
    */
   includes(p) {
-    for (let i in this.points) if (this.points[i] === p) return true;
+    for (let i in this.points)
+      if (this.points[i].x === p.x && this.points[i].y === p.y) return true;
     return false;
   }
 
@@ -41,6 +42,7 @@ class Polygon {
    */
   isInside(p) {
     //check if point in Polygon, if true stores first intersection in point.intersection
+    if (this.includes(p)) return true;
     let isInside = false;
     let intersections = this.rayPolygon(p, new Point(p.x + 50, p.y));
     isInside = Number(intersections.length) % 2 === 1;
@@ -51,6 +53,22 @@ class Polygon {
    * Recursive algorithm to triangulate the polygon
    */
   triangulate() {
+    let point_list = [];
+    for (let i in this.points) {
+      point_list.push(this.points[i].x, this.points[i].y);
+    }
+    let tri_list = earcut(point_list);
+
+    for (let i = 0; i < tri_list.length; i += 3) {
+      this.triangulations.push(
+        new Triangle(
+          this.points[tri_list[i]],
+          this.points[tri_list[i + 1]],
+          this.points[tri_list[i + 2]]
+        )
+      );
+    }
+    /**
     //recursively compute triangulations of a polygon p
     if (this.points.length === 3)
       this.triangulations.push(
@@ -68,10 +86,12 @@ class Polygon {
       this.triangulations.push(triangle);
       let newPoints = this.points.slice();
       newPoints.splice(ear, 1);
+      //console.log(newPoints);
       let p = new Polygon(newPoints);
       p.triangulate();
       this.triangulations = this.triangulations.concat(p.triangulations);
     }
+    */
   }
 
   /**
@@ -81,7 +101,7 @@ class Polygon {
    */
   isConcaveVertex(i) {
     //check if vertex i of polygon p is concave
-    return isRT(
+    return !isLT(
       this.points[mod(i - 1, this.points.length)],
       this.points[i],
       this.points[(i + 1) % this.points.length]
@@ -252,12 +272,13 @@ class Triangle extends Polygon {
    * @returns boolean to indicate if point is inside
    */
   isInside(p) {
+    if (this.includes(p)) return true;
     let p1 = this.points[0];
     let p2 = this.points[1];
     let p3 = this.points[2];
     return (
-      (isRT(p1, p2, p) && isRT(p2, p3, p) && isRT(p3, p1, p)) ||
-      (isLT(p1, p2, p) && isLT(p2, p3, p) && isLT(p3, p1, p))
+      (!isRT(p1, p2, p) && !isRT(p2, p3, p) && !isRT(p3, p1, p)) ||
+      (!isLT(p1, p2, p) && !isLT(p2, p3, p) && !isLT(p3, p1, p))
     );
   }
 
