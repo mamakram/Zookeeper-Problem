@@ -39,17 +39,18 @@ const polyDaizaPoints = [
 ];
 var polyDaiza;
 var borderCount = 0; //number of selected border points for cage creation
+var currentCagePolygon;
 var currentCage;
 var error = false;
 
 window.createCage = function () {
   if (
     polyDaiza.cages.length > 0 &&
-    polyDaiza.getLastCage().inConstruction &&
+    currentCage.inConstruction &&
     borderCount === 2 &&
     state === states.CAGES
   ) {
-    polyDaiza.getLastCage().constructCage();
+    currentCage.constructCage();
     borderCount = 0;
   }
 };
@@ -68,34 +69,44 @@ function createPolyDaiza() {
 window.mousePressed = function () {
   error = false;
   let labelLst = ["A", "B"];
-  let mousePoint = new Point(mouseX, mouseY);
+  let mousePoint = new Point(math.ceil(mouseX), math.ceil(mouseY)); //round point to int
   if (state === states.CAGES) {
     if (borderCount < 2) {
       mousePoint.label = labelLst[borderCount];
       let newPoint = polyDaiza.findMinReflection(mousePoint);
       if (newPoint !== null)
         if (!polyDaiza.isInsideCage(newPoint)) {
-          if (borderCount === 0) polyDaiza.addCage(new Cage(polyDaiza));
-          newPoint.label = labelLst[borderCount];
-          polyDaiza.getLastCage().polyChainPoints.push(newPoint);
+          //console.log(newPoint.x, newPoint.y);
+          newPoint = new Point(
+            math.ceil(newPoint.x),
+            math.ceil(newPoint.y),
+            labelLst[borderCount],
+            newPoint.segmentOnPolygon
+          );
+          if (borderCount === 0) {
+            let cage = new Cage(polyDaiza);
+            cage.polyChainPoints.push(newPoint);
+            polyDaiza.addCage(cage);
+            currentCage = cage;
+          } else currentCage.polyChainPoints.push(newPoint);
           borderCount++;
         } else error = true;
       if (borderCount === 2) {
-        if (!polyDaiza.getLastCage().createPolyChain(polyDaiza)) {
+        if (!currentCage.createPolyChain(polyDaiza)) {
           borderCount = 1; //reset borderCount if the second point is invalid
           error = true;
         } else {
-          currentCage = new Polygon(polyDaiza.getLastCage().polyChainPoints);
+          currentCagePolygon = new Polygon(currentCage.polyChainPoints);
         }
       }
     } else {
       if (polyDaiza.isInside(mousePoint))
         if (
           !polyDaiza.isInsideCage(mousePoint) &&
-          !currentCage.isInside(mousePoint) &&
-          polyDaiza.getLastCage().isValid(mousePoint)
+          !currentCagePolygon.isInside(mousePoint) &&
+          currentCage.isValid(mousePoint)
         ) {
-          polyDaiza.getLastCage().points.push(mousePoint);
+          currentCage.points.push(mousePoint);
         } else {
           error = true;
         }
@@ -154,6 +165,7 @@ window.setup = function () {
 
 window.reset = function () {
   polyDaiza.reset();
+  state = states.CAGES;
   borderCount = 0;
 };
 
@@ -170,7 +182,7 @@ window.draw = function () {
     polyDaiza.draw();
     polyDaiza.drawCages();
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
-    //if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
+    if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };
@@ -178,7 +190,7 @@ window.draw = function () {
 function displayMessage() {
   if (
     polyDaiza.cages.length === 0 ||
-    !polyDaiza.getLastCage().inConstruction ||
+    !currentCage.inConstruction ||
     borderCount < 2
   ) {
     document.getElementById("Info").innerHTML =

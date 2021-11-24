@@ -4,11 +4,11 @@
  * Class to represent point on canvas
  */
 class Point {
-  constructor(x, y, label = "") {
+  constructor(x, y, label = "", segmentOnPolygon = null) {
     this.x = x;
     this.y = y;
     this.label = label;
-    this.segmentOnPolygon = null;
+    this.segmentOnPolygon = segmentOnPolygon;
   }
 }
 

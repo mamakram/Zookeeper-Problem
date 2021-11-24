@@ -1,6 +1,6 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Polygon } from "./Polygon.js";
-import { mod, drawSegment } from "./Utils.js";
+import { mod, drawSegment, squareDistance } from "./Utils.js";
 
 /**
  * class to represent Zoolygon on canvas (i.e Polygon with cages)
@@ -26,7 +26,23 @@ class Zoolygon extends Polygon {
     }
   }
   addCage(cage) {
-    this.cages.push(cage);
+    let p = cage.getStartPoint();
+    let polyPoint = this.points[p.segmentOnPolygon];
+    let i = 0;
+    while (
+      i < this.cages.length &&
+      (p.segmentOnPolygon > this.cages[i].getStartPoint().segmentOnPolygon ||
+        (p.segmentOnPolygon ===
+          this.cages[i].getStartPoint().segmentOnPolygon &&
+          squareDistance(polyPoint, p) >
+            squareDistance(polyPoint, this.cages[i].getStartPoint())))
+    )
+      i++;
+    this.cages = this.cages
+      .slice(0, i)
+      .concat([cage])
+      .concat(this.cages.slice(i));
+    // this.cages.push(cage);
   }
   getCage(index) {
     return this.cageList[index];
@@ -52,7 +68,6 @@ class Zoolygon extends Polygon {
       tmp = tmp.slice(tmp.indexOf(this.cages[i].getEndPoint()));
       tmp.push(this.cages[i].getStartPoint());
       tmp.reverse();
-      console.log(tmp);
       let A = tmp[0];
       let insertPoint = this.points[A.segmentOnPolygon];
 
@@ -80,7 +95,7 @@ class Zoolygon extends Polygon {
   }
 
   drawTWCresult() {
-    /** 
+    /**
     for (let i = 0; i < this.shapeWithCages.points.length; i++) {
       drawSegment(
         this.shapeWithCages.points[i],
@@ -88,13 +103,15 @@ class Zoolygon extends Polygon {
         (color = "green")
       );
       text(i, this.shapeWithCages.points[i].x, this.shapeWithCages.points[i].y);
-    }*/
+    }
+    */
     //this.shapeWithCages.draw();
   }
 
   reset() {
     this.triangulations = [];
     this.funnel = null;
+    this.funnel2;
     this.dual = null;
     this.cages = [];
     this.shapeWithCages = null;
