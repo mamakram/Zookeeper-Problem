@@ -238,6 +238,7 @@ class Funnel {
       text(this.points[i].label, this.points[i].x, this.points[i].y);
     }
     if (this.funneled) {
+      /**
       for (let i = 0; i < this.segmentCrossedByApproxPath.length; i++) {
         drawSegment(
           this.segmentCrossedByApproxPath[i][0],
@@ -250,7 +251,7 @@ class Funnel {
       }
       for (let i = 0; i < this.left.length - 1; i++) {
         drawSegment(this.left[i], this.left[i + 1], "blue");
-      }
+      }*/
       for (let i = 0; i < this.path.length - 1; i++) {
         drawSegment(this.path[i], this.path[i + 1], "purple");
       }

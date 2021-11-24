@@ -202,7 +202,7 @@ class Cage {
           this.points[(i + 1) % this.points.length],
           "blue"
         );
-        text(i, this.points[i].x, this.points[i].y);
+        //text(i, this.points[i].x, this.points[i].y);
       }
     else {
       for (let i = 0; i < this.polyChainPoints.length; i++) {

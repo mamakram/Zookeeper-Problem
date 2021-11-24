@@ -46,7 +46,7 @@ window.createCage = function () {
   if (
     polyDaiza.cages.length > 0 &&
     polyDaiza.getLastCage().inConstruction &&
-    borderCount === 2
+    borderCount === 2 && state===states.CAGES
   ) {
     polyDaiza.getLastCage().constructCage();
     borderCount = 0;
@@ -100,7 +100,7 @@ window.mousePressed = function () {
         }
     }
   } else {
-    if (polyDaiza.isInside(mousePoint)) {
+    if (polyDaiza.isInside(mousePoint) && !polyDaiza.isInsideCage(mousePoint)) {
       if (borderCount === 0) {
         polyDaiza.funnel.reset();
       }
@@ -116,6 +116,7 @@ window.mousePressed = function () {
 };
 
 window.showFunnel = function () {
+  polyDaiza.triangulateWithCagesAsObstacles();
   polyDaiza.funnel = new Funnel(polyDaiza.shapeWithCages, depth++);
   state = states.FUNNEL;
 };
@@ -152,7 +153,7 @@ window.draw = function () {
     polyDaiza.draw();
     polyDaiza.drawCages();
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
-    if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
+    //if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };

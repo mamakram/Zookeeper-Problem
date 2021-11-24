@@ -1,8 +1,6 @@
 /* eslint-disable no-undef, no-unused-vars */
 import { Polygon } from "./Polygon.js";
 import { mod, drawSegment } from "./Utils.js";
-import { Point } from "./Point.js";
-import { Cage } from "./Cage.js";
 
 /**
  * class to represent Zoolygon on canvas (i.e Polygon with cages)
@@ -50,6 +48,7 @@ class Zoolygon extends Polygon {
       console.log(tmp);
       let A = tmp[0];
       let insertPoint = this.points[A.segmentOnPolygon];
+
       let cagePoints = this.cages[i].getPoints();
       for (let j = 0; j < cagePoints.length; j++) {
         if (mixPoints.includes(cagePoints[j])) {
@@ -57,6 +56,10 @@ class Zoolygon extends Polygon {
         }
       }
       let cutIndex = mod(mixPoints.indexOf(insertPoint) + 1, mixPoints.length);
+      while(!this.includes(mixPoints[(cutIndex)]))
+        cutIndex++;
+
+
       mixPoints = mixPoints
         .slice(0, cutIndex)
         .concat(tmp)
@@ -68,17 +71,19 @@ class Zoolygon extends Polygon {
       mixPoints = temp;
     }
     this.shapeWithCages = new Polygon(mixPoints);
-    //this.shapeWithCages.triangulate();
+    this.shapeWithCages.triangulate();
   }
 
   drawTWCresult() {
+    /** 
     for (let i = 0; i < this.shapeWithCages.points.length; i++) {
       drawSegment(
         this.shapeWithCages.points[i],
         this.shapeWithCages.points[(i + 1) % this.shapeWithCages.points.length],
         (color = "green")
       );
-    }
+      text(i, this.shapeWithCages.points[i].x, this.shapeWithCages.points[i].y);
+    }*/
     //this.shapeWithCages.draw();
   }
 
