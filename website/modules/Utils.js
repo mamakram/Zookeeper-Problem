@@ -111,13 +111,7 @@ function isSegmentBefore(a, c, d, e, f) {
 }
 
 /**
- * Solve degree 2 equation
- * @param {Point} a
- * @param {Point} b
- * @param {Point} c
- * @param {Point} d
- * @param {Point} e
- * @param {Point} f
+ * Solve 2 equation 2 unknown using cramer's method
  * @returns x,y solution to equation
  */
 function solve2eq2unk(a, b, c, d, e, f) {
