@@ -41,6 +41,7 @@ class Polygon {
    */
   isInside(p) {
     //check if point in Polygon, if true stores first intersection in point.intersection
+    if (this.includes(p)) return true;
     let isInside = false;
     let intersections = this.rayPolygon(p, new Point(p.x + 50, p.y));
     isInside = Number(intersections.length) % 2 === 1;
@@ -252,6 +253,7 @@ class Triangle extends Polygon {
    * @returns boolean to indicate if point is inside
    */
   isInside(p) {
+    if (this.includes(p)) return true;
     let p1 = this.points[0];
     let p2 = this.points[1];
     let p3 = this.points[2];

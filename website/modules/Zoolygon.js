@@ -10,6 +10,7 @@ class Zoolygon extends Polygon {
     super(points);
     this.cages = [];
     this.funnel = null;
+    this.funnel2 = null;
     this.shapeWithCages = null;
   }
 
@@ -19,6 +20,11 @@ class Zoolygon extends Polygon {
     }
   }
 
+  insideWhatCage(p) {
+    for (let i = 0; i < this.cages.length; i++) {
+      if (this.cages[i].isInside(p)) return this.cages[i];
+    }
+  }
   addCage(cage) {
     this.cages.push(cage);
   }
@@ -34,6 +40,7 @@ class Zoolygon extends Polygon {
   }
 
   drawFunnel() {
+    this.funnel2.draw();
     this.funnel.draw();
   }
 
@@ -56,9 +63,7 @@ class Zoolygon extends Polygon {
         }
       }
       let cutIndex = mod(mixPoints.indexOf(insertPoint) + 1, mixPoints.length);
-      while(!this.includes(mixPoints[(cutIndex)]))
-        cutIndex++;
-
+      while (!this.includes(mixPoints[cutIndex])) cutIndex++;
 
       mixPoints = mixPoints
         .slice(0, cutIndex)

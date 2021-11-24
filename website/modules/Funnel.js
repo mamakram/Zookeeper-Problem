@@ -60,6 +60,8 @@ class Funnel {
       if (this.originalPoly.triangulations[i].isInside(this.points[1]))
         this.special_triangle2 = this.originalPoly.triangulations[i];
     }
+    console.log("triangles", this.special_triangle1, this.special_triangle2);
+
     let path = this.dual.dfs_paths(
       this.special_triangle1,
       this.special_triangle2

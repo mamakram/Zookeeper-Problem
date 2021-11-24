@@ -46,7 +46,8 @@ window.createCage = function () {
   if (
     polyDaiza.cages.length > 0 &&
     polyDaiza.getLastCage().inConstruction &&
-    borderCount === 2 && state===states.CAGES
+    borderCount === 2 &&
+    state === states.CAGES
   ) {
     polyDaiza.getLastCage().constructCage();
     borderCount = 0;
@@ -100,12 +101,27 @@ window.mousePressed = function () {
         }
     }
   } else {
-    if (polyDaiza.isInside(mousePoint) && !polyDaiza.isInsideCage(mousePoint)) {
+    if (polyDaiza.isInside(mousePoint)) {
       if (borderCount === 0) {
         polyDaiza.funnel.reset();
+        polyDaiza.funnel2.reset();
       }
-      polyDaiza.funnel.addPoint(mousePoint);
-      borderCount++;
+      if (polyDaiza.isInsideCage(mousePoint)) {
+        if (borderCount == 1) {
+          let cage = polyDaiza.insideWhatCage(mousePoint);
+          //console.log(cage.getStartPoint(), cage.getEndPoint());
+          polyDaiza.funnel.addPoint(cage.getStartPoint());
+          polyDaiza.funnel2.addPoint(polyDaiza.funnel.points[0]);
+          polyDaiza.funnel2.addPoint(cage.getEndPoint());
+          polyDaiza.funnel.funnel();
+          polyDaiza.funnel2.funnel();
+          borderCount = 0;
+          state = states.CAGES;
+        }
+      } else {
+        polyDaiza.funnel.addPoint(mousePoint);
+        borderCount++;
+      }
       if (borderCount === 2) {
         polyDaiza.funnel.funnel();
         borderCount = 0;
@@ -118,6 +134,7 @@ window.mousePressed = function () {
 window.showFunnel = function () {
   polyDaiza.triangulateWithCagesAsObstacles();
   polyDaiza.funnel = new Funnel(polyDaiza.shapeWithCages, depth++);
+  polyDaiza.funnel2 = new Funnel(polyDaiza.shapeWithCages, depth);
   state = states.FUNNEL;
 };
 
