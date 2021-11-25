@@ -35,7 +35,6 @@ class Funnel {
 
   funnel() {
     this.funneled = true;
-    // variable for which we can remove the "this." when we don't need to draw them anymore
     this.pathTriangle = this.getRopePath();
     this.segmentCrossedByApproxPath = this.getSegmentCrossed(this.pathTriangle);
     this.path = this.shortestPath(
@@ -91,7 +90,6 @@ class Funnel {
     return segCrossed;
   }
 
-  // WIP
   shortestPath(pathTriangle, segCrossed) {
     let tail = [this.points[0]];
     let left = [];

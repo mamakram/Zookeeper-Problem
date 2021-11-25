@@ -4,6 +4,7 @@ import { Zoolygon } from "./modules/Zoolygon.js";
 import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
 import { Funnel } from "./modules/Funnel.js";
+import { SupportingChain } from "./modules/SupportingChain.js";
 
 const states = {
   CAGES: "CAGES",
@@ -149,6 +150,15 @@ window.showFunnel = function () {
   state = states.FUNNEL;
 };
 
+window.showSupportingChains = function (){
+  polyDaiza.triangulateWithCagesAsObstacles()
+  for (let i = 0; i< polyDaiza.cages.length; i++){
+    polyDaiza.supporting_chains.push(
+      new SupportingChain(i, polyDaiza, polyDaiza.shapeWithCages))
+  }
+  
+}
+
 window.TriWithCages = function () {
   polyDaiza.triangulateWithCagesAsObstacles();
 };
@@ -179,8 +189,9 @@ window.draw = function () {
   background(200);
   textSize(15);
   if (polyDaiza !== undefined) {
-    polyDaiza.draw();
     polyDaiza.drawCages();
+    polyDaiza.draw();
+    
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
     if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }

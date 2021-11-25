@@ -279,6 +279,9 @@
         <button class="button1" onclick="showFunnel()" id="funnel">
           Show Funnel
         </button>
+        <button class="button1" onclick="showSupportingChains()" id="suppCages">
+          Debug : show suppChains
+        </button>
       </div>
       <div id="scriptContainer">
         <script
@@ -333,7 +336,7 @@
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
       }
-      document.getElementById("Explanation").style.display = "block";
+      document.getElementById("Demo").style.display = "block";
     </script>
   </body>
 </html>
