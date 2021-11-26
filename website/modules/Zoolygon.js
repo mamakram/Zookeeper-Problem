@@ -11,7 +11,10 @@ class Zoolygon extends Polygon {
     this.cages = [];
     this.funnel = null;
     this.funnel2 = null;
+    this.supporting_chains = []
     this.shapeWithCages = null;
+    this.chair = {...this.points[0]} // copy
+    this.chair.label = "p"
   }
 
   isInsideCage(p) {
@@ -29,6 +32,8 @@ class Zoolygon extends Polygon {
     let p = cage.getStartPoint();
     let polyPoint = this.points[p.segmentOnPolygon];
     let i = 0;
+
+    // maintain cages sorted
     while (
       i < this.cages.length &&
       (p.segmentOnPolygon > this.cages[i].getStartPoint().segmentOnPolygon ||
@@ -59,6 +64,16 @@ class Zoolygon extends Polygon {
     this.funnel2.draw();
     this.funnel.draw();
   }
+
+  draw() {
+    super.draw()
+    fill("purple");
+    ellipse(this.chair.x, this.chair.y, 4, 4);
+    text(this.chair.label, this.chair.x, this.chair.y);
+    for (let i=0; i< this.supporting_chains.length; i++){
+      this.supporting_chains[i].draw();
+    }
+}
 
   triangulateWithCagesAsObstacles() {
     let mixPoints = this.points;
@@ -115,6 +130,7 @@ class Zoolygon extends Polygon {
     this.dual = null;
     this.cages = [];
     this.shapeWithCages = null;
+    this.supporting_chains = [];
   }
 }
 
