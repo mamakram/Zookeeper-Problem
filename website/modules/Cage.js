@@ -25,6 +25,8 @@ class Cage {
     this.polyChainPoints = [];
     this.inConstruction = true;
     this.points = [];
+    this.A = null // points found by supporting chain
+    this.B = null
   }
 
   isInside(p) {
@@ -195,7 +197,7 @@ class Cage {
    * Draw the cage on the canvas
    */
   draw() {
-    if (!this.inConstruction)
+    if (!this.inConstruction){
       for (let i = 0; i < this.points.length; i++) {
         drawSegment(
           this.points[i],
@@ -204,6 +206,16 @@ class Cage {
         );
         //text(i, this.points[i].x, this.points[i].y);
       }
+      if (this.A !== null && this.B !== null){
+        fill("red");
+        ellipse(this.A.x, this.A.y, 4, 4);
+        text(this.A.label, this.A.x, this.A.y);
+        ellipse(this.B.x, this.B.y, 4, 4);
+        text(this.B.label, this.B.x, this.B.y);
+      
+      }
+    }
+      
     else {
       for (let i = 0; i < this.polyChainPoints.length; i++) {
         fill(0);

@@ -152,7 +152,8 @@ window.showFunnel = function () {
 
 window.showSupportingChains = function (){
   polyDaiza.triangulateWithCagesAsObstacles()
-  for (let i = 0; i< polyDaiza.cages.length; i++){
+  // start at -1, syntax to consider the chair as first point
+  for (let i = -1; i< polyDaiza.cages.length; i++){
     polyDaiza.supporting_chains.push(
       new SupportingChain(i, polyDaiza, polyDaiza.shapeWithCages))
   }
