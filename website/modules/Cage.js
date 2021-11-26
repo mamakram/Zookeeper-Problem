@@ -25,8 +25,9 @@ class Cage {
     this.polyChainPoints = [];
     this.inConstruction = true;
     this.points = [];
-    this.A = null // points found by supporting chain
-    this.B = null
+    this.A = null; // points found by supporting chain
+    this.B = null;
+    this.active = true;
   }
 
   isInside(p) {
@@ -187,36 +188,49 @@ class Cage {
       }
       stack.shift();
       stack.pop();
-      this.points = this.polyChainPoints.concat(stack);
+      this.points = [this.polyChainPoints[0]]
+        .concat(stack.reverse())
+        .concat(
+          this.polyChainPoints.slice(1, this.polyChainPoints.length).reverse()
+        );
     } else this.points = this.polyChainPoints;
     this.inConstruction = false;
-    //console.log(edgeIntersection(this.Zoolygon, this));
+  }
+
+  isAbeforeB() {
+    console.log(this.points.indexOf(this.A) > this.points.indexOf(this.B));
+    return this.points.indexOf(this.A) > this.points.indexOf(this.B);
+  }
+
+  getStartPoint() {
+    return this.polyChainPoints[0];
+  }
+
+  getEndPoint() {
+    return this.polyChainPoints[this.polyChainPoints.length - 1];
   }
 
   /**
    * Draw the cage on the canvas
    */
   draw() {
-    if (!this.inConstruction){
+    if (!this.inConstruction) {
       for (let i = 0; i < this.points.length; i++) {
         drawSegment(
           this.points[i],
           this.points[(i + 1) % this.points.length],
           "blue"
         );
-        //text(i, this.points[i].x, this.points[i].y);
+        text(i, this.points[i].x, this.points[i].y);
       }
-      if (this.A !== null && this.B !== null){
+      if (this.A !== null && this.B !== null) {
         fill("red");
         ellipse(this.A.x, this.A.y, 4, 4);
         text(this.A.label, this.A.x, this.A.y);
         ellipse(this.B.x, this.B.y, 4, 4);
         text(this.B.label, this.B.x, this.B.y);
-      
       }
-    }
-      
-    else {
+    } else {
       for (let i = 0; i < this.polyChainPoints.length; i++) {
         fill(0);
         ellipse(this.polyChainPoints[i].x, this.polyChainPoints[i].y, 4, 4);
@@ -232,14 +246,6 @@ class Cage {
         text(i, this.points[i].x, this.points[i].y);
       }
     }
-  }
-
-  getStartPoint() {
-    return this.polyChainPoints[0];
-  }
-
-  getEndPoint() {
-    return this.polyChainPoints[this.polyChainPoints.length-1];
   }
 }
 
