@@ -157,7 +157,7 @@ window.showSupportingChains = function () {
   for (let i = -1; i < cages.length; i++) {
     polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza));
   }
-  polyDaiza.markUselessCages();
+  polyDaiza.markUselessCages(); // end of point 2 ? 
 };
 
 window.TriWithCages = function () {

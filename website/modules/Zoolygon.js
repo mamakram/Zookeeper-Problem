@@ -58,7 +58,7 @@ class Zoolygon extends Polygon {
 
   markUselessCages() {
     for (let i in this.cages) {
-      if (!this.cages[i].isAbeforeB()) this.cages[i].active = false;
+      if (this.cages[i].isAbeforeB()) this.cages[i].active = false;
     }
   }
 
@@ -74,11 +74,10 @@ class Zoolygon extends Polygon {
     let mixPoints = this.points;
     let rm = [];
     for (let i = 0; i < this.cages.length; i++) {
+      
       let tmp = this.cages[i].getPoints();
-      tmp = tmp.slice(tmp.indexOf(this.cages[i].getEndPoint()));
-      tmp.push(this.cages[i].getStartPoint());
-      tmp.reverse();
       let A = tmp[0];
+      
       let insertPoint = this.points[A.segmentOnPolygon];
 
       let cagePoints = this.cages[i].getPoints();

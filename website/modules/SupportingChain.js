@@ -28,9 +28,10 @@ class SupportingChain {
     let after_chain = new Funnel(this.poly);
     let chair = this.zoo.chair;
     after_chain.addPoint(this.C_i === chair ? chair : this.C_i.getStartPoint());
-    after_chain.addPoint(
-      this.after === chair ? this.zoo.chair : this.after.getEndPoint()
-    );
+    
+    if (this.index === this.cages.length - 1) after_chain.addPoint(chair);
+    else after_chain.addPoint( this.after.getEndPoint());
+    
     after_chain.funnel();
     let supporting_chain = after_chain.path;
 
