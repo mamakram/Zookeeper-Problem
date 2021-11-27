@@ -150,15 +150,15 @@ window.showFunnel = function () {
   state = states.FUNNEL;
 };
 
-window.showSupportingChains = function (){
-  polyDaiza.triangulateWithCagesAsObstacles()
+window.showSupportingChains = function () {
+  polyDaiza.triangulateWithCagesAsObstacles();
+  let cages = polyDaiza.getActiveCages();
   // start at -1, syntax to consider the chair as first point
-  for (let i = -1; i< polyDaiza.cages.length; i++){
-    polyDaiza.supporting_chains.push(
-      new SupportingChain(i, polyDaiza, polyDaiza.shapeWithCages))
+  for (let i = -1; i < cages.length; i++) {
+    polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza));
   }
-  
-}
+  polyDaiza.markUselessCages(); // end of point 2 ? 
+};
 
 window.TriWithCages = function () {
   polyDaiza.triangulateWithCagesAsObstacles();
@@ -192,7 +192,7 @@ window.draw = function () {
   if (polyDaiza !== undefined) {
     polyDaiza.drawCages();
     polyDaiza.draw();
-    
+
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
     if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }
