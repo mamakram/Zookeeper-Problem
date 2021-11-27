@@ -221,9 +221,8 @@ class Cage {
           this.points[(i + 1) % this.points.length],
           "blue"
         );
-        text(i, this.points[i].x, this.points[i].y);
       }
-      if (this.A !== null && this.B !== null) {
+      if (this.A !== null && this.B !== null && this.active) {
         fill("red");
         ellipse(this.A.x, this.A.y, 4, 4);
         text(this.A.label, this.A.x, this.A.y);
