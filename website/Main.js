@@ -157,7 +157,22 @@ window.showSupportingChains = function () {
   for (let i = -1; i < cages.length; i++) {
     polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza));
   }
-  polyDaiza.markUselessCages(); // end of point 2 ? 
+  polyDaiza.markUselessCages(); // end of point 2 ?
+
+  cages = polyDaiza.getActiveCages();
+  for (let i = 0; i < cages.length; i++) {
+    if ((i + 1) % 2 === 0) {
+      cages[i].markedEdge = cages[i].points.indexOf(cages[i].B);
+    } else {
+      cages[i].markedEdge = cages[i].points.indexOf(cages[i].A) - 1;
+    }
+    let v1 = cages[i].points[cages[i].markedEdge];
+    let v2 = cages[i].points[cages[i].markedEdge + 1];
+    cages[i].markedEdgeCenter = new Point(
+      Math.ceil((v1.x + v2.x) / 2),
+      Math.ceil((v1.y + v2.y) / 2)
+    );
+  }
 };
 
 window.TriWithCages = function () {
@@ -190,8 +205,8 @@ window.draw = function () {
   background(200);
   textSize(15);
   if (polyDaiza !== undefined) {
-    polyDaiza.drawCages();
     polyDaiza.draw();
+    polyDaiza.drawCages();
 
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
     if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();

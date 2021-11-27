@@ -28,6 +28,8 @@ class Cage {
     this.A = null; // points found by supporting chain
     this.B = null;
     this.active = true;
+    this.markedEdge = null;
+    this.markedEdgeCenter = null;
   }
 
   isInside(p) {
@@ -216,10 +218,12 @@ class Cage {
   draw() {
     if (!this.inConstruction) {
       for (let i = 0; i < this.points.length; i++) {
+        let color = "blue";
+        if (this.markedEdge === i) color = "red";
         drawSegment(
           this.points[i],
           this.points[(i + 1) % this.points.length],
-          "blue"
+          color
         );
       }
       if (this.A !== null && this.B !== null && this.active) {
@@ -228,6 +232,8 @@ class Cage {
         text(this.A.label, this.A.x, this.A.y);
         ellipse(this.B.x, this.B.y, 4, 4);
         text(this.B.label, this.B.x, this.B.y);
+        fill("green");
+        ellipse(this.markedEdgeCenter.x, this.markedEdgeCenter.y, 4, 4);
       }
     } else {
       for (let i = 0; i < this.polyChainPoints.length; i++) {
