@@ -205,7 +205,6 @@ class Cage {
   }
 
   isAbeforeB() {
-    console.log(this.points.indexOf(this.A) < this.points.indexOf(this.B));
     return this.points.indexOf(this.A) < this.points.indexOf(this.B);
   }
 

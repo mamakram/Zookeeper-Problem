@@ -84,7 +84,6 @@ class Zoolygon extends Polygon {
 
       let cagePoints = this.cages[i].polyChainPoints;
       for (let j = 1; j < cagePoints.length - 1; j++) {
-        console.log(cagePoints[j]);
         rm.push(cagePoints[j]);
       }
       let cutIndex = mod(mixPoints.indexOf(insertPoint) + 1, mixPoints.length);
@@ -98,11 +97,10 @@ class Zoolygon extends Polygon {
     for (let k = 0; k < rm.length; k++) {
       let a = mixPoints.indexOf(rm[k]);
       mixPoints.splice(a, 1);
-      console.log(mixPoints.includes(rm[k]));
     }
 
     this.shapeWithCages = new Polygon(mixPoints);
-    //this.shapeWithCages.triangulate();
+    this.shapeWithCages.triangulate();
   }
 
   drawCages() {
@@ -125,6 +123,7 @@ class Zoolygon extends Polygon {
   }
 
   drawTWCresult() {
+    /**
     for (let i = 0; i < this.shapeWithCages.points.length; i++) {
       drawSegment(
         this.shapeWithCages.points[i],
@@ -133,7 +132,7 @@ class Zoolygon extends Polygon {
       );
       text(i, this.shapeWithCages.points[i].x, this.shapeWithCages.points[i].y);
     }
-
+    */
     //this.shapeWithCages.draw();
   }
 
