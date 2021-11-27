@@ -12,6 +12,8 @@ import {
   reflectionOnLine,
   sortPointsRadially,
   squareDistance,
+  isAligned,
+  isOnSegment,
 } from "./Utils.js";
 
 /**
@@ -256,7 +258,6 @@ class Polygon {
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
     }
-
   }
 }
 
@@ -274,6 +275,17 @@ class Triangle extends Polygon {
    */
   isInside(p) {
     if (this.includes(p)) return true;
+    for (let i = 0; i < 3; i++) {
+      if (
+        isOnSegment(
+          this.points[i],
+          this.points[(i + 1) % this.points.length],
+          p,
+          10
+        )
+      )
+        return true;
+    }
     let p1 = this.points[0];
     let p2 = this.points[1];
     let p3 = this.points[2];

@@ -15,6 +15,8 @@ class Zoolygon extends Polygon {
     this.shapeWithCages = null;
     this.chair = { ...this.points[0] }; // copy
     this.chair.label = "p";
+    this.R0 = null;
+    this.Jacopo = false;
   }
 
   isInsideCage(p) {
@@ -117,8 +119,14 @@ class Zoolygon extends Polygon {
     fill("purple");
     ellipse(this.chair.x, this.chair.y, 4, 4);
     text(this.chair.label, this.chair.x, this.chair.y);
-    for (let i = 0; i < this.supporting_chains.length; i++) {
-      this.supporting_chains[i].draw();
+    if (!this.Jacopo)
+      for (let i = 0; i < this.supporting_chains.length; i++) {
+        this.supporting_chains[i].draw();
+      }
+    else if (this.R0 !== null) {
+      for (let i = 0; i < this.R0.length; i++) {
+        drawSegment(this.R0[i], this.R0[(i + 1) % this.R0.length], "cyan");
+      }
     }
   }
 
@@ -144,6 +152,7 @@ class Zoolygon extends Polygon {
     this.cages = [];
     this.shapeWithCages = null;
     this.supporting_chains = [];
+    this.R0 = null;
   }
 }
 

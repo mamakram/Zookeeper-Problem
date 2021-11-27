@@ -150,6 +150,10 @@ window.showFunnel = function () {
   state = states.FUNNEL;
 };
 
+window.swap = function () {
+  polyDaiza.Jacopo = !polyDaiza.Jacopo;
+};
+
 window.showSupportingChains = function () {
   polyDaiza.triangulateWithCagesAsObstacles();
   let cages = polyDaiza.getActiveCages();
@@ -168,11 +172,21 @@ window.showSupportingChains = function () {
     }
     let v1 = cages[i].points[cages[i].markedEdge];
     let v2 = cages[i].points[cages[i].markedEdge + 1];
-    cages[i].markedEdgeCenter = new Point(
-      Math.ceil((v1.x + v2.x) / 2),
-      Math.ceil((v1.y + v2.y) / 2)
-    );
+    cages[i].markedEdgeCenter = new Point((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);
   }
+
+  let path = [];
+  for (let i = -1; i < cages.length; i++) {
+    let before = i === -1 ? polyDaiza.chair : cages[i].markedEdgeCenter;
+    let after =
+      i === cages.length - 1 ? polyDaiza.chair : cages[i + 1].markedEdgeCenter;
+    let funnel = new Funnel(polyDaiza.shapeWithCages);
+    funnel.addPoint(before);
+    funnel.addPoint(after);
+    funnel.funnel();
+    path = path.concat(funnel.path);
+  }
+  polyDaiza.R0 = path;
 };
 
 window.TriWithCages = function () {
