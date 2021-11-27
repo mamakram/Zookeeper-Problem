@@ -28,6 +28,8 @@ class Cage {
     this.A = null; // points found by supporting chain
     this.B = null;
     this.active = true;
+    this.markedEdge = null;
+    this.markedEdgeCenter = null;
   }
 
   isInside(p) {
@@ -193,12 +195,16 @@ class Cage {
         .concat(
           this.polyChainPoints.slice(1, this.polyChainPoints.length).reverse()
         );
-    } else this.points = this.polyChainPoints;
+    } else {
+      let pointsToAdd = this.polyChainPoints.slice();
+      this.points.push(pointsToAdd.shift());
+      this.points.push(pointsToAdd.pop());
+      this.points = this.points.concat(pointsToAdd.reverse());
+    }
     this.inConstruction = false;
   }
 
   isAbeforeB() {
-    console.log(this.points.indexOf(this.A) < this.points.indexOf(this.B));
     return this.points.indexOf(this.A) < this.points.indexOf(this.B);
   }
 
@@ -216,11 +222,14 @@ class Cage {
   draw() {
     if (!this.inConstruction) {
       for (let i = 0; i < this.points.length; i++) {
+        let color = "blue";
+        if (this.markedEdge === i) color = "red";
         drawSegment(
           this.points[i],
           this.points[(i + 1) % this.points.length],
-          "blue"
+          color
         );
+        //text(i, this.points[i].x, this.points[i].y);
       }
       if (this.A !== null && this.B !== null && this.active) {
         fill("red");
@@ -228,6 +237,8 @@ class Cage {
         text(this.A.label, this.A.x, this.A.y);
         ellipse(this.B.x, this.B.y, 4, 4);
         text(this.B.label, this.B.x, this.B.y);
+        fill("green");
+        ellipse(this.markedEdgeCenter.x, this.markedEdgeCenter.y, 4, 4);
       }
     } else {
       for (let i = 0; i < this.polyChainPoints.length; i++) {

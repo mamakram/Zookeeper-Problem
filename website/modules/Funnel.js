@@ -4,9 +4,8 @@ import { drawSegment, isRT, isLT } from "./Utils.js";
  * Represent the shortest path between 2 points in a polygon
  */
 class Funnel {
-  constructor(poly, depth) {
+  constructor(poly) {
     this.originalPoly = poly;
-    this.depth = depth;
     this.points = [];
     this.labellst = ["s", "t"];
     this.special_triangle1 = undefined;

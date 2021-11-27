@@ -121,7 +121,6 @@ window.mousePressed = function () {
       if (polyDaiza.isInsideCage(mousePoint)) {
         if (borderCount == 1) {
           let cage = polyDaiza.insideWhatCage(mousePoint);
-          //console.log(cage.getStartPoint(), cage.getEndPoint());
           polyDaiza.funnel.addPoint(cage.getStartPoint());
           polyDaiza.funnel2.addPoint(polyDaiza.funnel.points[0]);
           polyDaiza.funnel2.addPoint(cage.getEndPoint());
@@ -150,14 +149,49 @@ window.showFunnel = function () {
   state = states.FUNNEL;
 };
 
+window.swap = function () {
+  polyDaiza.Jacopo = !polyDaiza.Jacopo;
+};
+
 window.showSupportingChains = function () {
+  polyDaiza.supporting_chains = [];
   polyDaiza.triangulateWithCagesAsObstacles();
   let cages = polyDaiza.getActiveCages();
   // start at -1, syntax to consider the chair as first point
   for (let i = -1; i < cages.length; i++) {
     polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza));
   }
-  polyDaiza.markUselessCages(); // end of point 2 ? 
+  polyDaiza.markUselessCages(); // end of point 2 ?
+
+  cages = polyDaiza.getActiveCages();
+  for (let i = 0; i < cages.length; i++) {
+    if ((i + 1) % 2 === 0) {
+      cages[i].markedEdge = cages[i].points.indexOf(cages[i].B);
+    } else {
+      cages[i].markedEdge = cages[i].points.indexOf(cages[i].A) - 1;
+    }
+    let v1 = cages[i].points[cages[i].markedEdge];
+    let v2 = cages[i].points[cages[i].markedEdge + 1];
+    if (cages[i].A === cages[i].B) cages[i].markedEdgeCenter = cages[i].A;
+    else
+      cages[i].markedEdgeCenter = new Point(
+        (v1.x + v2.x) / 2,
+        (v1.y + v2.y) / 2
+      );
+  }
+
+  let path = [];
+  for (let i = -1; i < cages.length; i++) {
+    let before = i === -1 ? polyDaiza.chair : cages[i].markedEdgeCenter;
+    let after =
+      i === cages.length - 1 ? polyDaiza.chair : cages[i + 1].markedEdgeCenter;
+    let funnel = new Funnel(polyDaiza.shapeWithCages);
+    funnel.addPoint(before);
+    funnel.addPoint(after);
+    funnel.funnel();
+    path = path.concat(funnel.path);
+  }
+  polyDaiza.R0 = path;
 };
 
 window.TriWithCages = function () {
@@ -190,8 +224,8 @@ window.draw = function () {
   background(200);
   textSize(15);
   if (polyDaiza !== undefined) {
-    polyDaiza.drawCages();
     polyDaiza.draw();
+    polyDaiza.drawCages();
 
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
     if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
