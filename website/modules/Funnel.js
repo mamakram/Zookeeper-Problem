@@ -59,11 +59,16 @@ class Funnel {
         this.special_triangle2 = this.originalPoly.triangulations[i];
     }
 
+    console.log("Dual : ", this.dual)
+    console.log(this.special_triangle1, this.special_triangle2)
     let path = this.dual.dfs_paths(
       this.special_triangle1,
       this.special_triangle2
     );
+    console.log("Path : ", path)
     for (let i = 0; i < path.length - 1; i++) {
+      console.log("PT :", pathTriangle)
+      console.log(path[i], path[i + 1])
       pathTriangle.push([path[i], path[i + 1]]);
     }
     return pathTriangle;

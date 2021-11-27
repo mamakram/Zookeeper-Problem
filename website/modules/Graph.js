@@ -41,6 +41,7 @@ class Graph {
             //reset visited
             key.visited = false;
           }
+          console.log("In dfs : ", path)
           return path;
         }
         tr_vertex.visited = true;

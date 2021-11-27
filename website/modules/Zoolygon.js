@@ -123,7 +123,7 @@ class Zoolygon extends Polygon {
   }
 
   drawTWCresult() {
-    /**
+    
     for (let i = 0; i < this.shapeWithCages.points.length; i++) {
       drawSegment(
         this.shapeWithCages.points[i],
@@ -132,7 +132,7 @@ class Zoolygon extends Polygon {
       );
       text(i, this.shapeWithCages.points[i].x, this.shapeWithCages.points[i].y);
     }
-    */
+    
     //this.shapeWithCages.draw();
   }
 
