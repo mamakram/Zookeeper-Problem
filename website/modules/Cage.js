@@ -195,13 +195,12 @@ class Cage {
         .concat(
           this.polyChainPoints.slice(1, this.polyChainPoints.length).reverse()
         );
-    } else{
-      this.points.push(this.polyChainPoints.shift());
-      this.points.push(this.polyChainPoints.pop());
-      this.points = this.points.concat(this.polyChainPoints.reverse());
-      
-
-    } 
+    } else {
+      let pointsToAdd = this.polyChainPoints.slice();
+      this.points.push(pointsToAdd.shift());
+      this.points.push(pointsToAdd.pop());
+      this.points = this.points.concat(pointsToAdd.reverse());
+    }
     this.inConstruction = false;
   }
 
@@ -231,7 +230,7 @@ class Cage {
           this.points[(i + 1) % this.points.length],
           color
         );
-        text(i, this.points[i].x, this.points[i].y);
+        //text(i, this.points[i].x, this.points[i].y);
       }
       if (this.A !== null && this.B !== null && this.active) {
         fill("red");
