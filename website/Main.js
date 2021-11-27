@@ -172,7 +172,12 @@ window.showSupportingChains = function () {
     }
     let v1 = cages[i].points[cages[i].markedEdge];
     let v2 = cages[i].points[cages[i].markedEdge + 1];
-    cages[i].markedEdgeCenter = new Point((v1.x + v2.x) / 2, (v1.y + v2.y) / 2);
+    if (cages[i].A === cages[i].B) cages[i].markedEdgeCenter = cages[i].A;
+    else
+      cages[i].markedEdgeCenter = new Point(
+        (v1.x + v2.x) / 2,
+        (v1.y + v2.y) / 2
+      );
   }
 
   let path = [];
