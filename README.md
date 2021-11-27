@@ -1,2 +1,2 @@
 # Zookeeper's Problem
-Solve the Zookeeper problem in (maybe) O(nlogn)
+Solve the Zookeeper problem (not really) in (definitely not) O(nlogn)
