@@ -121,7 +121,6 @@ window.mousePressed = function () {
       if (polyDaiza.isInsideCage(mousePoint)) {
         if (borderCount == 1) {
           let cage = polyDaiza.insideWhatCage(mousePoint);
-          //console.log(cage.getStartPoint(), cage.getEndPoint());
           polyDaiza.funnel.addPoint(cage.getStartPoint());
           polyDaiza.funnel2.addPoint(polyDaiza.funnel.points[0]);
           polyDaiza.funnel2.addPoint(cage.getEndPoint());
@@ -155,6 +154,7 @@ window.swap = function () {
 };
 
 window.showSupportingChains = function () {
+  polyDaiza.supporting_chains = [];
   polyDaiza.triangulateWithCagesAsObstacles();
   let cages = polyDaiza.getActiveCages();
   // start at -1, syntax to consider the chair as first point
