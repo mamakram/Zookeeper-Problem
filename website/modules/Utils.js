@@ -142,8 +142,8 @@ function isRT(A, B, Q, error = 0) {
   return computeOrientation(A, B, Q) + error < 0;
 }
 
-function isLT(A, B, Q) {
-  return computeOrientation(A, B, Q) > 0;
+function isLT(A, B, Q, error = 0) {
+  return computeOrientation(A, B, Q) - error > 0;
 }
 
 function mod(n, m) {

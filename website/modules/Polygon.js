@@ -275,23 +275,12 @@ class Triangle extends Polygon {
    */
   isInside(p) {
     if (this.includes(p)) return true;
-    for (let i = 0; i < 3; i++) {
-      if (
-        isOnSegment(
-          this.points[i],
-          this.points[(i + 1) % this.points.length],
-          p,
-          10
-        )
-      )
-        return true;
-    }
     let p1 = this.points[0];
     let p2 = this.points[1];
     let p3 = this.points[2];
     return (
-      (!isRT(p1, p2, p) && !isRT(p2, p3, p) && !isRT(p3, p1, p)) ||
-      (!isLT(p1, p2, p) && !isLT(p2, p3, p) && !isLT(p3, p1, p))
+      (!isRT(p1, p2, p, 10) && !isRT(p2, p3, p, 10) && !isRT(p3, p1, p, 10)) ||
+      (!isLT(p1, p2, p, 10) && !isLT(p2, p3, p, 10) && !isLT(p3, p1, p, 10))
     );
   }
 

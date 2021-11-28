@@ -224,11 +224,11 @@ window.draw = function () {
   background(200);
   textSize(15);
   if (polyDaiza !== undefined) {
-    polyDaiza.draw();
     polyDaiza.drawCages();
+    polyDaiza.draw();
 
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
-    if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
+    //if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };
