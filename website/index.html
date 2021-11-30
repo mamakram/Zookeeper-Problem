@@ -22,7 +22,7 @@
     <div id="Explanation" class="tabcontent">
       <h2 style="text-align: center" class="titleHead">
         Zookeeper problem: Solving the zookeeper algorithm in approximatively
-        O(nlogn)
+        O(n²)
       </h2>
       <div style="text-align: center" class="author">
         <span class="cmr-12"
@@ -130,69 +130,68 @@
       </h3>
       <!--l. 27-->
       <p class="noindent" align="justify"> 
-        The shortest path in a simple polygon is the first step that should be implemented. We should find the shortest path between all cages. In order to compute the shortest path between two points in a simple polygon, firstly we should find a path (not necessary the shortest one) [we will explain why we need such a path in the follolwing]; So as to find this path, we should compute the dual graph of the polygon. The dual is a graph of triangles, in form of a tree. There exist an edge between two triangles in the dual, if those two triangles share an edge in the triangulated polygon. So firstly we triangulate the polygone then we choose a random point at each triangle (we take the center of each triangle) and then we connect these points.
+        The shortest path between two points in a simple polygon is the first step that should be implemented to solve the problem. In order to compute such a shortest path, we first need to find a path (not necessarily the shortest one) that connects the two points. So as to find this path, we should compute the dual graph of the polygon. The dual is a graph of triangles, in form of a tree. There exists a connection between two triangles in the dual if those two triangles share an edge in the triangulated polygon.
         <br class="newline"/>  
         <br class="newline"/>  
-        What interests us in the dual tree is the path between two special triangles of the triangulations : those who have an endpoint of the shortest path inside them. We find this path using the DFS in the graph.
+        What interests us in the dual tree is the path between two special triangles of the triangulation : those which have an endpoint of the shortest path inside them. We find this path using the DFS in the graph, note that this path is unique because we consider a tree.
         <br class="newline"/>  
         <br class="newline"/>  
-        Now that we have a path inside our original polygon, we can proceed the funnel algorithm.
-        To do so, we first compute the list of segments of triangles crossed by our path. Then, following our path, each time we cross one segment of this list with our path, we can update boundaries on the shortest path using the endpoints of the segment we crossed.
+        Now that we have a path inside our original polygon, we can proceed to the funnel algorithm.
+        To do so, we first compute the list of segments of triangles crossed by our path. Then, advancing through our path, each time we cross one segment of this list with our path, we can update boundaries on the shortest path using the endpoints of the segment we crossed.
         </p>
-        <br class="newline"/>  
-        <br class="newline"/> 
         <h4 class="subsectionHead">
           <span class="titlemark"> 3.1 </span> <a id="x1-50002.1"></a>Basic Notions
         </h4>
         <p class="noindent" align="justify">
-        Before we explain the funnel algorithm, Let's check some notions together; First notion that we should know about it, is Topology; Topology refers to properties of geometric object which is unchangable versus continous mapping; For example consider a tape; The tape form is preservable against scretching, twisting, crumpling and bending but it is changable against tearing. Topological space is a set of objects which has topological properties. Second instersting notion is homotopy; Two continous functions f, g from topological space X, to topological space Y are homotopic, if f can be continuously convert to g or if g can be continuously convert to f. Such a conversion is called homotopy; In order to understand better check the example of Wikipedia in the gif below:
-        </p>
+          Before we explain the funnel algorithm, let's check some notions together.
+          <ul class="itemize1">
+            <li class="itemize">
+              First notion that we should know about is Topology. Topology refers to properties of geometric object which is unchangeable. For example consider a tape, the tape form is preservable against stretching, twisting, crumpling and bending but it is changeable against tearing. Topological space is a set of objects which has topological properties.<br>
+            </li>
+            <li class="itemize">
+              Second interesting notion is homotopy. Two continous functions f, g from topological space X, to topological space Y are homotopic, if f can be continuously convert to g or if g can be continuously convert to f, such a conversion is called homotopy.
+            </li>
+          </ul>        
+         </p>
         <br class="newline"/>  
         <br class="newline"/> 
         <center>
         <figure>
           <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/HomotopySmall.gif" width = "20%"/>
           <a href="https://en.wikipedia.org/wiki/Homotopy">
-          <figcaption>Two homotopic functions </figcaption>
+          <figcaption>Example of two homotopic functions</figcaption>
           </a>
         </figure>
         </center>
-        <br class="newline"/>  
-        <br class="newline"/> 
+        <br>
         <p class="noindent" align="justify">
-        So why these notions are important ? Let's return to our own problem. we are searching for the shortest path that zookeeper must traversed without entering into the cages; If we found the shortest path from the zookeeper's initial position to the first cage and then from the first cage to the second cage and so on untill the last cage to the zookeeper's initial position, we can claim that we found a path that zookeper travered from an initial position, visited all cages and return to the same position by gathering all these local shortest path that we found. with manipulating and adjusting these paths by using upcoming techniques, we can find a solution for the problem.
-        <br class="newline"/>  
-        <br class="newline"/>
-        To find out these paths, let's imagine that there exist a path p from each cage to the next cage; Now we are interested to find the shortest path homotopic to the p; In fact the path p is the path that we found by using dfs algotithm (in the way that we explained at beginning of this section). Then we find the shortest path in the homotopy class of each p.
-        <br class="newline"/>  
-        <br class="newline"/>
+        So why these notions are important ? Let's return to our problem. Considering our shortest path problem and knowing an initial path, it can be shortened by pulling on it like a rope, while preserving its topology. This is exactly the logic behind the funnel algorithm.
       </p>
       <h4 class="subsectionHead">
         <span class="titlemark"> 3.2 </span> <a id="x1-50002.1"></a>Funnel Algorithm
       </h4>
       <p class="noindent" align="justify">
-        Given a triangulated polygon, the source point, the destionation point and a path p from the source to the destination; Our goal is to find the shortest homotopic path to p which goes from the source to the destination. Maybe you wounder that why the algorithm is called funnel; In fact the algorithm is composed of two bounderies; a left side boundry and a right side boundry; The right side boundry and the left side boundry are connected to each other from one endpoint (source point at the beginning) which creates an image similar to a funnel.
+        Given a triangulated polygon, the source point, the destination point and an initial path p from the source to the destination. Our goal is to find the shortest homotopic path to p which goes from the source to the destination. Maybe you wonder why the algorithm is called funnel. In fact the algorithm is composed of two boundaries, a left side boundary and a right side boundary. These two boundaries are connected to each other from one endpoint (source point at the beginning) which creates an image similar to a funnel.
         <br class="newline"/>  
         <br class="newline"/>
-        At each iteration we try to tighten the bottleneck of this fuunel by respecting to the edges that have been crossed by path p (green); Once the left side boundery coincide on the rigth side boundry or vice versa, we found a segment of the shortest path and we restart the funnel process untill we reach the destination point.
+        At each iteration we try to tighten the bottleneck of this funnel in respect to the edges that have been crossed by path p (green). Once the left side boundary coincides on the right side boundary or vice versa, we found a portion of the shortest path and we restart the funnel process from the last point of this portion (this point is called the apex) until we reach the destination point.
         <br class="newline"/>  
         <br class="newline"/>
-        Consider the following example, which make the explanation easier; 
+        Consider the following example, 
       </p> 
         <br class="newline"/>  
-        <br class="newline"/> 
         <center>
         <figure>
           <img src="./images/Funnel_Base.jpg" width = "20%"/>
           <figcaption>Basic Example</figcaption>
         </figure>
         </center>
-        <br class="newline"/>  
         <br class="newline"/> 
       <p class="noindent" align="justify">
-        The dotted line represents the path p, green segments represent triangulation edges that have been crossed by the path p and purple segments are other edges of the triangulation; Let's discuss about each iteration:
+        The dotted line represents the path p, green segments represent triangulation edges that have been crossed by the path p and purple segments are other edges of the triangulation. Let's take a look at each iteration of the algorithm :
         <br class="newline"/>
-        <b>Iteration 1: </b> At the beginning we connect the apex of our funnel (source point) to the endpoints of the edge which have been crossed by path p (AH).
+        <br class="newline"/>  
+        <b>Iteration 1: </b> At the beginning we connect the apex (source point) of our funnel to the endpoints of the first edge which has been crossed by path p (AH). The right boundary is represented in blue and the left boundary in red. 
       </p>
       <br class="newline"/>   
       <center>
@@ -200,7 +199,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 2: </b> In order to tighten our funnel by considering the first crossed edge (AH), we move the left boundry endpoint from H to G (right boundry is at the most right position compared to the apex [source] so it is not possible to move it).
+        <b>Iteration 2: </b> In order to tighten our funnel by considering the second crossed edge (AG), we move the left boundary endpoint from H to G as there exists a direct path from the apex to G. The right boundary is already on A so it is not possible to move it.
       </p>
       <br class="newline"/>   
       <center>
@@ -208,7 +207,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 3: </b> Now in order to tighten our funnel by considering the next crossed edge (AG), we can not move the left boundry (as it is at the left most position compared to the apex and respecting to AG). The right boundry also is not movable as the endpoint of next edge (B) is at its right side (or at least it is aligned with it) but it is possible to continue the right boundry on the edge (AB) in order to reach the next endpoint (this will not tighten the funnel but it is the only way to continue execution; In fact the algorithm perform this action in same case).
+        <b>Iteration 3: </b> Now in order to tighten our funnel by considering the next crossed edge (BG), we can not move the left boundary, as it is at the left most position compared to the apex and respecting to BG. The right boundary also is not movable as the endpoint of the next edge (B) is at its right side (or at least it is aligned with it) but it is possible to continue the right boundary on the edge (AB) in order to reach the next endpoint.
       </p>
       <br class="newline"/>   
       <center>
@@ -216,7 +215,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 4: </b> Now the next crossed edge is BG and it is possible to move the left boundry to tighten the funnel (From G to F).
+        <b>Iteration 4: </b> Now the next crossed edge is BF and it is possible to move the left boundary to tighten the funnel (From G to F).
       </p>
       <br class="newline"/>   
       <center>
@@ -224,7 +223,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 5: </b> In order to handle the next crossed edge (BF), it is not possible to move the right boundry (as it is at the right most position compared to the apex). The only way to continue execution is to move the left boundry. As we move this boundry it will be coincide over the right boundry. So the coincide segment will be a part of the solution. This coincide segment is the the tail of our funnel and its endpoint which closer to the destination (B) is the new apex. 
+        <b>Iteration 5: </b> In order to handle the next crossed edge (CF), it is not possible to move the right boundary (as it is at the right most position compared to the apex). The only way to continue the execution is to move the left boundary. As we move this boundary it will be coincide over the right boundary. So the coincide segment will be a part of the solution. This shared segment is the tail of our funnel and its endpoint (B) which is closer to the destination is the new apex. 
       </p>
       <br class="newline"/>   
       <center>
@@ -232,7 +231,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 6: </b> Now we got new left boundry and new right boundry; As you can see there is a possibility to move the right boundry to tighten the new funnel by considering the edge CF.
+        <b>Iteration 6: (pas une itération) </b> Now we got new left boundary and new right boundary; As you can see there is a possibility to move the right boundary to tighten the new funnel by considering the edge CF.
       </p>
       <br class="newline"/>   
       <center>
@@ -240,7 +239,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 7: </b> Next crossed edge is DF and we can again move the right boundry to tighten the funnel .
+        <b>Iteration 7: </b> Next crossed edge is DF and we can again move the right boundary to tighten the funnel .
       </p>
       <br class="newline"/>   
       <center>
@@ -248,7 +247,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 8: </b> We can again move the right boundry to tighten the funnel and handle the crossed edge EF.
+        <b>Iteration 8: </b> We can once again move the right boundary to tighten the funnel and handle the crossed edge EF.
       </p>
       <br class="newline"/>   
       <center>
@@ -256,7 +255,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 9: </b> We can again move the right boundry to tighten the funnel. So now we reached the destination; So our solution will be tail of the funnel with the boundry which have been reached the destination.
+        <b>Iteration 9: </b> The final step is particular : 
       </p>
       <br class="newline"/>   
       <center>
@@ -361,7 +360,7 @@
           <span class="titlemark">6.2 </span> <a id="x1-50002.1"></a> Identification of the edges of the cage where the shortest route passes
         </h4>
         <p>
-          We will now use those supporting chains to identtify, for each cage, the edge considered in the final shortest zookeeper's route. <br>
+          We will now use those supporting chains to identify, for each cage, the edge considered in the final shortest zookeeper's route. <br>
           To do so, we compute the supporting chains from C<sub>i</sub> to C<sub>i+1</sub>, where s is consider to be C<sub>0</sub> and C<sub>n+1</sub> for all of our n cages. In particular, this identify the points a and b for each cage.<br>
           We can now interest ourselfs in another lemma stated by Chin and Ntafos : <br>
 
@@ -520,7 +519,14 @@
         href="https://www.sciencedirect.com/science/article/pii/S0925772102000925"
         >An O(nlogn) algorithm for the zoo-keeper's problem,Sergei
         Bespamyatnikh</a
+      > <br/>
+      <a
+        href="https://www.sciencedirect.com/science/article/abs/pii/002002559290072G"
+        >The zookeeper route problem, Chin & Ntafos
+      </a
       >
+
+      
       <h4>Shortest path</h4>
       <a href="https://www.cc.gatech.edu/~rpeng/18434_S15/sspPolygon.pdf"
         >Georgia Tech - Seminar in Theoretical Computer Science : Shortest Path
