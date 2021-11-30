@@ -202,7 +202,7 @@ window.TriWithCages = function () {
 // -------------------------------------------------------------------------
 
 window.setup = function () {
-  let screen = createCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
+  let screen = createCanvas((windowWidth * 25) / 50, (windowHeight * 35) / 50);
   screen.parent("scriptContainer");
   textSize(15);
   createPolyDaiza();
@@ -221,7 +221,7 @@ window.windowResized = function () {
 //                             DRAW
 // -------------------------------------------------------------------------
 window.draw = function () {
-  background(200);
+  background(200, 200, 200);
   textSize(15);
   if (polyDaiza !== undefined) {
     polyDaiza.drawCages();

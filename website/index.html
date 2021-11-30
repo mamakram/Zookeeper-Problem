@@ -2,12 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link href="style.css" rel="stylesheet" />
     <title>Zookeeper</title>
   </head>
   <body>
+    
     <div class="tab">
       <button class="tablinks active" onclick="openTab(event, 'Explanation')">
         Explanation
@@ -476,26 +475,26 @@
             the segments crossed by the path (in green)
           </li>
         </ul>
-        The actual shortest path is still to be computed using the funnel algorithm.
-
       </p>
+      <p>The actual shortest path is still to be computed using the funnel algorithm.</p>
 
-      <div id="buttons">
-        <button class="button1" onclick="createCage()" id="crCage">
-          Create Cage
-        </button>
-        <button class="button1" onclick="reset()" id="rst">Clear</button>
-        <button class="button1" onclick="showFunnel()" id="funnel">
-          Show Funnel
-        </button>
-        <button class="button1" onclick="showSupportingChains()" id="suppCages">
-          Debug : show suppChains
-        </button>
-        <button class="button1" onclick="swap()" id="swap">
-          Swap SuppChain / R0
-        </button>
-      </div>
-      <div id="scriptContainer">
+      
+      <div class = scriptContainer id="scriptContainer" >
+        <div id="buttons" style = "width: 55%; margin: 0 auto;">
+          <button class="button1" onclick="createCage()" id="crCage">
+            Create Cage
+          </button>
+          <button class="button1" onclick="reset()" id="rst">Clear</button>
+          <button class="button1" onclick="showFunnel()" id="funnel">
+            Show Funnel
+          </button>
+          <button class="button1" onclick="showSupportingChains()" id="suppCages">
+            Compute Zookeeper path
+          </button>
+          <button class="button1" onclick="swap()" id="swap">
+            Swap SuppChain / R0
+          </button>
+        </div>
         <script
           src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.5/math.js"
           integrity="sha512-R+I48DmxDONCcV2MyhKKVv9QYPzcmoSdNYBDNmHoJh2R4g6mqakFTBiIMYU9r/T0kK8y5Q/JvlQ8iRb5DdHV/A=="
