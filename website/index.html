@@ -160,7 +160,7 @@
         <br class="newline"/>  
         <br class="newline"/> 
         <p class="noindent" align="justify">
-        So why these notions are important ? Let's return to our own problem. we are searching for the shortest path that zookeeper must traversed without entering into the cages; If we found the shortest path from the zookeeper's initial position to the first cage and then from the first cage to the second cage and so on untill the last cage to the zookeeper's initial position, we can claim that we found the shortest path that zookeper travered from an initial position, visited all cages and return to the same position by gathering all these shortest path that we found.
+        So why these notions are important ? Let's return to our own problem. we are searching for the shortest path that zookeeper must traversed without entering into the cages; If we found the shortest path from the zookeeper's initial position to the first cage and then from the first cage to the second cage and so on untill the last cage to the zookeeper's initial position, we can claim that we found a path that zookeper travered from an initial position, visited all cages and return to the same position by gathering all these local shortest path that we found. with manipulating and adjusting these paths by using upcoming techniques, we can find a solution for the problem.
         <br class="newline"/>  
         <br class="newline"/>
         To find out these paths, let's imagine that there exist a path p from each cage to the next cage; Now we are interested to find the shortest path homotopic to the p; In fact the path p is the path that we found by using dfs algotithm (in the way that we explained at beginning of this section). Then we find the shortest path in the homotopy class of each p.
@@ -174,7 +174,7 @@
         Given a triangulated polygone, the source point, the destionation point and a path p from the source to the destination; Our goal is to find the shortest homotopic path to p which goes from the source to the destination. Maybe you wounder that why the algorithm is called funnel; In fact the algorithm is composed of two bounderies; a left side boundry and a right side boundry; The right side boundry and the left side boundry are connected to each other from one endpoint (source point at the beginning) which creates an image similar to a funnel.
         <br class="newline"/>  
         <br class="newline"/>
-        At each iteration we try to tighten the bottleneck of this fuunel by respecting to the edges that have been crossed by path p (grren); Once the left side boundery coincide on the rigth side boundry, we found a segment of the shortest path and we restart the funnel process untill we reach the destination point.
+        At each iteration we try to tighten the bottleneck of this fuunel by respecting to the edges that have been crossed by path p (green); Once the left side boundery coincide on the rigth side boundry, we found a segment of the shortest path and we restart the funnel process untill we reach the destination point.
         <br class="newline"/>  
         <br class="newline"/>
         Consider the following example, which make the explanation easier; 
@@ -191,37 +191,86 @@
         <br class="newline"/> 
       <p class="noindent" align="justify">
         The dotted line represents the path p, green segments represent triangulation edges that have been crossed by the path p and purple segments are other edges of the triangulation; The following picture shows each iteration. Let's discuss about each iteration:
+        <br class="newline"/>
+        <b>Iteration 1: </b> At the beginning we connect the apex of our funnel (source point) to the endpoints of the edge which have been crossed by path p (AH).
       </p>
-      <br class="newline"/>  
-      <br class="newline"/> 
+      <br class="newline"/>   
       <center>
-      <figure>
-        <img src="./images/Funnel_Execution_Labeled.jpg" width="75%"/>
-        <figcaption>Funnel Algorithm Execution</figcaption>
-      </figure>
-      </center>
-      <br class="newline"/>  
+        <img src="./images/F_it1.jpg" width="20%"/>
+      </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 1: </b> At the beginning we connect the apex of our funnel (source point) to the endpoints of the edge which have been crossed by path p (AH).
-        <br class="newline"/>  
         <b>Iteration 2: </b> In order to tighten our funnel by considering the first crossed edge (AH), we move the left boundry endpoint from H to G (right boundry is at the most right position compared to the apex [source] so it is not possible to move it).
-        <br class="newline"/>
-        <b>Iteration 3: </b> Now in order to tighten our funnel by considering the next crossed edge (AG), we can not move the left boundry (as it is at the left most position compared to the apex). The right boundry also in not movable as the endpoint of next edge (B) is at its right side (or at least it is aligned with it) but it is possible to continue the right boundry on the edge (AB) in order to reach the next endpoint (this will not tighten the funnel but it is the only way to continue execution; In fact the algorithm perform this action in same case).
-        <br class="newline"/>
-        <b>Iteration 4: </b> Now the next crossed edge is BG and it is possible to move the left boundry to tighten the funnel (From G to F).
-        <br class="newline"/>
-        <b>Iteration 5: </b> In order to handle the next crossed edge (BF), it is not possible to move the right boundry (as it is at the right most position compared to the apex). The only way to continue execution is to move the left boundry. As we move this boundry it will be coincide over the right boundry. So the coincide segment will be a part of the solution. This coincide segment is the the tail of our funnel and its endpoint which closer to the destination (B) is the new apex. 
-        <br class="newline"/>
-        <b>Iteration 6: </b> Now we got new left boundry and new right boundry; As you can see there is a possibility to move the right boundry to tighten the new funnel by considering the edge CF.
-        <br class="newline"/>
-        <b>Iteration 7: </b> Next crossed edge is DF and we can again move the right boundry to tighten the funnel .
-        <br class="newline"/>
-        <b>Iteration 8: </b> We can again move the right boundry to tighten the funnel and handle the crossed edge EF.
-        <br class="newline"/>
-        <b>Iteration 9: </b> We can again move the right boundry to tighten the funnel. So now we reached the destination; So our solution will be tail of the funnel with the boundry which have been reached the destination.
-        <br class="newline"/>
       </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it2.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 3: </b> Now in order to tighten our funnel by considering the next crossed edge (AG), we can not move the left boundry (as it is at the left most position compared to the apex). The right boundry also in not movable as the endpoint of next edge (B) is at its right side (or at least it is aligned with it) but it is possible to continue the right boundry on the edge (AB) in order to reach the next endpoint (this will not tighten the funnel but it is the only way to continue execution; In fact the algorithm perform this action in same case).
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it3.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 4: </b> Now the next crossed edge is BG and it is possible to move the left boundry to tighten the funnel (From G to F).
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it4.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 5: </b> In order to handle the next crossed edge (BF), it is not possible to move the right boundry (as it is at the right most position compared to the apex). The only way to continue execution is to move the left boundry. As we move this boundry it will be coincide over the right boundry. So the coincide segment will be a part of the solution. This coincide segment is the the tail of our funnel and its endpoint which closer to the destination (B) is the new apex. 
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it5.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 6: </b> Now we got new left boundry and new right boundry; As you can see there is a possibility to move the right boundry to tighten the new funnel by considering the edge CF.
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it6.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 7: </b> Next crossed edge is DF and we can again move the right boundry to tighten the funnel .
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it7.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 8: </b> We can again move the right boundry to tighten the funnel and handle the crossed edge EF.
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it8.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        <b>Iteration 9: </b> We can again move the right boundry to tighten the funnel. So now we reached the destination; So our solution will be tail of the funnel with the boundry which have been reached the destination.
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_it9.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
+      <p class="noindent" align="justify">
+        You can see the final solution of funnel algorithm below:
+      </p>
+      <br class="newline"/>   
+      <center>
+        <img src="./images/F_sol.jpg" width="20%"/>
+      </center>  
+      <br class="newline"/> 
 
       
       <h3 class="sectionHead">
@@ -339,7 +388,7 @@
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
       }
-      document.getElementById("Demo").style.display = "block";
+      document.getElementById("Explanation").style.display = "block";
     </script>
   </body>
 </html>
