@@ -255,7 +255,7 @@
       </center>  
       <br class="newline"/> 
       <p class="noindent" align="justify">
-        <b>Iteration 9: </b> The final step is particular : <br/>Once we reached the last edge of our path, we try to connect the apex directly to the destination to create a shortest path. However if it goes to the left of the left boundary, or the right of the right boundary (thereby going out of the polygon), then we add the edges of that boundary to the tail and connect the last point to the destination thus forming our shortest path. In the case of this example, there is a straight line going from the apex to the destination.
+        <b>Iteration 9: </b> The final step is particular : <br/>Once we reached the last edge of our path, we try to connect the apex directly to the destination to create a shortest path. However, if it goes to the left of the left boundary, or the right of the right boundary (thereby going out of the polygon), then we add the edges of that boundary to the tail and connect the last point to the destination thus forming our shortest path. In the case of this example, there is a straight line going from the apex to the destination.
       </p>
       <br class="newline"/>   
       <center>
@@ -276,7 +276,7 @@
         <span class="titlemark">5 </span> <a id="x1-80004"></a> General look of a zookeeper's path<!--  -->
       </h3>
       <p class="noindent">
-        Wei-Pang Chin and Simeon Stafos stated in (faudra faire une ref) the following lemma : <br>
+        Wei-Pang Chin and Simeon Stafos stated in their article "The zookeeper route problem" the following lemma : <br>
       
         <div style="background: ghostwhite; 
             font-size: 16px; 
@@ -286,7 +286,7 @@
 
             <p>
               <span class="underline">Lemma </span>: <br>
-              Let s = C<sub>0</sub> , C<sub>1</sub> , ...,  C<sub>k</sub>  be the order in which s and the convex polygons in the set of cages are first visited in a counterclockwise scan of the boundary of P (the zoo). <br>
+              Let Ω = C<sub>0</sub> , C<sub>1</sub> , ...,  C<sub>k</sub>  be the order in which s and the convex polygons (the cages) are first visited in a counterclockwise scan of the boundary of P (the zoo). <br>
               Then there is a shortest zookeeper route that visits the cages in the set of cages in that same order. <br>
   
             </p>
@@ -339,7 +339,7 @@
           <span class="titlemark">6.1 </span> <a id="x1-50002.1"></a>Supporting chains
         </h4>
         <p>
-          Now that we know in which order we have to consider the cages of the zoo, let us introduce another tool we need to compute the zookeeper's path : the supportings chains. <br>
+          Now that we know in which order we have to consider the cages of the zoo, let us introduce another tool we need to compute the zookeeper's route : the supportings chains. <br>
           A supporting chain is a chain defined between two cages, C<sub>i</sub> and C<sub>i+1</sub> that goes from the starting vertex of C<sub>i</sub> to the last vertex of C<sub>i+1</sub>. <br>
           In particular, this chain is the shortest path between those two points. We compute it using the funnel algorithm.<br>
           Let us aswell define two points, let b := the point of the chain leaving the cage C<sub>i</sub>, and let a := the first point to touch C<sub>i+1</sub>.
@@ -361,7 +361,7 @@
         </h4>
         <p>
           We will now use those supporting chains to identify, for each cage, the edge considered in the final shortest zookeeper's route. <br>
-          To do so, we compute the supporting chains from C<sub>i</sub> to C<sub>i+1</sub>, where s is consider to be C<sub>0</sub> and C<sub>n+1</sub> for all of our n cages. In particular, this identify the points a and b for each cage.<br>
+          To do so, we compute the supporting chains from C<sub>i</sub> to C<sub>i+1</sub>, where s is considered to be C<sub>0</sub> and C<sub>n+1</sub> for all of our n cages. In particular, this identify the points a and b for each cage.<br>
           We can now interest ourselfs in another lemma stated by Chin and Ntafos : <br>
 
           <div style="background: ghostwhite; 
@@ -396,7 +396,7 @@
           Now let convince us that the lemma is true : <br class="newline"/>  
         <ul class="itemize1">
           <li class="itemize">
-            For a &#8805; b, imagine the zookeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points of the cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
+            For a &#8805; b, imagine the zookeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points a or b of one cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
           
           </li>
           <li class="itemize">
