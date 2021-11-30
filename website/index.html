@@ -171,7 +171,7 @@
         <span class="titlemark"> 3.2 </span> <a id="x1-50002.1"></a>Funnel Algorithm
       </h4>
       <p class="noindent" align="justify">
-        Given a triangulated polygone, the source point, the destionation point and a path p from the source to the destination; Our goal is to find the shortest homotopic path to p which goes from the source to the destination. Maybe you wounder that why the algorithm is called funnel; In fact the algorithm is composed of two bounderies; a left side boundry and a right side boundry; The right side boundry and the left side boundry are connected to each other from one endpoint (source point at the beginning) which creates an image similar to a funnel.
+        Given a triangulated polygon, the source point, the destionation point and a path p from the source to the destination; Our goal is to find the shortest homotopic path to p which goes from the source to the destination. Maybe you wounder that why the algorithm is called funnel; In fact the algorithm is composed of two bounderies; a left side boundry and a right side boundry; The right side boundry and the left side boundry are connected to each other from one endpoint (source point at the beginning) which creates an image similar to a funnel.
         <br class="newline"/>  
         <br class="newline"/>
         At each iteration we try to tighten the bottleneck of this fuunel by respecting to the edges that have been crossed by path p (grren); Once the left side boundery coincide on the rigth side boundry, we found a segment of the shortest path and we restart the funnel process untill we reach the destination point.
@@ -223,9 +223,170 @@
         <br class="newline"/>
       </p>
 
+
+      <h3 class="sectionHead">
+        <span class="titlemark">5 </span> <a id="x1-80004"></a> General look of a zookeeper's path<!--  -->
+      </h3>
+      <p class="noindent">
+        Wei-Pang Chin and Simeon Stafos stated in (faudra faire une ref) the following lemma : <br>
+      
+        <div style="background: ghostwhite; 
+            font-size: 16px; 
+            padding: 10px; 
+            border: 1px solid lightgray; 
+            margin: 10px;">
+
+            <p>
+              <span class="underline">Lemma </span>: <br>
+              Let s = C<sub>0</sub> , C<sub>1</sub> , ...,  C<sub>k</sub>  be the order in which s and the convex polygons in the set of cages are first visited in a counterclockwise scan of the boundary of P (the zoo). <br>
+              Then there is a shortest zookeeper route that visits the cages in the set of cages in that same order. <br>
+  
+            </p>
+            
+        </div>
+      </p>
+      <p class="noindent">
+        This is actually quite easy to figure out. <br>
+        Imagine it's not true and there is a shortest zookeeper's route that intersects itself at some point. (cfr. figure below) 
+         
+        <center>
+        <figure>
+          <img src="./images/generalLook1.png" width = "30%"/>
+          <figcaption>Zookeeper's route intersecting itself</figcaption>
+        </figure>
+        </center>
+        <br class="newline"/> 
+      </p>
+
+      <p class="noindent">
+        In such a path, the intersection create two triangles which are clossed by the dotted lines in the next figure. <br>
+        We realize that for both of such triangles, we consider the two sides that are not the hypotenuse instead of the hypotenuse, which is obviously not the shortest path. <br> 
+        <center>
+        <figure>
+          <img src="./images/generalLook2.png" width = "30%"/>
+          <figcaption> Triangles created by intersection </figcaption>
+        </figure>
+        </center> 
+        <br class="newline"/> 
+      </p>
+
+      <p class="noindent">
+        As the length of the hypotenuse of a triangle is always shorter than the sum of the lengths of the two other sides, and as all cages are still considered in the new path, 
+        we can shorten the zookeeper's route by passing through the two hypotenuses we did not consider before. <br>
+        Therefore, a route that intersects itself cannot exist, we get that the shortest route is considered in the order the cages are given on the boundary of the polygon, from s to s.  
+        <center>
+        <figure>
+          <img src="./images/generalLook3.png" width = "30%"/>
+          <figcaption> Shortend zookeeper's route </figcaption>
+        </figure>
+        </center>
+        <br class="newline"/> 
+      </p>
+
+      <h3 class="sectionHead">
+        <span class="titlemark">6 </span> <a id="x1-80004"></a> First approximation of shortest zookeeper's route.
+      </h3>
+      <p>
+        <h4 class="subsectionHead">
+          <span class="titlemark">6.1 </span> <a id="x1-50002.1"></a>Supporting chains
+        </h4>
+        <p>
+          Now that we know in which order we have to consider the cages of the zoo, let us introduce another tool we need to compute the zookeeper's path : the supportings chains. <br>
+          A supporting chain is a chain defined between two cages, C<sub>i</sub> and C<sub>i+1</sub> that goes from the starting vertex of C<sub>i</sub> to the last vertex of C<sub>i+1</sub>. <br>
+          In particular, this chain is the shortest path between those two points. We compute it using the funnel algorithm.<br>
+          Let us aswell define two points, let b := the point of the chain leaving the cage C<sub>i</sub>, and let a := the first point to touch C<sub>i+1</sub>.
+          <center>
+            <figure>
+              <img src="./images/suppChain.png" width = "30%"/>
+              <figcaption> Illustration of a supporting chain </figcaption>
+            </figure>
+            </center>
+            <br class="newline"/> 
+
+
+          
+        
+        </p>
+        
+        <h4 class="subsectionHead">
+          <span class="titlemark">6.2 </span> <a id="x1-50002.1"></a> Identification of the edges of the cage where the shortest route passes
+        </h4>
+        <p>
+          We will now use those supporting chains to identtify, for each cage, the edge considered in the final shortest zookeeper's route. <br>
+          To do so, we compute the supporting chains from C<sub>i</sub> to C<sub>i+1</sub>, where s is consider to be C<sub>0</sub> and C<sub>n+1</sub> for all of our n cages. In particular, this identify the points a and b for each cage.<br>
+          We can now interest ourselfs in another lemma stated by Chin and Ntafos : <br>
+
+          <div style="background: ghostwhite; 
+            font-size: 16px; 
+            padding: 10px; 
+            border: 1px solid lightgray; 
+            margin: 10px;">
+
+            <p>
+              <span class="underline">Lemma </span>: <br>
+            If a &#8805; b, then any shortest zookeeper's route R either reflects on a point between a and b, or it wraps around C<sub>i</sub> and has at least one point of contact between a and b. <br>
+            If a &#60; b, all points between a and b are also in R.<br>
+            </p>
+          
+        </div>
+        <p>
+          Let represent us what this lemma claims :  <br>
+          <center>
+            <figure>
+              <img src="./images/exempleAB.png" width = "25%"/>
+              <figcaption> Illustration of a supporting chain </figcaption>
+            </figure>
+            </center>
+            <br class="newline"/>  
+        </p>
+        <p>
+          For C<sub>2</sub> and C<sub>3</sub> : a comes after b. Therefore, the final zookeeper's route will hit those cages somewhere between a and b. <br>
+          For C<sub>1</sub> : a comes before b. Therefore, all points between a and b for C<sub>1</sub> are part of the final zookeeper's route. <br>
+        </p>
+
+        <p>
+          Now let convince us that the lemma is true : <br class="newline"/>  
+        <ul class="itemize1">
+          <li class="itemize">
+            For a &#8805; b, imagine the zookeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points of the cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
+          
+          </li>
+          <li class="itemize">
+            For a &#60; b, the only way not to consider all the points between a and b is to break contact and then return to the chain, which creates a longer route.<br>
+          As we know that the cages are to be considered in the order of the boundary of the zoo, we cannot access the cage from another point than a (which is the closest from the last cage) as it would create a longer route aswell. <br>
+          
+          </li>
+          
+        </ul>
+        <p>
+          The whole lemma is therefore true.
+        </p></p></p>
+        
+        <p>
+          Implication of this lemma :
+          <div style="background: ghostwhite; 
+            font-size: 16px; 
+            padding: 10px; 
+            border: 1px solid lightgray; 
+            margin: 10px;">
+
+            <p>
+             
+            Cages where a &#60; b can be treated as obstacles to the path as the funnel between the cage before and the cage after will consider all the points of this cage correctly anyway.<br>
+            </p>
+          
+        </div>
+      
+      
+      </p>
+
+      <h4 class="subsectionHead">
+        <span class="titlemark">6.3 </span> <a id="x1-50002.1"></a> Computation of R0, the first approximation of the shortest route.
+         TO BE DONE
+      </h4>
       
       <h3 class="sectionHead">
-        <span class="titlemark">4 </span> <a id="x1-80004"></a>Zookeeper
+        <span class="titlemark">7 </span> <a id="x1-80004"></a>Zookeeper
         algorithm
       </h3>
     </div>
@@ -339,7 +500,7 @@
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
       }
-      document.getElementById("Demo").style.display = "block";
+      document.getElementById("Explanation").style.display = "block";
     </script>
   </body>
 </html>
