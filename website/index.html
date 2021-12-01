@@ -266,7 +266,7 @@
       <h3 class="sectionHead">
         <span class="titlemark">5 </span> <a id="x1-80004"></a> General look of a zookeeper's path<!--  -->
       </h3>
-      <p class="noindent">
+      <p class="noindent" align="justify">
         Wei-Pang Chin and Simeon Stafos stated in their article "The zookeeper route problem" the following lemma : <br>
       
         <div style="background: ghostwhite; 
@@ -284,7 +284,7 @@
             
         </div>
       </p>
-      <p class="noindent">
+      <p class="noindent" align="justify">
         This is actually quite easy to figure out. <br>
         Imagine it's not true and there is a shortest zookeeper's route that intersects itself at some point. (cfr. figure below) 
          
@@ -297,7 +297,7 @@
         <br class="newline"/> 
       </p>
 
-      <p class="noindent">
+      <p class="noindent" align="justify">
         In such a path, the intersection create two triangles which are clossed by the dotted lines in the next figure. <br>
         We realize that for both of such triangles, we consider the two sides that are not the hypotenuse instead of the hypotenuse, which is obviously not the shortest path. <br> 
         <center>
@@ -309,7 +309,7 @@
         <br class="newline"/> 
       </p>
 
-      <p class="noindent">
+      <p class="noindent" align="justify">
         As the length of the hypotenuse of a triangle is always shorter than the sum of the lengths of the two other sides, and as all cages are still considered in the new path, 
         we can shorten the zookeeper's route by passing through the two hypotenuses we did not consider before. <br>
         Therefore, a route that intersects itself cannot exist, we get that the shortest route is considered in the order the cages are given on the boundary of the polygon, from s to s.  
@@ -325,11 +325,11 @@
       <h3 class="sectionHead">
         <span class="titlemark">6 </span> <a id="x1-80004"></a> First approximation of shortest zookeeper's route.
       </h3>
-      <p>
+      <p align="justify">
         <h4 class="subsectionHead">
           <span class="titlemark">6.1 </span> <a id="x1-50002.1"></a>Supporting chains
         </h4>
-        <p>
+        <p align="justify">
           Now that we know in which order we have to consider the cages of the zoo, let us introduce another tool we need to compute the zookeeper's route : the supportings chains. <br>
           A supporting chain is a chain defined between two cages, C<sub>i</sub> and C<sub>i+1</sub> that goes from the starting vertex of C<sub>i</sub> to the last vertex of C<sub>i+1</sub>. <br>
           In particular, this chain is the shortest path between those two points. We compute it using the funnel algorithm.<br>
@@ -350,7 +350,7 @@
         <h4 class="subsectionHead">
           <span class="titlemark">6.2 </span> <a id="x1-50002.1"></a> Identification of the edges of the cage where the shortest route passes
         </h4>
-        <p>
+        <p align="justify">
           We will now use those supporting chains to identify, for each cage, the edge considered in the final shortest zookeeper's route. <br>
           To do so, we compute the supporting chains from C<sub>i</sub> to C<sub>i+1</sub>, where s is considered to be C<sub>0</sub> and C<sub>n+1</sub> for all of our n cages. In particular, this identify the points a and b for each cage.<br>
           We can now interest ourselfs in another lemma stated by Chin and Ntafos : <br>
@@ -368,7 +368,7 @@
             </p>
           
         </div>
-        <p>
+        <p align="justify">
           Let represent us what this lemma claims :  <br>
           <center>
             <figure>
@@ -378,12 +378,12 @@
             </center>
             <br class="newline"/>  
         </p>
-        <p>
+        <p align="justify">
           For C<sub>2</sub> and C<sub>3</sub> : a comes after b. Therefore, the final zookeeper's route will hit those cages somewhere between a and b. <br>
           For C<sub>1</sub> : a comes before b. Therefore, all points between a and b for C<sub>1</sub> are part of the final zookeeper's route. <br>
         </p>
 
-        <p>
+        <p align="justify">
           Now let convince us that the lemma is true : <br class="newline"/>  
         <ul class="itemize1">
           <li class="itemize">
@@ -397,7 +397,7 @@
           </li>
           
         </ul>
-        <p>
+        <p align="justify">
           The whole lemma is therefore true.
         </p></p></p>
         
