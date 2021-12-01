@@ -9,6 +9,7 @@ import { SupportingChain } from "./modules/SupportingChain.js";
 const states = {
   CAGES: "CAGES",
   FUNNEL: "FUNNEL",
+  ZOOKEEPER: "ZOOKEEPER",
 };
 var state = states.CAGES;
 var depth = 2;
@@ -67,39 +68,43 @@ function createPolyDaiza() {
   polyDaiza = new Zoolygon(pointList);
 }
 
+function chooseCagePoint(p) {
+  let labelLst = ["A", "B"];
+  p.label = labelLst[borderCount];
+  let newPoint = polyDaiza.findMinReflection(p);
+  if (newPoint !== null)
+    if (!polyDaiza.isInsideCage(newPoint)) {
+      //console.log(newPoint.x, newPoint.y);
+      newPoint = new Point(
+        math.ceil(newPoint.x),
+        math.ceil(newPoint.y),
+        labelLst[borderCount],
+        newPoint.segmentOnPolygon
+      );
+      if (borderCount === 0) {
+        let cage = new Cage(polyDaiza);
+        cage.polyChainPoints.push(newPoint);
+        polyDaiza.addCage(cage);
+        currentCage = cage;
+      } else currentCage.polyChainPoints.push(newPoint);
+      borderCount++;
+    } else error = true;
+  if (borderCount === 2) {
+    if (!currentCage.createPolyChain(polyDaiza)) {
+      borderCount = 1; //reset borderCount if the second point is invalid
+      error = true;
+    } else {
+      currentCagePolygon = new Polygon(currentCage.polyChainPoints);
+    }
+  }
+}
+
 window.mousePressed = function () {
   error = false;
-  let labelLst = ["A", "B"];
   let mousePoint = new Point(math.ceil(mouseX), math.ceil(mouseY)); //round point to int
   if (state === states.CAGES) {
     if (borderCount < 2) {
-      mousePoint.label = labelLst[borderCount];
-      let newPoint = polyDaiza.findMinReflection(mousePoint);
-      if (newPoint !== null)
-        if (!polyDaiza.isInsideCage(newPoint)) {
-          //console.log(newPoint.x, newPoint.y);
-          newPoint = new Point(
-            math.ceil(newPoint.x),
-            math.ceil(newPoint.y),
-            labelLst[borderCount],
-            newPoint.segmentOnPolygon
-          );
-          if (borderCount === 0) {
-            let cage = new Cage(polyDaiza);
-            cage.polyChainPoints.push(newPoint);
-            polyDaiza.addCage(cage);
-            currentCage = cage;
-          } else currentCage.polyChainPoints.push(newPoint);
-          borderCount++;
-        } else error = true;
-      if (borderCount === 2) {
-        if (!currentCage.createPolyChain(polyDaiza)) {
-          borderCount = 1; //reset borderCount if the second point is invalid
-          error = true;
-        } else {
-          currentCagePolygon = new Polygon(currentCage.polyChainPoints);
-        }
-      }
+      chooseCagePoint(mousePoint);
     } else {
       if (polyDaiza.isInside(mousePoint))
         if (
@@ -112,7 +117,7 @@ window.mousePressed = function () {
           error = true;
         }
     }
-  } else {
+  } else if (state === states.FUNNEL) {
     if (polyDaiza.isInside(mousePoint)) {
       if (borderCount === 0) {
         polyDaiza.funnel.reset();
@@ -139,6 +144,15 @@ window.mousePressed = function () {
         state = states.CAGES;
       }
     }
+  } else if (state === states.ZOOKEEPER) {
+    let newPoint = polyDaiza.findMinReflection(mousePoint);
+    if (newPoint !== null && !polyDaiza.isInsideCage(newPoint)) {
+      newPoint.label = "p";
+      polyDaiza.chair = newPoint;
+      computeR0();
+    } else {
+      error = true;
+    }
   }
 };
 
@@ -153,7 +167,13 @@ window.swap = function () {
   polyDaiza.Jacopo = !polyDaiza.Jacopo;
 };
 
-window.showSupportingChains = function () {
+window.zookeeper = function () {
+  if (borderCount === 0) {
+    state = states.ZOOKEEPER;
+  }
+};
+
+function computeR0() {
   polyDaiza.supporting_chains = [];
   polyDaiza.triangulateWithCagesAsObstacles();
   let cages = polyDaiza.getActiveCages();
@@ -192,7 +212,8 @@ window.showSupportingChains = function () {
     path = path.concat(funnel.path);
   }
   polyDaiza.R0 = path;
-};
+  state = states.CAGES;
+}
 
 window.TriWithCages = function () {
   polyDaiza.triangulateWithCagesAsObstacles();
@@ -202,7 +223,7 @@ window.TriWithCages = function () {
 // -------------------------------------------------------------------------
 
 window.setup = function () {
-  let screen = createCanvas((windowWidth * 25) / 50, (windowHeight * 35) / 50);
+  let screen = createCanvas((windowWidth * 25) / 50, (windowHeight * 30) / 50);
   screen.parent("scriptContainer");
   textSize(15);
   createPolyDaiza();
@@ -215,7 +236,7 @@ window.reset = function () {
 };
 
 window.windowResized = function () {
-  resizeCanvas((windowWidth * 45) / 50, (windowHeight * 45) / 50);
+  resizeCanvas((windowWidth * 25) / 50, (windowHeight * 30) / 50);
 };
 
 //                             DRAW
@@ -234,19 +255,30 @@ window.draw = function () {
 };
 
 function displayMessage() {
-  if (
-    polyDaiza.cages.length === 0 ||
-    !currentCage.inConstruction ||
-    borderCount < 2
-  ) {
+  if (state === states.CAGES) {
+    if (
+      polyDaiza.cages.length === 0 ||
+      !currentCage.inConstruction ||
+      borderCount < 2
+    ) {
+      document.getElementById("Info").innerHTML =
+        "Please select two points on the borders of the Polygon";
+    } else {
+      document.getElementById("Info").innerHTML =
+        "You can add points and create the cage when finished";
+    }
+  } else if (state === states.FUNNEL) {
     document.getElementById("Info").innerHTML =
-      "Please select two points on the borders of the polygon";
+      "Choose 2 points inside the Polygon";
   } else {
     document.getElementById("Info").innerHTML =
-      "You can add points and create the cage when finished";
+      "Place the Zookeeper on the boundary of the Polygon (not in a cage)";
   }
   if (error) {
-    document.getElementById("Error").innerHTML =
-      "Invalid point, check that both points on the polygon form a convex chain and that the created cage would not intersect a segment or a Cage of the Polygon";
+    if (state === states.CAGES)
+      document.getElementById("Error").innerHTML =
+        "Invalid point, check that both points on the polygon form a convex chain and that the created cage would not intersect a segment or a Cage of the Polygon";
+    else if (state === states.ZOOKEEPER)
+      document.getElementById("Error").innerHTML = "";
   } else document.getElementById("Error").innerHTML = " ";
 }

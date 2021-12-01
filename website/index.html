@@ -446,11 +446,6 @@
         points on the Polygon
       </p>
 
-      
-      <div id="messages ">
-        <p id="Info"></p>
-        <p style="min-height: 40px; color: red" id="Error"></p>
-      </div>
 
       <p>
         NOTE: 
@@ -471,6 +466,13 @@
       <p>The actual shortest path is still to be computed using the funnel algorithm.</p>
 
       
+      <div id = floatContainer >
+        
+        <div class = messageBox id="messages ">
+        <p style = "width: 90%; margin: 10px;"id="Info"></p>
+        <p style="width: 90%; margin: 10px; min-height: 40px; color: red" id="Error"></p>
+      </div>
+
       <div class = scriptContainer id="scriptContainer" >
         <div id="buttons" style = "width: 55%; margin: 0 auto;">
           <button class="button1" onclick="createCage()" id="crCage">
@@ -480,13 +482,16 @@
           <button class="button1" onclick="showFunnel()" id="funnel">
             Show Funnel
           </button>
-          <button class="button1" onclick="showSupportingChains()" id="suppCages">
+          <button class="button1" onclick="zookeeper()" id="suppCages">
             Compute Zookeeper path
           </button>
           <button class="button1" onclick="swap()" id="swap">
             Swap SuppChain / R0
           </button>
         </div>
+      
+      </div>
+      
         <script
           src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.5/math.js"
           integrity="sha512-R+I48DmxDONCcV2MyhKKVv9QYPzcmoSdNYBDNmHoJh2R4g6mqakFTBiIMYU9r/T0kK8y5Q/JvlQ8iRb5DdHV/A=="
