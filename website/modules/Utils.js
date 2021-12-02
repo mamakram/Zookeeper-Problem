@@ -56,12 +56,13 @@ function isOnSegment(A, B, point) {
   let biggerMin = min(A.x, B.x) <= point.x;
   let lowerMax = point.x <= max(A.x, B.x);
   let validX = biggerMin && lowerMax;
-
-  return isAligned(A, B, point) && validX;
+  return isAligned(A, B, point, 200) && validX;
 }
 
-function isAligned(A, B, Q) {
-  return computeOrientation(A, B, Q) === 0;
+function isAligned(A, B, Q, error = 0) {
+  let det = computeOrientation(A, B, Q);
+  console.log(det);
+  return det > -error && det < error;
 }
 
 function computeOrientation(A, B, Q) {

@@ -50,9 +50,15 @@ br {
 
 .scriptContainer {
   width: 60%;
-  margin: auto;
+  float: left;
   padding: 10px;
   background-color: rgb(200, 200, 200);
+}
+
+.messageBox {
+  width: 25%;
+  float: left;
+  vertical-align: top;
 }
 
 a {

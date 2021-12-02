@@ -13,8 +13,8 @@ class Zoolygon extends Polygon {
     this.funnel2 = null;
     this.supporting_chains = [];
     this.shapeWithCages = null;
-    this.chair = { ...this.points[0] }; // copy
-    this.chair.label = "p";
+    this.chair = null; //{ ...this.points[0] }; // copy
+    //this.chair.label = "p";
     this.R0 = null;
     this.Jacopo = false;
   }
@@ -23,6 +23,7 @@ class Zoolygon extends Polygon {
     for (let i = 0; i < this.cages.length; i++) {
       if (this.cages[i].isInside(p)) return true;
     }
+    return false;
   }
 
   insideWhatCage(p) {
@@ -64,10 +65,14 @@ class Zoolygon extends Polygon {
     }
   }
 
-  getActiveCages() {
+  getActiveCages(startIndex = 0) {
     let activeCages = [];
-    for (let i in this.cages) {
-      if (this.cages[i].active) activeCages.push(this.cages[i]);
+
+    let cages = this.cages
+      .slice(startIndex)
+      .concat(this.cages.slice(0, startIndex));
+    for (let i in cages) {
+      if (cages[i].active) activeCages.push(cages[i]);
     }
     return activeCages;
   }
@@ -116,9 +121,11 @@ class Zoolygon extends Polygon {
 
   draw() {
     super.draw();
-    fill("purple");
-    ellipse(this.chair.x, this.chair.y, 4, 4);
-    text(this.chair.label, this.chair.x, this.chair.y);
+    if (this.chair !== null) {
+      fill("purple");
+      ellipse(this.chair.x, this.chair.y, 4, 4);
+      text(this.chair.label, this.chair.x, this.chair.y);
+    }
     if (!this.Jacopo)
       for (let i = 0; i < this.supporting_chains.length; i++) {
         this.supporting_chains[i].draw();
@@ -130,25 +137,12 @@ class Zoolygon extends Polygon {
     }
   }
 
-  drawTWCresult() {
-    /**
-    for (let i = 0; i < this.shapeWithCages.points.length; i++) {
-      drawSegment(
-        this.shapeWithCages.points[i],
-        this.shapeWithCages.points[(i + 1) % this.shapeWithCages.points.length],
-        (color = "green")
-      );
-      text(i, this.shapeWithCages.points[i].x, this.shapeWithCages.points[i].y);
-    }
-    */
-    //this.shapeWithCages.draw();
-  }
-
   reset() {
     this.triangulations = [];
     this.funnel = null;
     this.funnel2;
     this.dual = null;
+    this.chair = null;
     this.cages = [];
     this.shapeWithCages = null;
     this.supporting_chains = [];

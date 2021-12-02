@@ -3,6 +3,7 @@ import {
   squareDistance,
   mod,
   sortPointsRadially,
+  isLT,
   isRT,
   drawSegment,
   checkSegmentIntersection,
@@ -36,7 +37,7 @@ class Cage {
     if (!this.inConstruction) {
       for (let i = 0; i < this.points.length; i++) {
         if (
-          isRT(this.points[i], this.points[(i + 1) % this.points.length], p, 10)
+          isLT(this.points[i], this.points[(i + 1) % this.points.length], p, 10)
         )
           return false;
       }
@@ -229,7 +230,7 @@ class Cage {
           this.points[(i + 1) % this.points.length],
           color
         );
-        //text(i, this.points[i].x, this.points[i].y);
+        text(this.points[i].label, this.points[i].x, this.points[i].y);
       }
       if (this.A !== null && this.B !== null && this.active) {
         fill("red");
@@ -238,7 +239,7 @@ class Cage {
         ellipse(this.B.x, this.B.y, 4, 4);
         text(this.B.label, this.B.x, this.B.y);
         fill("green");
-        ellipse(this.markedEdgeCenter.x, this.markedEdgeCenter.y, 4, 4);
+        //ellipse(this.markedEdgeCenter.x, this.markedEdgeCenter.y, 4, 4);
       }
     } else {
       for (let i = 0; i < this.polyChainPoints.length; i++) {
