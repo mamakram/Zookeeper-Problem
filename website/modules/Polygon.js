@@ -10,10 +10,7 @@ import {
   isLT,
   mod,
   reflectionOnLine,
-  sortPointsRadially,
   squareDistance,
-  isAligned,
-  isOnSegment,
 } from "./Utils.js";
 
 /**
@@ -191,7 +188,6 @@ class Polygon {
         !segment.includes(b) &&
         checkSegmentIntersection(a, b, segment[0], segment[1])
       ) {
-        //console.log("inter", segment[0], segment[1], a, b);
         return true;
       }
     }
@@ -257,6 +253,7 @@ class Polygon {
 
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
+      text(this.points[i].label, this.points[i].x, this.points[i].y);
     }
   }
 }

@@ -5,6 +5,7 @@ import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
 import { Funnel } from "./modules/Funnel.js";
 import { SupportingChain } from "./modules/SupportingChain.js";
+import { isAligned, isOnSegment } from "./modules/Utils.js";
 
 const states = {
   CAGES: "CAGES",
@@ -50,7 +51,8 @@ window.createCage = function () {
     polyDaiza.cages.length > 0 &&
     currentCage.inConstruction &&
     borderCount === 2 &&
-    state === states.CAGES
+    state === states.CAGES &&
+    currentCage.points.length > 0
   ) {
     currentCage.constructCage();
     borderCount = 0;
@@ -150,6 +152,7 @@ window.mousePressed = function () {
       newPoint.label = "p";
       polyDaiza.chair = newPoint;
       computeR0();
+      state = states.CAGES;
     } else {
       error = true;
     }
@@ -173,17 +176,61 @@ window.zookeeper = function () {
   }
 };
 
+/**
+ * Find index of the last cage before the chair starting from point 0 of the Zoolygon
+ * @returns index
+ */
+function findCageIndex() {
+  let cages = polyDaiza.cages;
+  let i = 0;
+  while (
+    i < cages.length &&
+    cages[i].getEndPoint().segmentOnPolygon <=
+      polyDaiza.chair.segmentOnPolygon &&
+    !isOnSegment(
+      polyDaiza.points[cages[i].getStartPoint().segmentOnPolygon],
+      cages[i].getStartPoint(),
+      polyDaiza.chair
+    ) //case where point is between vertex and cage start point
+  ) {
+    if (
+      cages[i].getEndPoint().segmentOnPolygon ===
+      polyDaiza.chair.segmentOnPolygon
+    )
+      if (
+        i < cages.length - 1 &&
+        cages[i + 1].getStartPoint().segmentOnPolygon ===
+          polyDaiza.chair.segmentOnPolygon
+      ) {
+        if (
+          isOnSegment(
+            cages[i].getEndPoint(),
+            cages[i + 1].getStartPoint(),
+            polyDaiza.chair
+          ) // case where point is between 2 cages
+        )
+          return i + 1;
+      }
+
+    i++;
+  }
+  return i; //case where point is between cage end point and polygon vertex
+}
+
 function computeR0() {
   polyDaiza.supporting_chains = [];
   polyDaiza.triangulateWithCagesAsObstacles();
-  let cages = polyDaiza.getActiveCages();
+  let cages = polyDaiza.cages;
+  let index = findCageIndex();
+  console.log(index);
+  cages = polyDaiza.cages.slice(index).concat(polyDaiza.cages.slice(0, index));
   // start at -1, syntax to consider the chair as first point
   for (let i = -1; i < cages.length; i++) {
-    polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza));
+    polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza, cages));
   }
   polyDaiza.markUselessCages(); // end of point 2 ?
 
-  cages = polyDaiza.getActiveCages();
+  cages = polyDaiza.getActiveCages(index);
   for (let i = 0; i < cages.length; i++) {
     if ((i + 1) % 2 === 0) {
       cages[i].markedEdge = cages[i].points.indexOf(cages[i].B);
@@ -212,7 +259,6 @@ function computeR0() {
     path = path.concat(funnel.path);
   }
   polyDaiza.R0 = path;
-  state = states.CAGES;
 }
 
 window.TriWithCages = function () {
@@ -249,7 +295,6 @@ window.draw = function () {
     polyDaiza.draw();
 
     if (polyDaiza.funnel !== null) polyDaiza.drawFunnel();
-    //if (polyDaiza.shapeWithCages !== null) polyDaiza.drawTWCresult();
   }
   displayMessage();
 };

@@ -7,11 +7,11 @@ class SupportingChain {
    * @param {*} index if -1, we consider the chair to be the first point
    * @param {*} zoo
    */
-  constructor(index, zoo) {
+  constructor(index, zoo, cages) {
     this.index = index;
     this.zoo = zoo;
     this.poly = zoo.shapeWithCages;
-    this.cages = zoo.getActiveCages();
+    this.cages = cages;
     this.C_i = index === -1 ? this.zoo.chair : this.cages[index];
     this.after = this.getCageAfter(); // C_i+1
     this.chain = this.getSupportingChains(index);
@@ -28,10 +28,10 @@ class SupportingChain {
     let after_chain = new Funnel(this.poly);
     let chair = this.zoo.chair;
     after_chain.addPoint(this.C_i === chair ? chair : this.C_i.getStartPoint());
-    
+
     if (this.index === this.cages.length - 1) after_chain.addPoint(chair);
-    else after_chain.addPoint( this.after.getEndPoint());
-    
+    else after_chain.addPoint(this.after.getEndPoint());
+
     after_chain.funnel();
     let supporting_chain = after_chain.path;
 
