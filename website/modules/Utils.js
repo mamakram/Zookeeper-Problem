@@ -61,7 +61,6 @@ function isOnSegment(A, B, point) {
 
 function isAligned(A, B, Q, error = 0) {
   let det = computeOrientation(A, B, Q);
-  console.log(det);
   return det > -error && det < error;
 }
 

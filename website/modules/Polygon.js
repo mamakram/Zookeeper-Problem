@@ -67,30 +67,6 @@ class Polygon {
         )
       );
     }
-    /**
-    //recursively compute triangulations of a polygon p
-    if (this.points.length === 3)
-      this.triangulations.push(
-        new Triangle(this.points[0], this.points[1], this.points[2])
-      );
-    else {
-      let ear = this.findEar();
-      let minusindex = mod(Number(ear) - 1, this.points.length);
-      let plusindex = (Number(ear) + 1) % this.points.length;
-      let triangle = new Triangle(
-        this.points[ear],
-        this.points[minusindex],
-        this.points[plusindex]
-      );
-      this.triangulations.push(triangle);
-      let newPoints = this.points.slice();
-      newPoints.splice(ear, 1);
-      //console.log(newPoints);
-      let p = new Polygon(newPoints);
-      p.triangulate();
-      this.triangulations = this.triangulations.concat(p.triangulations);
-    }
-    */
   }
 
   /**
@@ -105,41 +81,6 @@ class Polygon {
       this.points[i],
       this.points[(i + 1) % this.points.length]
     );
-  }
-
-  /**
-   * Find the first ear of the polygon by starting at index 0
-   * @returns the point corresponding to the ear
-   */
-  findEar() {
-    //find index of ear in polygon
-    let i = 2;
-    let earNotFound = true;
-    while (earNotFound) {
-      if (!this.isConcaveVertex(Number(i))) {
-        earNotFound = false;
-        let minusindex = mod(Number(i) - 1, this.points.length);
-        let plusindex = (Number(i) + 1) % this.points.length;
-        //check that no concave vertices inside triangle formed by the three points
-        let triangle = new Triangle(
-          this.points[i],
-          this.points[minusindex],
-          this.points[plusindex]
-        );
-        let j = 0;
-        while (j < this.points.length && !earNotFound) {
-          if (
-            !triangle.includes(this.points[j]) &&
-            triangle.isInside(this.points[j], triangle) &&
-            this.isConcaveVertex(Number(j))
-          )
-            earNotFound = true;
-          j++;
-        }
-      }
-      if (earNotFound) i = (Number(i) + 1) % this.points.length;
-    }
-    return i;
   }
 
   /**
@@ -253,7 +194,6 @@ class Polygon {
 
     for (let i = 0; i < this.points.length; i++) {
       drawSegment(this.points[i], this.points[(i + 1) % this.points.length]);
-      text(this.points[i].label, this.points[i].x, this.points[i].y);
     }
   }
 }

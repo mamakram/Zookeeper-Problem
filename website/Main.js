@@ -222,7 +222,6 @@ function computeR0() {
   polyDaiza.triangulateWithCagesAsObstacles();
   let cages = polyDaiza.cages;
   let index = findCageIndex();
-  console.log(index);
   cages = polyDaiza.cages.slice(index).concat(polyDaiza.cages.slice(0, index));
   // start at -1, syntax to consider the chair as first point
   for (let i = -1; i < cages.length; i++) {
@@ -317,7 +316,7 @@ function displayMessage() {
       "Choose 2 points inside the Polygon";
   } else {
     document.getElementById("Info").innerHTML =
-      "Place the Zookeeper on the boundary of the Polygon (not in a cage)";
+      "Place the Zookeeper on a boundary of the Polygon (not in a cage)";
   }
   if (error) {
     if (state === states.CAGES)
