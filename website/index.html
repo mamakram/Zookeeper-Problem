@@ -264,7 +264,7 @@
 
 
       <h3 class="sectionHead">
-        <span class="titlemark">5 </span> <a id="x1-80004"></a> General look of a zookeeper's path<!--  -->
+        <span class="titlemark">4 </span> <a id="x1-80004"></a> General look of a zookeeper's path<!--  -->
       </h3>
       <p class="noindent" align="justify">
         Wei-Pang Chin and Simeon Stafos stated in their article "The zookeeper route problem" the following lemma : <br>
@@ -323,11 +323,11 @@
       </p>
 
       <h3 class="sectionHead">
-        <span class="titlemark">6 </span> <a id="x1-80004"></a> First approximation of shortest zookeeper's route.
+        <span class="titlemark">5 </span> <a id="x1-80004"></a> Zookeeper's algorithm : first approximation of shortest zookeeper's route.
       </h3>
       <p align="justify">
         <h4 class="subsectionHead">
-          <span class="titlemark">6.1 </span> <a id="x1-50002.1"></a>Supporting chains
+          <span class="titlemark">5.1 </span> <a id="x1-50002.1"></a>Supporting chains
         </h4>
         <p align="justify">
           Now that we know in which order we have to consider the cages of the zoo, let us introduce another tool we need to compute the zookeeper's route : the supportings chains. <br>
@@ -348,7 +348,7 @@
         </p>
         
         <h4 class="subsectionHead">
-          <span class="titlemark">6.2 </span> <a id="x1-50002.1"></a> Identification of the edges of the cage where the shortest route passes
+          <span class="titlemark">5.2 </span> <a id="x1-50002.1"></a> Identification of the edges of the cage where the shortest route passes
         </h4>
         <p align="justify">
           We will now use those supporting chains to identify, for each cage, the edge considered in the final shortest zookeeper's route. <br>
@@ -385,18 +385,18 @@
 
         <p align="justify">
           Now let convince us that the lemma is true : <br class="newline"/>  
-        <ul class="itemize1">
-          <li class="itemize">
-            For a &#8805; b, imagine the zookeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points a or b of one cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
-          
-          </li>
-          <li class="itemize">
-            For a &#60; b, the only way not to consider all the points between a and b is to break contact and then return to the chain, which creates a longer route.<br>
-          As we know that the cages are to be considered in the order of the boundary of the zoo, we cannot access the cage from another point than a (which is the closest from the last cage) as it would create a longer route aswell. <br>
-          
-          </li>
-          
-        </ul>
+          <ul class="itemize1">
+            <li class="itemize">
+              For a &#8805; b, imagine the zookeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points a or b of one cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
+            
+            </li>
+            <li class="itemize">
+              For a &#60; b, the only way not to consider all the points between a and b is to break contact and then return to the chain, which creates a longer route.<br>
+            As we know that the cages are to be considered in the order of the boundary of the zoo, we cannot access the cage from another point than a (which is the closest from the last cage) as it would create a longer route aswell. <br>
+            
+            </li>
+            
+          </ul>
         <p align="justify">
           The whole lemma is therefore true.
         </p></p></p>
@@ -420,17 +420,36 @@
       </p>
 
       <h4 class="subsectionHead">
-        <span class="titlemark">6.3 </span> <a id="x1-50002.1"></a> Computation of R0, the first approximation of the shortest route.
-         TO BE DONE
-      </h4>
-      
-      <h3 class="sectionHead">
-        <span class="titlemark">7 </span> <a id="x1-80004"></a>Zookeeper
-        algorithm
-      </h3>
-    </div>
+        <span class="titlemark">5.3 </span> <a id="x1-50002.1"></a> Computation of R0, the first approximation of the shortest route.
+        </h4>
+          <p align="justify">
+            Now that we are conviced of the previous lemma, we know for sure that when the path reflect on the cage, it occurs on one of the segments between b and a. Let's identify on which edge the reflection occurs.<br>
+          
+            There are two easy scenarios : 
+          <ul class="itemize1">
+            <li class="itemize">
+              When b and a stand on the same edge, we identify that edge as the reflecting edge, and
+            </li>
+            <li class="itemize">
+              When a and b are on the same vertex, the reflecting point is exactly this vertex.
+            </li>
+            
+          </ul>
+          </p>
+          <p align="justify">
+            However, when there are multiple edge, we need to choose carefully the edge we are reflecting on. <br>
+            Let e<sub>ib</sub> be the edge that goes from b to b+1 on the cage i, and let e<sub>i(a-1)</sub> be the edge that goes from a-1 to b on the cage i (remind that the vertices of the cages are sorted clockwise). <br>
+            As we consider the cages in counterclockwise order and sorted around the chair, we have to alternate the reflections between the edges e<sub>ib</sub> and e<sub>i(a-1)</sub>, 
+            which are the edge that are locally the closest to the cage i+1. To do so, we observe the parity i &#8712; {1, ..., n} of our n cages. When i is odd, 
+            the point of reflection on C<sub>i</sub> has to be on the edge e<sub>i(a-1)</sub>. Respectively, when i is even, the point of reflection on C<sub>i</sub> has to 
+            be on the edge e<sub>ib</sub>. <br>
+            Now that we have identify the edges we needed, let's aproximate that the shortest path between all the cages of the zoo is obtained by connecting the middle point of
+            every identified edge. This is where our implementation of the zookeeper's route probleme ends and the further sections will explain how we can actually improve the 
+            approximate path to be the exact shortest zookeeper's route. <br> 
+          </p>
+        </div>
+      <div id="Demo" class="tabcontent">
 
-    <div id="Demo" class="tabcontent">
       <h3>Demo</h3>
       <p>
         Rules: Place the desired number of Cages (a.k.a convex hulls) on the
