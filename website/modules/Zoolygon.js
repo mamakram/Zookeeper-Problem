@@ -16,7 +16,7 @@ class Zoolygon extends Polygon {
     this.chair = null; //{ ...this.points[0] }; // copy
     //this.chair.label = "p";
     this.R0 = null;
-    this.Jacopo = false;
+    this.Jacopo = true; 
   }
 
   isInsideCage(p) {

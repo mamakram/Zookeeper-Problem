@@ -449,7 +449,7 @@
           </p>
         </div>
       <div id="Demo" class="tabcontent">
-
+title="Hello World!"
       <h3>Demo</h3>
       <p>
         Rules: Place the desired number of Cages (a.k.a convex hulls) on the
@@ -494,18 +494,18 @@
 
       <div class = scriptContainer id="scriptContainer" >
         <div id="buttons" style = "width: 55%; margin: 0 auto;">
-          <button class="button1" onclick="createCage()" id="crCage">
+          <button title="Compute the cage that respect the format need with your points (convex hull)" class="button1" onclick="createCage()" id="crCage">
             Create Cage
           </button>
-          <button class="button1" onclick="reset()" id="rst">Clear</button>
-          <button class="button1" onclick="showFunnel()" id="funnel">
+          <button title="Reset all manual drawing" class="button1" onclick="reset()" id="rst">Clear</button>
+          <button title="Compute the shortest path within the zoolygon, cages are treated as obstacles" class="button1" onclick="showFunnel()" id="funnel">
             Shortest Path
           </button>
-          <button class="button1" onclick="zookeeper()" id="suppCages">
+          <button title="Compute the zookeeper's route" class="button1" onclick="zookeeper()" id="suppCages">
             Compute Zookeeper path
           </button>
-          <button class="button1" onclick="swap()" id="swap">
-            Swap SuppChain / R0
+          <button title="Swap the drawing of an already drawn zookeeper's route between R0 and the suppoorting chains used to create R0"class="button1" onclick="swap()" id="swap">
+            Swap R0 / SuppChain
           </button>
         </div>
       
