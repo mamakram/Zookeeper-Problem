@@ -387,7 +387,7 @@
           Now let convince us that the lemma is true : <br class="newline"/>  
           <ul class="itemize1">
             <li class="itemize">
-              For a &#8805; b, imagine the zookeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points a or b of one cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
+              For a &#8805; b, imagine the zookeeper's route does not reflect between the two points. Then, the zookeeper's route must wrap around at least one of the two points a or b of one cage to reach the next cage, which would create a longer path and contradict the lemma.<br>
             
             </li>
             <li class="itemize">
@@ -461,37 +461,33 @@
 title="Hello World!"
       <h3>Demo</h3>
       <p>
-        Rules: Place the desired number of Cages (a.k.a convex hulls) on the
+        <strong>Rules:</strong> <br>
+        Place the desired number of Cages (a.k.a convex hulls) on the
         Polygon.
       </p>
       <p>
-        Start by placing two points on the Polygon edges (these points must form
+        To do so, start by placing two points on the Polygon edges (these points must form
         a convex chain of vertices across the Polygon).
       </p>
       <p>
-        Then, place as many points as you want inside the Polygon, press create
-        Cage when done to form a convex Cage with the set of points and the two
-        points on the Polygon
+        Then, place as many points as you want inside the Polygon. When you are done, press "Create
+        Cage" to form a convex Cage with the set of points and the two
+        points on the Polygon.
       </p>
-
+      <p>
+        Repeat as many times as you want to create multiple cages. When you are done, press "Compute Zookeeper path" and choose a point on the border
+        of Poly Daiza (your favorite zoo-lygon) that will be the chair of the zookeeper. Once the chair point is chosen, the zookeeper route is displayed.
+      </p>
+        
+      <p>
+        You have the possibility to swap the rendering of the zookeeper's route so as to show the supporting chains used to compute it by pressing "Swap R0/SuppChain".
+      </p>  
 
       <p>
-        NOTE: 
-        The Show Funnel button is a temporary button for the funnel algorithm in developpement. 
-        It displays :
-        <ul class="itemize1">
-          <li class="itemize">
-            the triangulation of the polygon,
-          </li>
-          <li class="itemize">
-            the approximate shortest path between the 2 fixed points s and t (in red), 
-          </li>
-          <li class="itemize">
-            the segments crossed by the path (in green)
-          </li>
-        </ul>
-      </p>
-      <p>The actual shortest path is still to be computed using the funnel algorithm.</p>
+        At any time, whether there are cages or not, you can use a tool to visualize the shortest path between to points in a polygon. To do so, press "Shortest path" and
+        place 2 points inside the zoo.  
+        This is compute using the funnel algorithm describe in the explanation section.   
+      </p>  
 
       
       <div id = floatContainer >
