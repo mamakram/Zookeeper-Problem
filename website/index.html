@@ -290,7 +290,7 @@
          
         <center>
         <figure>
-          <img src="./images/ant_1.jpg" width = "25%"/>
+          <img src="./images/generalLook1.jpg" width = "25%"/>
           <figcaption>Zookeeper's route intersecting itself</figcaption>
         </figure>
         </center>
@@ -302,7 +302,7 @@
         We realize that for both of such triangles, we consider the two sides that are not the hypotenuse instead of the hypotenuse, which is obviously not the shortest path. <br> 
         <center>
         <figure>
-          <img src="./images/ant_2.jpg" width = "25%"/>
+          <img src="./images/generalLook2.jpg" width = "25%"/>
           <figcaption> Triangles created by intersection </figcaption>
         </figure>
         </center> 
@@ -315,7 +315,7 @@
         Therefore, a route that intersects itself cannot exist, we get that the shortest route is considered in the order the cages are given on the boundary of the polygon, from s to s.  
         <center>
         <figure>
-          <img src="./images/ant_3.jpg" width = "25%"/>
+          <img src="./images/generalLook3.jpg" width = "25%"/>
           <figcaption> Shortend zookeeper's route </figcaption>
         </figure>
         </center>
@@ -336,7 +336,7 @@
           Let us aswell define two points, let b := the point of the chain leaving the cage C<sub>i</sub>, and let a := the first point to touch C<sub>i+1</sub>.
           <center>
             <figure>
-              <img src="./images/ant_4.jpg" width = "35%"/>
+              <img src="./images/suppChain.jpg" width = "35%"/>
               <figcaption> Illustration of a supporting chain </figcaption>
             </figure>
             </center>
@@ -372,7 +372,7 @@
           Let represent us what this lemma claims :  <br>
           <center>
             <figure>
-              <img src="./images/ant_5.jpg" width = "30%"/>
+              <img src="./images/exampleAB.jpg" width = "30%"/>
               <figcaption> Illustration of a supporting chain </figcaption>
             </figure>
             </center>
@@ -444,7 +444,16 @@
             the point of reflection on C<sub>i</sub> has to be on the edge e<sub>i(a-1)</sub>. Respectively, when i is even, the point of reflection on C<sub>i</sub> has to 
             be on the edge e<sub>ib</sub>. <br>
             Now that we have identify the edges we needed, let's aproximate that the shortest path between all the cages of the zoo is obtained by connecting the middle point of
-            every identified edge. This is where our implementation of the zookeeper's route probleme ends and the further sections will explain how we can actually improve the 
+            every identified edge. <br>
+            <center>
+              <figure>
+                <img src="./images/R0.png" width = "30%"/>
+                <figcaption> Illustration a computed R0 with our demo tool (point t is the chair) </figcaption>
+              </figure>
+              </center>
+
+            
+            This is where our implementation of the zookeeper's route probleme ends and the further sections will explain how we can actually improve the 
             approximate path to be the exact shortest zookeeper's route. <br> 
           </p>
         </div>

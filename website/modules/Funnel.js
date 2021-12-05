@@ -104,9 +104,7 @@ class Funnel {
     let rightElem = null;
     let leftElem = null;
 
-    //while (segCrossedCp.length !== 0) { (depth < 8){
     let depth = 0;
-    //while (depth < this.depth) {
     while (segCrossedCp.length !== 0) {
       depth++;
       let consideredSeg = segCrossedCp.shift();
@@ -144,12 +142,12 @@ class Funnel {
             right = left.slice(0, problem + 1);
             right.push(rightElem);
           } else if (
-            !isRT(apex, right[right.length - 1], rightElem) //&&!this.originalPoly.intersects(apex, rightElem)
+            !isRT(apex, right[right.length - 1], rightElem) 
           ) {
             right[right.length - 1] = rightElem;
             while (
               right.length > 1 &&
-              !isRT(apex, right[right.length - 2], rightElem) //&&!this.originalPoly.intersects(apex, rightElem)
+              !isRT(apex, right[right.length - 2], rightElem) 
             ) {
               right.pop();
               right[right.length - 1] = rightElem;
@@ -160,10 +158,8 @@ class Funnel {
         }
 
         // Considering left bounds
-
         if (leftElem !== left[left.length - 1]) {
           let problem = -1;
-          //console.log("last point of right " right[right.length - 1],right.length);
           for (let i = 0; i < right.length; i++) {
             //check if there is an intersection between new added point to left and the right funnel
             if (!isLT(apex, right[i], leftElem)) {
@@ -175,12 +171,12 @@ class Funnel {
             left = right.slice(0, problem + 1);
             left.push(leftElem);
           } else if (
-            !isLT(apex, left[left.length - 1], leftElem) //&&!this.originalPoly.intersects(apex, leftElem)
+            !isLT(apex, left[left.length - 1], leftElem) 
           ) {
             left[left.length - 1] = leftElem;
             while (
               left.length > 1 &&
-              !isLT(apex, left[left.length - 2], leftElem) //&&!this.originalPoly.intersects(apex, leftElem)
+              !isLT(apex, left[left.length - 2], leftElem) 
             ) {
               left.pop();
               left[left.length - 1] = leftElem;
@@ -199,15 +195,12 @@ class Funnel {
     }
     this.right = [];
     this.left = [];
-    //this.right = [tail[tail.length - 1]].concat(right);
-    //this.left = [tail[tail.length - 1]].concat(left);
     this.finishPath(left, right, tail);
 
     return tail; // temporarily for debug
   }
 
   finishPath(left, right, tail) {
-    //console.log(tail, right[right.length - 1], left[left.length - 1]);
     //while the path from apex(tail end) to point is not between the funnels, add the path of the funnel it intersects
     let done = false;
     while (
@@ -235,20 +228,6 @@ class Funnel {
       text(this.points[i].label, this.points[i].x, this.points[i].y);
     }
     if (this.funneled) {
-      /**
-      for (let i = 0; i < this.segmentCrossedByApproxPath.length; i++) {
-        drawSegment(
-          this.segmentCrossedByApproxPath[i][0],
-          this.segmentCrossedByApproxPath[i][1],
-          "green"
-        );
-      }
-      for (let i = 0; i < this.right.length - 1; i++) {
-        drawSegment(this.right[i], this.right[i + 1], "orange");
-      }
-      for (let i = 0; i < this.left.length - 1; i++) {
-        drawSegment(this.left[i], this.left[i + 1], "blue");
-      }*/
       for (let i = 0; i < this.path.length - 1; i++) {
         drawSegment(this.path[i], this.path[i + 1], "purple");
       }

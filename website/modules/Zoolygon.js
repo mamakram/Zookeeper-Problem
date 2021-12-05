@@ -13,8 +13,7 @@ class Zoolygon extends Polygon {
     this.funnel2 = null;
     this.supporting_chains = [];
     this.shapeWithCages = null;
-    this.chair = null; //{ ...this.points[0] }; // copy
-    //this.chair.label = "p";
+    this.chair = null; 
     this.R0 = null;
     this.Jacopo = true; 
   }
@@ -50,7 +49,6 @@ class Zoolygon extends Polygon {
       .slice(0, i)
       .concat([cage])
       .concat(this.cages.slice(i));
-    // this.cages.push(cage);
   }
   getCage(index) {
     return this.cageList[index];

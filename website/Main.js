@@ -15,30 +15,30 @@ const states = {
 var state = states.CAGES;
 var depth = 2;
 const polyDaizaPoints = [
-  [33, 245],
-  [39, 305],
-  [106, 306],
-  [108, 251],
-  [162, 379],
-  [71, 382],
-  [142, 465],
-  [550, 464],
-  [547, 385],
-  [453, 382],
-  [416, 421],
-  [363, 341],
-  [316, 414],
-  [318, 286],
-  [444, 238],
-  [436, 326],
-  [576, 319],
-  [580, 190],
-  [332, 152],
-  [280, 176],
-  [265, 283],
-  [186, 280],
-  [172, 175],
-  [85, 187],
+  [33, 145],
+  [39, 205],
+  [106, 206],
+  [108, 151],
+  [162, 279],
+  [71, 282],
+  [142, 365],
+  [550, 364],
+  [547, 285],
+  [453, 282],
+  [416, 321],
+  [363, 241],
+  [316, 314],
+  [318, 186],
+  [444, 138],
+  [436, 226],
+  [576, 219],
+  [580, 90],
+  [332, 52],
+  [280, 76],
+  [265, 183],
+  [186, 180],
+  [172, 75],
+  [85, 87],
 ];
 var polyDaiza;
 var borderCount = 0; //number of selected border points for cage creation
@@ -76,8 +76,7 @@ function chooseCagePoint(p) {
   let newPoint = polyDaiza.findMinReflection(p);
   if (newPoint !== null)
     if (!polyDaiza.isInsideCage(newPoint)) {
-      //console.log(newPoint.x, newPoint.y);
-      newPoint = new Point(
+        newPoint = new Point(
         math.ceil(newPoint.x),
         math.ceil(newPoint.y),
         labelLst[borderCount],
@@ -227,7 +226,7 @@ function computeR0() {
   for (let i = -1; i < cages.length; i++) {
     polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza, cages));
   }
-  polyDaiza.markUselessCages(); // end of point 2 ?
+  polyDaiza.markUselessCages();  
 
   cages = polyDaiza.getActiveCages(index);
   for (let i = 0; i < cages.length; i++) {
