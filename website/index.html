@@ -445,20 +445,47 @@
             be on the edge e<sub>ib</sub>. <br>
             Now that we have identify the edges we needed, let's aproximate that the shortest path between all the cages of the zoo is obtained by connecting the middle point of
             every identified edge. <br>
+          </p>
             <center>
               <figure>
                 <img src="./images/R0.png" width = "30%"/>
                 <figcaption> Illustration a computed R0 with our demo tool (point t is the chair) </figcaption>
               </figure>
-              </center>
-
-            
+              </center>  
+          <p align="justify">          
             This is where our implementation of the zookeeper's route probleme ends and the further sections will explain how we can actually improve the 
             approximate path to be the exact shortest zookeeper's route. <br> 
           </p>
+        <h3 class="sectionHead">
+        <span class="titlemark"> 6 </span> <a id="x1-80004"></a> Theorical Approximation
+      </h3>
+      <h4 class="subsectionHead">
+        <span class="titlemark">6.1 </span> <a id="x1-50002.1"></a> Finding exact contact point with R0
+      </h4>
+        <p align="justify">
+          Now we know that R<sub>0</sub> passes from which edges of each cage. So we can try to find the exact contact point between these edges and R<sub>0</sub>. Imagine that E be the set of edges of each cage that will be visited by R<sub>0</sub>. Let's call these edges u (u<sub>i</sub> for cage C<sub>i</sub>). The shortest route which visits all u<sub>i</sub>s in E can be computed as follow: <br>
+        </p>
+        <p align="justify">
+          <ul class="itemize1">
+             <li class="itemize"> <b>I)</b> Setting up the inner chains of each cage as a parts of the zoo polygon boundary. Let's call this new zoo polygon M. </li>
+             <li class="itemize"> <b>II)</b> Triangulating M (triangulation by considering cages). </li>
+             <li class="itemize"> <b>III)</b> Unrolling M according to edges of E as mirrors. </li>
+             <li class="itemize"> <b>IV)</b> Reflecting corresponding portions of M with respect to these mirrors. </li>
+          </ul>
+        </p>
+        <p align="justify">
+          Now the new problem is to find the shortest path from a point x to the point x' (itself) inside a simple polygon. This problem can be solved easly by using Funnel algorithm which has been described in section 3. Once these process finishes, The route R<sub>0</sub> can be obtained by bending back the unrolled polygon. Let's call all these process T. The following image illustrate the process T step by step: 
+        <br class="newline"/>  
+        <center>
+        <figure>
+          <img src="./images/TODO.jpg" width = "20%"/>
+          <figcaption>Finding exact contact point of R<sub>0</sub> on each cage</figcaption>
+        </figure>
+        </center>
+        <br class="newline"/> 
+        </p>
         </div>
       <div id="Demo" class="tabcontent">
-title="Hello World!"
       <h3>Demo</h3>
       <p>
         <strong>Rules:</strong> <br>
