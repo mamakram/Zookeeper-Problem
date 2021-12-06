@@ -484,6 +484,38 @@
         </center>
         <br class="newline"/> 
         </p>
+        
+        <h3 class="subsectionHead">
+          <span class="titlemark">7 </span> <a id="x1-50002.1"></a> Further adjustments using A<sub>ij</sub> coefficients
+          </h3>
+            <p align="justify">
+              The R0 obtained using the reflection method is only the first version of the shortest path. This path can however still be adjusted further through an iterative adjustment method.<br> 
+              For each cage in the path, we can compute an adjustment we will call A<sub>ij</sub>, that lets us know whether the point of intersection of R0 on the cage can be moved to left or the right to shorten the path.<br> 
+              To find A<sub>ij</sub>, we start by taking the two vectors going away from the point and following the edges of the path on either side of the point: 
+            </p>
+            <center>
+              <figure>
+                <img src="./images/step1.png" width = "30%"/>
+                <figcaption> Vectors going from point. Dotted lines represent R0 </figcaption>
+              </figure>
+              </center>  
+            <p align="justify">
+              Once we normalize these two vectors and project them onto the edge of the cage containing our point v<sub>ij</sub>, we can compute A<sub>ij</sub> by calculating the sum of these two vectors:
+            </p>
+            <center>
+              <figure>
+                <img src="./images/step2.png" width = "30%"/>
+                <figcaption> Projecting both vectors on the cage edge </figcaption>
+              </figure>
+              </center>  
+          <p align="justify">
+            Now that we know how to compute the A<sub>ij</sub> coefficient for every point touching a cage in R0, our algorithm to shorten the path goes as follows: 
+            <ul class="itemize1">
+               <li class="itemize"> <b>I)</b> Pick the maximum A<sub>ij</sub> value of all points in R0. </li>
+               <li class="itemize"> <b>II)</b> Adjust that point accordingly in the direction of A<sub>ij</sub>. </li>
+               <li class="itemize"> <b>III)</b> Repeat. </li>
+            </ul>
+          </p>
         </div>
       <div id="Demo" class="tabcontent">
       <h3>Demo</h3>
