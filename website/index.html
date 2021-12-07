@@ -423,25 +423,25 @@
         <span class="titlemark">5.3 </span> <a id="x1-50002.1"></a> Computation of R0, the first approximation of the shortest route.
         </h4>
           <p align="justify">
-            Now that we are conviced of the previous lemma, we know for sure that when the path reflect on the cage, it occurs on one of the segments between b and a. Let's identify on which edge the reflection occurs.<br>
+            Now that we are conviced of the previous lemma, we know for sure that when the path contacts the cage, it occurs on one of the segments between b and a. Let's identify on which edge it occurs.<br>
           
             There are two easy scenarios : 
           <ul class="itemize1">
             <li class="itemize">
-              When b and a stand on the same edge, we identify that edge as the reflecting edge, and
+              When b and a stand on the same edge, we identify that edge as the contacting edge, and
             </li>
             <li class="itemize">
-              When a and b are on the same vertex, the reflecting point is exactly this vertex.
+              When a and b are on the same vertex, the junction point is exactly this vertex.
             </li>
             
           </ul>
           </p>
           <p align="justify">
-            However, when there are multiple edge, we need to choose carefully the edge we are reflecting on. <br>
+            However, when there are multiple edge, we need to choose carefully the edge we are visiting. <br>
             Let e<sub>ib</sub> be the edge that goes from b to b+1 on the cage i, and let e<sub>i(a-1)</sub> be the edge that goes from a-1 to b on the cage i (remind that the vertices of the cages are sorted clockwise). <br>
-            As we consider the cages in counterclockwise order and sorted around the chair, we have to alternate the reflections between the edges e<sub>ib</sub> and e<sub>i(a-1)</sub>, 
+            As we consider the cages in counterclockwise order and sorted around the chair, we have to alternate the position of the junction points between the edges e<sub>ib</sub> and e<sub>i(a-1)</sub>, 
             which are the edge that are locally the closest to the cage i+1. To do so, we observe the parity i &#8712; {1, ..., n} of our n cages. When i is odd, 
-            the point of reflection on C<sub>i</sub> has to be on the edge e<sub>i(a-1)</sub>. Respectively, when i is even, the point of reflection on C<sub>i</sub> has to 
+            the point that contacts C<sub>i</sub> has to be on the edge e<sub>i(a-1)</sub>. Respectively, when i is even, the point that contacts C<sub>i</sub> has to 
             be on the edge e<sub>ib</sub>. <br>
             Now that we have identify the edges we needed, let's aproximate that the shortest path between all the cages of the zoo is obtained by connecting the middle point of
             every identified edge. <br>
