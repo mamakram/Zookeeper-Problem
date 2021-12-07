@@ -52,7 +52,7 @@ window.createCage = function () {
     currentCage.inConstruction &&
     borderCount === 2 &&
     state === states.CAGES &&
-    currentCage.points.length > 0
+    currentCage.polyChainPoints.length + currentCage.points.length > 2
   ) {
     currentCage.constructCage();
     borderCount = 0;
@@ -76,7 +76,7 @@ function chooseCagePoint(p) {
   let newPoint = polyDaiza.findMinReflection(p);
   if (newPoint !== null)
     if (!polyDaiza.isInsideCage(newPoint)) {
-        newPoint = new Point(
+      newPoint = new Point(
         math.ceil(newPoint.x),
         math.ceil(newPoint.y),
         labelLst[borderCount],
@@ -226,7 +226,7 @@ function computeR0() {
   for (let i = -1; i < cages.length; i++) {
     polyDaiza.supporting_chains.push(new SupportingChain(i, polyDaiza, cages));
   }
-  polyDaiza.markUselessCages();  
+  polyDaiza.markUselessCages();
 
   cages = polyDaiza.getActiveCages(index);
   for (let i = 0; i < cages.length; i++) {
