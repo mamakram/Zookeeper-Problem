@@ -13,7 +13,7 @@
       </button>
       <button class="tablinks" onclick="openTab(event, 'Demo')">Demo</button>
       <button class="tablinks" onclick="openTab(event, 'References')">
-        References
+        References & Workload
       </button>
     </div>
 
@@ -457,24 +457,24 @@
             approximate path to be the exact shortest zookeeper's route. <br> 
           </p>
         <h3 class="sectionHead">
-        <span class="titlemark"> 6 </span> <a id="x1-80004"></a> Theorical Approximation
+        <span class="titlemark"> 6 </span> <a id="x1-80004"></a> Theoretical approximation
       </h3>
       <h4 class="subsectionHead">
         <span class="titlemark">6.1 </span> <a id="x1-50002.1"></a> Finding exact contact point with R0
       </h4>
         <p align="justify">
-          Now we know that R<sub>0</sub> passes from which edges of each cage. So we can try to find the exact contact point between these edges and R<sub>0</sub>. Imagine that E be the set of edges of each cage that will be visited by R<sub>0</sub>. Let's call these edges u (u<sub>i</sub> for cage C<sub>i</sub>). The shortest route which visits all u<sub>i</sub>s in E can be computed as follow: <br>
+          Now we know on which edge R<sub>0</sub> passes in each cage. We can try to find the exact contact point between these edges and R<sub>0</sub>. Let E be the set of edges of each cage that will be visited by R<sub>0</sub>. Let's call these edges u (u<sub>i</sub> for cage C<sub>i</sub>). The shortest route which visits all u<sub>i</sub> in E can be computed as follow: <br>
         </p>
         <p align="justify">
           <ul class="itemize1">
-             <li class="itemize"> <b>I)</b> Setting up the inner chains of each cage as a parts of the zoo polygon boundary. Let's call this new zoo polygon M. </li>
-             <li class="itemize"> <b>II)</b> Triangulating M (triangulation by considering cages). </li>
-             <li class="itemize"> <b>III)</b> Unrolling M according to edges of E as mirrors. </li>
-             <li class="itemize"> <b>IV)</b> Reflecting corresponding portions of M with respect to these mirrors. </li>
+             <li class="itemize"> <b>I)</b> Set up the inner chains of each cage as a parts of the zoo polygon boundary. Let's call this new zoo polygon M. </li>
+             <li class="itemize"> <b>II)</b> Triangulate M (triangulation by considering cages). </li>
+             <li class="itemize"> <b>III)</b> Unroll M according to edges of E as mirrors. </li>
+             <li class="itemize"> <b>IV)</b> Reflect corresponding portions of M with respect to these mirrors. </li>
           </ul>
         </p>
         <p align="justify">
-          Now the new problem is to find the shortest path from a point x to the point x' (itself) inside a simple polygon. This problem can be solved easly by using Funnel algorithm which has been described in section 3. Once these process finishes, The route R<sub>0</sub> can be obtained by bending back the unrolled polygon. Let's call all these process T. The following image illustrate the process T step by step: 
+          Now the new problem is to find the shortest path from a point x to the point x' (itself) inside a simple polygon. This problem can be solved easily by using the Funnel algorithm which has been described in section 3. Once this process finishes, the route R<sub>0</sub> can be obtained by bending back the unrolled polygon. Let's call this process T. The following image illustrates the process T step by step: 
         <br class="newline"/>  
         <center>
         <figure>
@@ -485,9 +485,9 @@
         <br class="newline"/> 
         </p>
         
-        <h3 class="subsectionHead">
-          <span class="titlemark">7 </span> <a id="x1-50002.1"></a> Further adjustments using A<sub>ij</sub> coefficients
-          </h3>
+        <h4 class="subsectionHead">
+          <span class="titlemark">6.2 </span> <a id="x1-50002.1"></a> Further adjustments using A<sub>ij</sub> coefficients
+          </h4>
             <p align="justify">
               The R0 obtained using the reflection method is only the first version of the shortest path. This path can however still be adjusted further through an iterative adjustment method.<br> 
               For each cage in the path, we can compute an adjustment coefficient we will call A<sub>ij</sub>, that lets us know whether the point of intersection of R0 on the cage can be moved to left or the right to shorten the path.<br> 
@@ -500,7 +500,7 @@
               </figure>
               </center>  
             <p align="justify">
-              Once we normalize these two vectors and project them onto the edge of the cage containing our point v<sub>ij</sub>, we can compute A<sub>ij</sub> by calculating the sum of these two vectors:
+              Once we normalize these two vectors and project them onto the edge of the cage containing our point v<sub>ij</sub>, we can compute A<sub>ij</sub> by calculating their sum:
             </p>
             <center>
               <figure>
@@ -516,6 +516,23 @@
                <li class="itemize"> <b>III)</b> Repeat. </li>
             </ul>
           </p>
+          <h3 class="subsectionHead">
+            <span class="titlemark">7 </span> <a id="x1-50002.1"></a> Conclusion
+            </h3>
+              <p align="justify">
+                In conclusion, the Zookeeper's route problem is a problem that requires a lot of simple tools in polygons : triangulion, convex hull computation, dual graph computation, shortest path between two points in polygon, reflection, and many more.
+                All these tools need to be combined in insightful ways to solve the problem.     
+              </p>
+             
+            <p align="justify">
+              Pseudo code of zookeeper's route : 
+              <ul class="itemize1">
+                 <li class="itemize"> <b>I)</b> Construct the supporting chain for each cage of the zoolygon. </li>
+                 <li class="itemize"> <b>II)</b> Remove cages from the cage list when a < b. </li>
+                 <li class="itemize"> <b>III)</b> Construct R<sub>0</sub> with reflections. </li>
+                 <li class="itemize"> <b>IV)</b> Adjust the route while it's adjustable. </li>
+              </ul>
+            </p>
         </div>
       <div id="Demo" class="tabcontent">
       <h3>Demo</h3>
@@ -594,19 +611,36 @@
     <div id="References" class="tabcontent">
       <h3>References</h3>
       <h4>Zookeeper Algorithm</h4>
+      
       <a
         href="https://www.sciencedirect.com/science/article/pii/S0925772102000925"
-        >An O(nlogn) algorithm for the zoo-keeper's problem,Sergei
-        Bespamyatnikh</a
-      > <br/>
+        >An O(nlogn) algorithm for the zoo-keeper's problem </a>,
+        <p align="justify">
+          Sergei Bespamyatnikh, 2003, <br> 
+          Department of Computer Science, Duke University, Durham, USA,<br>
+          Computational Geometry,<br>
+          Volume 24, Issue 2,<br>
+          Pages 63-74,<br>
+          ISSN 0925-7721<br>
+          </p>
+        <br/>
       <a
         href="https://www.sciencedirect.com/science/article/abs/pii/002002559290072G"
-        >The zookeeper route problem, Chin & Ntafos
-      </a
-      >
+        >The zookeeper route problem</a>, Chin & Ntafos, 1992, AT&T Bell Laboratories, Columbus, Ohio - Computer Science Program, The University of Texas at Dallas, Richardson, Texas, 
+        Information Sciences,
+        Volume 63, Issue 3,
+        1992,
+        Pages 245-259,
+        ISSN 0020-0255,
+      
 
       
       <h4>Shortest path</h4>
+
+      <a href="https://graphics.stanford.edu/courses/cs268-09-winter/notes/handout7.pdf">  Shortest Path Problems</a> Jim Stewart, 1992, Stanford University, CS268: Geometric Algorithms, Design and Analysis  <br />
+
+
+
       <a href="https://www.cc.gatech.edu/~rpeng/18434_S15/sspPolygon.pdf"
         >Georgia Tech - Seminar in Theoretical Computer Science : Shortest Path
         in a Polygon, Alex Grinman
@@ -614,11 +648,81 @@
       <br />
       <a
         href="https://www.sciencedirect.com/science/article/pii/0925772194900108?via%3Dihub"
-        >Computing minimum length paths of a given homotopy class,John
-        Hershberger & Jack Snoeyink</a
-      >
-    </div>
+        >Computing minimum length paths of a given homotopy class </a>,
+        John Hershberger & Jack Snoeyink,
+        1994,
+        Mentor Graphics, San Jose, USA - Department of Computer Science, University of British Columbia, Vancouver, B.C., Canada,
+        Computing minimum length paths of a given homotopy class,
+        Computational Geometry,
+        Volume 4, Issue 2,
+        Pages 63-97,
+        ISSN 0925-7721
+    
 
+    <h3>Workload</h3>
+    <style>
+      table, th, td {
+        border:1px solid black;
+        border-collapse:collapse;
+        
+      }
+      </style>
+      
+      
+      <center>
+      <table style="width:50%">
+        <tr>
+          <th></th>
+          <th>Amir M. Fallahi</th>
+          <th>Anthony Kerckhof</th>
+          <th>Markus Makram Ghatas</th>
+        </tr>
+        <tr>
+          <td> Website layout and css </td>
+          <td> <center><span>&#10003;</span></center> </td>
+          <td> </td>
+          <td> <center><span>&#10003;</span></center> </td>
+        </tr>
+        <tr>
+          <td> Cages implementation </td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+        </tr>
+        <tr>
+          <td> Dual Graph </td>
+          <td></td>
+          <td><center><span>&#10003;</span></center></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td> Funnel algorithm </td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+        </tr>
+        <tr>
+          <td> Supporting chains & R0 </td>
+          <td> </td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+        </tr>
+        <tr>
+          <td> Theoretical aspect : reflection & adjustment </td>
+          <td><center><span>&#10003;</span></center></td>
+          <td> </td>
+          <td><center><span>&#10003;</span></center></td>
+        </tr>
+        <tr>
+          <td> Documentation and redaction </td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+          <td><center><span>&#10003;</span></center></td>
+        </tr>
+        
+      </table>
+    </center>
+  </div>
     <!-- script to open tabs-->
     <script>
       function openTab(evt, tabName) {
