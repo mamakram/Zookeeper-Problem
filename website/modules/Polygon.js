@@ -216,8 +216,10 @@ class Triangle extends Polygon {
     let p2 = this.points[1];
     let p3 = this.points[2];
     return (
-      (!isRT(p1, p2, p, 10) && !isRT(p2, p3, p, 10) && !isRT(p3, p1, p, 10)) ||
-      (!isLT(p1, p2, p, 10) && !isLT(p2, p3, p, 10) && !isLT(p3, p1, p, 10))
+      (!isRT(p1, p2, p, 100) &&
+        !isRT(p2, p3, p, 100) &&
+        !isRT(p3, p1, p, 100)) ||
+      (!isLT(p1, p2, p, 100) && !isLT(p2, p3, p, 100) && !isLT(p3, p1, p, 100))
     );
   }
 

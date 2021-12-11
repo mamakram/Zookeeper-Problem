@@ -5,7 +5,7 @@ import { Point } from "./modules/Point.js";
 import { Cage } from "./modules/Cage.js";
 import { Funnel } from "./modules/Funnel.js";
 import { SupportingChain } from "./modules/SupportingChain.js";
-import { isAligned, isOnSegment } from "./modules/Utils.js";
+import { mod, isOnSegment } from "./modules/Utils.js";
 
 const states = {
   CAGES: "CAGES",
@@ -213,7 +213,7 @@ function findCageIndex() {
 
     i++;
   }
-  return i; //case where point is between cage end point and polygon vertex
+  return mod(i, polyDaiza.points.length); //case where point is between cage end point and polygon vertex
 }
 
 function computeR0() {
