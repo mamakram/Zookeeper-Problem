@@ -184,6 +184,8 @@ function findCageIndex() {
   let i = 0;
   while (
     i < cages.length &&
+    cages[i].getStartPoint().segmentOnPolygon <=
+      polyDaiza.chair.segmentOnPolygon &&
     cages[i].getEndPoint().segmentOnPolygon <=
       polyDaiza.chair.segmentOnPolygon &&
     !isOnSegment(
